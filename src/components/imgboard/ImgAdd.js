@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ImgAdd(){
+    const myPort = process.env.REACT_APP_MY_PORT
     const navigate = useNavigate();
     const token = sessionStorage.getItem("token");
     const loginid = sessionStorage.getItem('loginid');
@@ -22,7 +23,7 @@ export default function ImgAdd(){
         fdata.append('title', title);
         fdata.append('content', content);
         fdata.append('f', file.files[0]);
-        axios.post('http://localhost:8081/auth/diary', fdata, 
+        axios.post('http://localhost:' + myPort + '/auth/diary', fdata, 
                     {headers:{Authorization:token, "Content-Type":"multipart/form-data"}})
             .then(function(res){
                 if(res.status===200){

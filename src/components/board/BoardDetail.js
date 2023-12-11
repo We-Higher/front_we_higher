@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export default function BoardDetail() {
+    const myPort = process.env.REACT_APP_MY_DOMAIN
     const token = sessionStorage.getItem("token");
     const n = useParams().num;
 
@@ -17,7 +18,7 @@ export default function BoardDetail() {
     });
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/board/' + n, { headers: { Authorization: token } })
+        axios.get('http://localhost:' + myPort + '/auth/board/' + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -45,7 +46,7 @@ export default function BoardDetail() {
         })
     }
     const del = () => {
-        axios.post('http://localhost:8081/auth/board/del',
+        axios.post('http://localhost:' + myPort + '/auth/board/del',
             {},
             {
                 headers: { Authorization: token },

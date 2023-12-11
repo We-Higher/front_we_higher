@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function ImgBoardHome(){
+    const myPort = process.env.REACT_APP_MY_PORT
     const token = sessionStorage.getItem("token");
     const [list, setList] = useState([]);
     useEffect(()=>{
-        axios.get('http://localhost:8081/auth/diary', {headers:{Authorization:token}})
+        axios.get('http://localhost:' + myPort + '/auth/diary', {headers:{Authorization:token}})
         .then(function(res){
             if(res.status===200){
                 setList(res.data.list)
@@ -25,7 +26,7 @@ export default function ImgBoardHome(){
                     <li key={item.num}>
                         {item.num} / {item.wdate} / {item.writer.id} /
                         {item.title} / {item.content} /
-                        <img src={"http://localhost:8081/read-img/"+item.fname} className="imgstyle"/>
+                        <img src={'http://localhost:' + myPort + "/read-img/" + item.fname} className="imgstyle"/>
                     </li>
                 ))
             }

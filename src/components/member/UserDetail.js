@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 export default function UserDetail(){
-
+    const myPort = process.env.REACT_APP_MY_PORT
     const token = sessionStorage.getItem("token");
     const [dto, setDto] = useState({});
     
     useEffect(()=>{
-        axios.get('http://localhost:8081/auth/info', {headers:{Authorization:token}})
+        axios.get('http://localhost:' + myPort + '/auth/info', {headers:{Authorization:token}})
         .then(
             function(res){
                 if(res.status===200){

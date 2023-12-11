@@ -5,7 +5,7 @@ import '../../css/login_form.css';
 import '../../css/style.bundle.css';
 
 export default function Login() {
-
+    const myPort = process.env.REACT_APP_MY_PORT
     const navigate = useNavigate();
     const token = sessionStorage.getItem("token");
     useEffect(()=>{
@@ -24,7 +24,7 @@ export default function Login() {
         })
     }
     const login = () => {
-        axios.post('http://localhost:8081/login', {}, { params: { username: username, password: password } })
+        axios.post('http://localhost:' + myPort + '/login', {}, { params: { username: username, password: password } })
             .then(function (res) {
                 if (res.status === 200) {
                     if (res.data.flag) {

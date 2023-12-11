@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const myPort = process.env.REACT_APP_MY_PORT
     const navigate = useNavigate();
     const [inputs, setInputs] = useState({ id: '', pwd: ''});
     const { id, pwd} = inputs;
@@ -14,7 +15,7 @@ export default function Login() {
         })
     }
     const login = () => {
-        axios.post('http://localhost:8081/login', {},{ params: { id: id, pwd: pwd } })
+        axios.post('http://localhost:' + myPort + '/login', {},{ params: { id: id, pwd: pwd } })
             .then(function (res) {
                 if (res.status === 200) {
                     if(res.data.flag){

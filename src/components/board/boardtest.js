@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function BoardHome() {
+    const myPort = process.env.REACT_APP_MY_PORT
     const token = sessionStorage.getItem("token");
     const navigate = useNavigate();
     const [list, setList] = useState([]);
 
    useEffect(()=>{
-    axios.get('http://localhost:8081/auth/board', {headers:{Authorization:token}})
+    axios.get('http://localhost:' + myPort + '/auth/board', {headers:{Authorization:token}})
     .then(
         function(res){
             if(res.status===200){

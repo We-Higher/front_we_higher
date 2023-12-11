@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 
 export default function EmployeeJoin() {
@@ -11,7 +10,6 @@ export default function EmployeeJoin() {
     const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [mdto, setDto] = useState({});
-    const { ismaster } = mdto;
 
     useEffect(() => {
         axios.get('http://localhost:' + myPort + '/auth/employee/join', { headers: { Authorization: token } })

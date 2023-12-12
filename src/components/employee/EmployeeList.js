@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import '../../css/dataroom.css';
 
 export default function EmployeeList() {
@@ -46,6 +45,11 @@ export default function EmployeeList() {
             );
     }
 
+    // 회원가입 폼으로 이동
+    const join=()=>{
+        navigate('/employee/join');
+    }
+
     return (
 
         <div className="dataroom">
@@ -60,7 +64,7 @@ export default function EmployeeList() {
                                         <div className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                            <a href='/employee/join'><i className="bi bi-person-plus-fill">회원가입</i></a>
+                                            <i className="bi bi-person-plus-fill" onClick={join}>회원가입</i>
                                         </div>
                                         <div className="input-group mb-3" style={{ paddingTop: '50px' }}>
                                             <div className="input-group-prepend">

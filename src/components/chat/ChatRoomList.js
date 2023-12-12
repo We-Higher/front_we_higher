@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import MY_PORT from "../../common/util";
 import $ from 'jquery';
+import {Link} from "react-router-dom";
 
 export default function ChatRoomList() {
     const [rooms, setRooms] = useState([])
@@ -20,7 +21,7 @@ export default function ChatRoomList() {
         <h1>ChatRoomList</h1>
         <ul>
             {rooms.map(room => (
-                <li key={room.id}>{room.roomName}</li>
+                <li key={room.id}><Link to={`/chat/room/${room.id}`}>{room.roomName}</Link></li>
             ))}
         </ul>
     </>

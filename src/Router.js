@@ -1,5 +1,5 @@
-import { Component } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import {Component} from "react";
+import {Route, Routes, Navigate} from "react-router-dom";
 
 import Login from "./components/member/Login";
 import Join from "./components/member/Join";

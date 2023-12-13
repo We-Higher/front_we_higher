@@ -10,6 +10,7 @@ import BoardDetail from "./components/board/BoardDetail";
 import EmployeeList from "./components/employee/EmployeeList";
 import EmployeeJoin from './components/employee/EmployeeJoin';
 import { Navigate } from "react-router-dom";
+import DemoApp from "./components/schedule/Calendar";
 
 function Router() {
   return (
@@ -40,6 +41,7 @@ function Router() {
       <Route path="/board/edit/:num" element={<BoardEdit />} />
       <Route path="/employee/list/" element={<EmployeeList />} />
       <Route path="/employee/join/" element={<EmployeeJoin />} />
+      <Route path="/schedule/calendar" element={<DemoApp  />} />
     </Routes>
   );
 }

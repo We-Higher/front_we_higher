@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 
 export default function EmployeeList() {
-    const myPort = process.env.REACT_APP_MY_PORT
     const token = sessionStorage.getItem("token");
     const loginid = sessionStorage.getItem("loginid");
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function EmployeeList() {
     const [option, setOption] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:' + myPort + '/auth/employee/list', { headers: { Authorization: token } })
+        axios.get('http://localhost:8081/auth/employee/list', { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -32,7 +32,7 @@ export default function EmployeeList() {
     }, [])
 
     const search = (type, option) => {
-        axios.get('http://localhost:' + myPort + '/auth/employee/search',
+        axios.get('http://localhost:8081/auth/employee/search',
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {
@@ -43,11 +43,6 @@ export default function EmployeeList() {
                     }
                 }
             );
-    }
-
-    // 회원가입 폼으로 이동
-    const join=()=>{
-        navigate('/employee/join');
     }
 
     return (
@@ -64,7 +59,7 @@ export default function EmployeeList() {
                                         <div className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                            <i className="bi bi-person-plus-fill" onClick={join}>회원가입</i>
+                                            <a href='/employee/join'><i className="bi bi-person-plus-fill">회원가입</i></a>
                                         </div>
                                         <div className="input-group mb-3" style={{ paddingTop: '50px' }}>
                                             <div className="input-group-prepend">

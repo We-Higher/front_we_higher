@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export default function BoardDetail() {
-    const myPort = process.env.REACT_APP_MY_DOMAIN
     const token = sessionStorage.getItem("token");
     const n = useParams().num;
 
@@ -18,7 +17,7 @@ export default function BoardDetail() {
     });
 
     useEffect(() => {
-        axios.get('http://localhost:' + myPort + '/auth/board/' + n, { headers: { Authorization: token } })
+        axios.get('http://localhost:8081/auth/board/' + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -38,30 +37,7 @@ export default function BoardDetail() {
     }, []);
 
     const { num, writer, wdate, udate, title, content, cnt } = dto;
-    const onChange = (e) => {
-        const { name, value } = e.target;
-        setDto({
-            ...dto,
-            [name]: value
-        })
-    }
-    const del = () => {
-        axios.post('http://localhost:' + myPort + '/auth/board/del',
-            {},
-            {
-                headers: { Authorization: token },
-                params: { num: num }
-            }
-        )
-            .then(function (res) {
-                if (res.status === 200) {
-                    alert('삭제완료');
-                } else {
-                    alert(res.status);
-                }
-            });
-    }
-    const loginid = sessionStorage.getItem('loginid');
+
     return (
         <div className="container py-4">
             <div className="text-end mt-5">

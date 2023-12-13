@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 
 export default function Join() {
-    const myPort = process.env.REACT_APP_MY_PORT
+
     const [inputs, setInputs] = useState({ id: '', pwd: '', name: '', email: '' });
     const { id, pwd, name, email } = inputs;
     const onChange = (e) => {
@@ -13,7 +13,7 @@ export default function Join() {
         })
     }
     const save = () => {
-        axios.post('http://localhost:' + myPort + '/join', {},
+        axios.post('http://localhost:8081/join', {},
             { params: { id: id, pwd: pwd, name: name, email: email } })
             .then(function (res) {
                 if (res.status === 200) {

@@ -11,15 +11,20 @@ function DemoApp() {
     const token = sessionStorage.getItem("token");
     const [events, setEvents] = useState([])
 
-    useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/schedule`,
-            { headers: { Authorization: token } })
-            .then(response => {
-                setEvents(response.data);
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
+    const loadEvents = async () => {
+        try {
+            const response = await axios.get(`http://localhost:${myPort}/auth/schedule`, {
+                headers: { Authorization: token },
             });
+            setEvents(response.data); // 일정 상태를 업데이트
+        } catch (error) {
+            console.error('Error loading events', error);
+        }
+    };
+
+    // 컴포넌트가 마운트될 때 일정 데이터를 불러옴
+    useEffect(() => {
+        loadEvents();
     }, []);
 
     console.log('events', events);
@@ -37,7 +42,7 @@ function DemoApp() {
                 const response = await axios.post(`http://localhost:${myPort}/auth/schedule`, eventData, { headers: { Authorization: token } });
 
                 if (response.status === 200) {
-                    
+
                     setEvents([...events, response.data.newEvent]);
                 }
             } catch (error) {
@@ -72,22 +77,32 @@ function DemoApp() {
     const handleEventDrop = async (info) => {
         if (window.confirm(`${info.event.title} 일정을 수정하시겠습니까?`)) {
             const events = [{
-                title: info.event.title,
-                start: info.event.start,
-                end: info.event.end,
+                title: info.event._def.title,
+                start: info.event.start.getTime(),
+                end: info.event.end.getTime(),
             }];
 
+            const calId = info.event.extendedProps.cal_Id;
+            if (calId === '') {
+                calId = info.event._def.publicId
+            }
             try {
-                const response = await axios.put(`http://localhost:${myPort}/auth/schedule/${info.event.extendedProps.cal_Id}`,
-                    events, { headers: { Authotrization: token } });
+                const response = await axios({
+                    method: 'put',
+                    url: `http://localhost:${myPort}/auth/schedule/${calId}`,
+                    headers: { Authorization: token, 'Content-Type': 'application/json' },
+                    data: JSON.stringify(events)
+                });
 
                 if (response.data.flag) {
-                    info.revert();
+                    loadEvents();
                 } else {
                     alert(response.data.msg);
+                    info.revert();
                 }
             } catch (error) {
                 console.error('Error updating schedule', error);
+                info.revert();
             }
         } else {
             info.revert();

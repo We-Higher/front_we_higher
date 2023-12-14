@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 
 export default function CommuteEditList() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const loginid = sessionStorage.getItem("loginid");
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function CommuteEditList() {
     // const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/commute/editlist', { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/commute/editlist`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -30,7 +31,7 @@ export default function CommuteEditList() {
     }, [])
 
     const edit = (num) => {
-        axios.post('http://localhost:8081/auth/commute/approve',
+        axios.post(`http://localhost:${myPort}/auth/commute/approve`,
             {},
             {
                 headers: { Authorization: token },
@@ -47,7 +48,7 @@ export default function CommuteEditList() {
     }
 
     const del = (num) => {
-        axios.post('http://localhost:8081/auth/commute/cancel',
+        axios.post(`http://localhost:${myPort}/auth/commute/cancel`,
             {},
             {
                 headers: { Authorization: token },

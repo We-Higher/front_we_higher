@@ -1,24 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 
 export default function Report() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const [mdto, setDto] = useState({});
     const navigate = useNavigate();
-    //const { writer, title, content } = dto;
+    const { writer, title, content } = mdto;
 
     const onChange = (e) => {
         const { name, value } = e.target;
         setDto({
-            ...dto,
+            ...mdto,
             [name]: value
         })
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/approval/report' , { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/report` , { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -29,7 +29,7 @@ export default function Report() {
     }, []);
 
     const save = () => {
-        axios.post('http://localhost:8081/auth/approval/report',
+        axios.post(`http://localhost:${myPort}/auth/approval/report`,
             {},
             { headers: { Authorization: token }, params: { title: title, content: content } })
             .then(function (res) {

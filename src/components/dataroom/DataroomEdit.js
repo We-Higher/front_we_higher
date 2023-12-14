@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 export default function DataroomEdit() {
-
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const n = useParams().num;
     const [dto, setDto] = useState({
@@ -28,7 +28,7 @@ export default function DataroomEdit() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/dataroom/edit/' + n, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/dataroom/edit/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -53,8 +53,8 @@ export default function DataroomEdit() {
         let file = document.getElementById('f');
         fdata.append('content', content);
         fdata.append('f', file.files[0]);
-        axios.post('http://localhost:8081/auth/dataroom', fdata,
-            { headers: { Authorization: token }, "Content-Type": "multipart/form-data" , params: { num:n, title:title, content:content }})
+        axios.post(`http://localhost:${myPort}/auth/dataroom`, fdata,
+            { headers: { Authorization: token }, "Content-Type": "multipart/form-data", params: { num: n, title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
                     navigate('/dataroom/list')

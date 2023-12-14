@@ -1,0 +1,44 @@
+.ApprovalList {
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        background-color: #fff;
+        border-collapse: collapse;
+    }
+
+    /* Table header styles */
+    .table th,
+    .table td {
+        padding: 0.75rem;
+        vertical-align: top;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    /* Table header background color and text color */
+    .table thead th {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    /* Alternating row colors */
+    .table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    /* Button styles */
+    .table button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    /* Button hover styles */
+    .table button:hover {
+        background-color: #0056b3;
+    }
+}

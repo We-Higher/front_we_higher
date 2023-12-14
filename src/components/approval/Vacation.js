@@ -2,19 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import ApprovalList1 from './ApprovalList1';
 
-const Report = () => {
-
+export default function Vacation() {
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
-    const [dto, setDto2] = useState({
-        writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
-        serviceLife: '', classification: '', approval1: '', approval2: '', approval1rank: '', approval2rank: '', app1username: '', app2username: ''
-    });
+    const [dto, setDto2] = useState({ writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '', 
+    serviceLife:'', classification: '', approval1:'' ,approval2:'', approval1rank:'', approval2rank:'', app1username:'', app2username:''});
     const navigate = useNavigate();
-    const { writer, title, content, wdate, serviceLife, classification, approval1,
+    const { writer, title, content , wdate, serviceLife, classification , approval1 ,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
 
     const onChange = (e) => {
@@ -25,14 +21,8 @@ const Report = () => {
         })
     }
 
-    const [selectedEmployee, setSelectedEmployee] = useState({
-        name: '',
-        rankname: '',
-        username: '',
-    });
-
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report`, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/report` , { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -40,60 +30,14 @@ const Report = () => {
                     alert('error:' + res.status);
                 }
             });
-        window.addEventListener('message', handleMessage);
-        return () => {
-            window.removeEventListener('message', handleMessage);
-        };
     }, []);
-
-    const openApprovalListWindow = () => {
-
-        const width = 800;
-        const height = 750;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-
-        /*window.open(
-            '/approval/approvalList1',
-            'approvalList_window',
-            `width=${width},height=${height},left=${left},top=${top},history=no,resizable=no,status=no,scrollbars=yes,menubar=no`
-        );*/
-        const approvalListWindow = window.open(
-            '/approval/approvalList1',
-            'approvalList_window',
-            `width=${width},height=${height},left=${left},top=${top},history=no,resizable=no,status=no,scrollbars=yes,menubar=no`
-        );
-        approvalListWindow.postMessageReference = window.postMessage;
-    };
-
-    const handleMessage = (event) => {
-        setSelectedEmployee(event.data);
-      };
-
-    const openApprovalListWindow2 = () => {
-        const width = 800;
-        const height = 750;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-
-        window.open(
-            '/approval/approvalList2',
-            'approvalList_window',
-            `width=${width},height=${height},left=${left},top=${top},history=no,resizable=no,status=no,scrollbars=yes,menubar=no`
-        );
-    };
-
 
     const save = () => {
         axios.post(`http://localhost:${myPort}/auth/approval/report`,
             {},
-            {
-                headers: { Authorization: token }, params: {
-                    writer: writer, title: title, content: content,
-                    wdate: wdate, serviceLife: serviceLife, classification: classification, approval1: approval1,
-                    approval2: approval2, approval1rank: approval1rank, approval2rank: approval2rank, app1username: app1username, app2username: app2username
-                }
-            })
+            { headers: { Authorization: token }, params: { writer:writer, title:title, content:content ,
+                 wdate:wdate, serviceLife:serviceLife, classification:classification , approval1:approval1,
+                approval2:approval2, approval1rank:approval1rank, approval2rank:approval2rank, app1username:app1username, app2username:app2username } })
             .then(function (res) {
                 if (res.status === 200) {
                     alert('지출결의서 기안이 완료되었습니다.');
@@ -105,16 +49,16 @@ const Report = () => {
     }
 
     return (
-        <div>
 
-            <div>
-                Selected Employee:
-                <ul>
-                    <li>Name: {selectedEmployee.name}</li>
-                    <li>Rank Name: {selectedEmployee.rankname}</li>
-                    <li>Username: {selectedEmployee.username}</li>
-                </ul>
-            </div>
+        <span
+            style={{
+                fontFamily: '"맑은 고딕"',
+                fontSize: "10pt",
+                lineHeight: "normal",
+                marginTop: 0,
+                marginBottom: 0
+            }}
+        >
             <span
                 style={{
                     fontFamily: '"맑은 고딕"',
@@ -124,16 +68,7 @@ const Report = () => {
                     marginBottom: 0
                 }}
             >
-                <span
-                    style={{
-                        fontFamily: '"맑은 고딕"',
-                        fontSize: "10pt",
-                        lineHeight: "normal",
-                        marginTop: 0,
-                        marginBottom: 0
-                    }}
-                >
-                    {/* 문서 헤더 시작*/}
+                {/* 문서 헤더 시작*/}
                     <table
                         style={{
                             width: 800,
@@ -256,7 +191,6 @@ const Report = () => {
                                                     id="ap1"
                                                 >
                                                     <input
-                                                        onClick={openApprovalListWindow}
                                                         type="text"
                                                         id="approvalList1"
                                                         name="approval1"
@@ -268,7 +202,7 @@ const Report = () => {
                                                             textAlign: "center",
                                                             color: "red"
                                                         }}
-                                                        readOnly="true"
+                                                        readOnly=""
                                                         text="등록"
                                                     />
                                                 </td>
@@ -297,7 +231,6 @@ const Report = () => {
                                                     id="ap2"
                                                 >
                                                     <input
-                                                        onClick={openApprovalListWindow2}
                                                         type="text"
                                                         id="approvalList2"
                                                         name="approval2"
@@ -411,7 +344,7 @@ const Report = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" value={wdate} onChange={onChange} />
+                                        <input type="date" name="wdate" value={wdate} onChange={onChange}/>
                                     </span>
                                 </td>
                             </tr>
@@ -713,33 +646,32 @@ const Report = () => {
                             </tr>
                         </tbody>
                     </table>
-                    {/* 제목 및 내용 끝 */}
-                    {/* 푸터*/}
-                    <table
-                        style={{
-                            width: 800,
-                            fontSize: 12,
-                            fontFamily: "malgun gothic,dotum,arial,tahoma"
-                        }}
-                    >
-                        <tbody>
-                            <tr></tr>
-                        </tbody>
-                    </table>
-                    {/* 푸터 끝*/}
-                </span>
-                <p
+                {/* 제목 및 내용 끝 */}
+                {/* 푸터*/}
+                <table 
                     style={{
-                        fontFamily: '"맑은 고딕"',
-                        fontSize: "10pt",
-                        lineHeight: 20,
-                        marginTop: 0,
-                        marginBottom: 0
+                        width: 800,
+                        fontSize: 12,
+                        fontFamily: "malgun gothic,dotum,arial,tahoma"
                     }}
-                />
+                >
+                    <tbody>
+                        <tr></tr>
+                    </tbody>
+                </table>
+                {/* 푸터 끝*/}
             </span>
-        </div>
-    )
-}
+            <p
+                style={{
+                    fontFamily: '"맑은 고딕"',
+                    fontSize: "10pt",
+                    lineHeight: 20,
+                    marginTop: 0,
+                    marginBottom: 0
+                }}
+            />
+        </span>
 
-export default Report;
+    )
+
+}

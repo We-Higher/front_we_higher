@@ -6,7 +6,6 @@ import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
 
 const Report = () => {
-
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
@@ -19,7 +18,6 @@ const Report = () => {
     const navigate = useNavigate();
     const { writer, title, content, wdate, serviceLife, classification, approval1,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
-
     const onChange = (e) => {
         const { name, value } = e.target;
         setDto2({

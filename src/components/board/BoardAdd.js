@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 export default function BoardAdd() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const [dto, setDto] = useState({ writer: sessionStorage.getItem('loginid'), title: '', content: '' });
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function BoardAdd() {
         })
     }
     const save = () => {
-        axios.post('http://localhost:8081/auth/board',
+        axios.post(`http://localhost:${myPort}/auth/board`,
             {},
             { headers: { Authorization: token }, params: { title: title, content: content } })
             .then(function (res) {

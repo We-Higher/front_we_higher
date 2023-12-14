@@ -26,6 +26,7 @@ import CommuteEditList from "./components/commute/CommuteEditList";
 import Report from "./components/approval/Report";
 import MailSend from "./components/mail/MailSend";
 import DemoApp from "./components/schedule/Calendar";
+import Meetingroom from "./components/meetingroom/meetingroom";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
@@ -67,7 +68,7 @@ class Router extends Component {
         <Route path="/mail/send" element={<MailSend />} />
 
        <Route path="/schedule/calendar" element={<DemoApp  />} />
-         
+       <Route path="/meetingroom/meetingroom" element={<Meetingroom  />} />
       </Routes>
     );
   }

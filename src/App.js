@@ -1,21 +1,55 @@
-import './App.css';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import Navbar from './components/layout/navbar';
+import Sidebar from './components/layout/sidebar';
+import Footer from './components/layout/footer';
+import React from 'react';
 import Router from './Router';
 import Login from './components/member/Login';
-import Footer from './fragments/footer';
-import Sidebar from './layout/sidebar';
+import EmployeeEdit from './components/employee/EmployeeEdit';
+import './css/layout.css';
 
-function App() {
+export default function App() {
+  const token = sessionStorage.getItem('token');
 
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Sidebar/>
-        <Router />
-      </BrowserRouter>
-      {/* <Footer/> */}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Private routes with layout */}
+        {token ? (
+          <Route
+            path="/*"
+            element={
+              <div className="d-flex flex-column flex-root">
+                <div className="page d-flex flex-row flex-column-fluid">
+                  <div className="sidebar">
+                    <Sidebar />
+                  </div>
+                  <div className="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                    <div className="navbar">
+                      <Navbar />
+                    </div>
+                    <div className="content">
+                      <Router />
+                    </div>
+                    <div className="footer">
+                      <Footer />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          />
+        ) : (
+          // Public routes
+          <Route path="/" element={<Login />} />
+        )}
+
+        {/* EmployeeEdit route without layout */}
+        <Route
+          path="/edit/:username"
+          element={<EmployeeEdit />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

@@ -1,21 +1,22 @@
 import axios from "axios";
-import { useState , useEffect} from "react";
-import { useLocation, useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import '../../css/login_form.css';
 import '../../css/style.bundle.css';
 
 export default function Login() {
-
-    const navigate = useNavigate();
+    const myPort = process.env.REACT_APP_MY_PORT
+    const [inputs, setInputs] = useState({ username: '', password: '' });
     const token = sessionStorage.getItem("token");
-    useEffect(()=>{
-        if(token!=null){    
+    const { username, password } = inputs;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (token != null) {
             navigate("/main");
         }
     }, []);
 
-    const [inputs, setInputs] = useState({ username: '', password: '' });
-    const { username, password } = inputs;
     const onChange = (e) => {
         const { name, value } = e.target;
         setInputs({
@@ -23,18 +24,18 @@ export default function Login() {
             [name]: value
         })
     }
+
     const login = () => {
-        axios.post('http://localhost:8081/login', {}, { params: { username: username, password: password } })
+        axios.post('http://localhost:' + myPort + '/login', {}, { params: { username: username, password: password } })
             .then(function (res) {
                 if (res.status === 200) {
                     if (res.data.flag) {
                         sessionStorage.setItem('token', res.data.token);
                         sessionStorage.setItem('loginid', username);
-                        navigate("/main");
+                        window.location.reload(); // 페이지 새로고침
                     } else {
                         alert('로그인 실패');
                     }
-
                 } else {
                     alert('error:' + res.status);
                 }
@@ -42,14 +43,15 @@ export default function Login() {
             .catch(function (error) {
                 alert('아이디가 존재하지 않거나 비밀번호가 다릅니다.');
             });
-    }
+    };
+
+
 
     return (
-
         <>
             <meta charSet="UTF-8" />
             <title>We-Higher</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
             <meta name="description" content="" />
             <link rel="icon" href="/img/favicon.png" />
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -57,7 +59,7 @@ export default function Login() {
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
                 crossOrigin="anonymous"
             ></script>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700"/>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
 
             <div className="loginform">
                 <body>
@@ -99,5 +101,4 @@ export default function Login() {
             </div>
         </>
     );
-
 }

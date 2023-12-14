@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 
 export default function BoardList() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const loginid = sessionStorage.getItem("loginid");
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function BoardList() {
     const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/dataroom', { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/dataroom`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -30,7 +31,7 @@ export default function BoardList() {
     }, [])
 
     const del = (num) => {
-        axios.post('http://localhost:8081/auth/dataroom/del',
+        axios.post(`http://localhost:${myPort}/auth/dataroom/del`,
             {},
             {
                 headers: { Authorization: token },

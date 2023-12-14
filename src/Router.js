@@ -31,6 +31,8 @@ import ImgBoardHome from "./components/ImgBoardHome";
 import ImgAdd from "./components/imgboard/ImgAdd";
 import Test from "./Test";
 
+import DemoApp from "./components/schedule/Calendar";
+
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
 class Router extends Component {
@@ -69,6 +71,7 @@ class Router extends Component {
             <Route path="/imgboard/add" element={<ImgAdd />} />
             <Route path="/test" element={<Test />} />
             
+            <Route path="/schedule/calendar" element={<DemoApp  />} />
       </Routes>
     );
   }

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 export default function Sidebar() {
     const navigate = useNavigate();
 
@@ -290,12 +290,12 @@ export default function Sidebar() {
                                     </div>
                                 </div>
                                 <div className="menu-item">
-                                    <a className="menu-link" href="/schedule">
+                                    <Link className="menu-link" href="/schedule/calendar">
                                         <span className="menu-bullet">
                                             <span className="bullet bullet-dot"></span>
                                         </span>
                                         <span className="menu-title">일정 보기</span>
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="menu-item">
                                     <a className="menu-link" href="/meetingroom">

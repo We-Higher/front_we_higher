@@ -31,6 +31,8 @@ import ImgBoardHome from "./components/ImgBoardHome";
 import ImgAdd from "./components/imgboard/ImgAdd";
 import Test from "./Test";
 
+import DemoApp from "./components/schedule/Calendar";
+
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
 class Router extends Component {

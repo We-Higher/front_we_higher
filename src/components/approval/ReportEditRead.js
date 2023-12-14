@@ -6,18 +6,17 @@ import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
 
 const Report = () => {
+
+    const n = useParams().num;
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
-    const [dto, setDto2] = useState({
-        writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
-        serviceLife: '', classification: '', approval1: '', approval2: '',
-        approval1rank: '', approval2rank: '', app1username: '', app2username: '',
-    });
+    const [dto, setDto2] = useState({});
 
     const navigate = useNavigate();
     const { writer, title, content, wdate, serviceLife, classification, approval1,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
+
     const onChange = (e) => {
         const { name, value } = e.target;
         setDto2({
@@ -27,84 +26,25 @@ const Report = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report`, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/report/editread/` + n , { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
+                    setDto2(res.data.dto);
                 } else {
                     alert('error:' + res.status);
                 }
+            })
+            .catch(function (error) {
+                alert("오류: " + error.message);
             });
         return () => {
         };
     }, []);
 
-    const [showModal, setShowModal] = useState(false);
-    const [showModal2, setShowModal2] = useState(false);
-
-    const [selectedEmployee, setSelectedEmployee] = useState({});
-    const [selectedEmployee2, setSelectedEmployee2] = useState({});
-
-    const openModal = () => {
-        setShowModal(true);
-    };
-
-    const openModal2 = () => {
-        setShowModal2(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-    const closeModal2 = () => {
-        setShowModal2(false);
-    };
-
-    const handleSelectEmployee = (employee) => {
-
-        setSelectedEmployee(employee);
-    };
-
-    const handleSelectEmployee2 = (employee) => {
-
-        setSelectedEmployee2(employee);
-    };
-
-    const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/approval/report`,
-            {},
-            {
-                headers: { Authorization: token }, params: {
-                    writer: writer, title: title, content: content,
-                    wdate: wdate, serviceLife: serviceLife, classification: classification, approval1: selectedEmployee.name,
-                    approval2: selectedEmployee2.name, approval1rank: selectedEmployee.companyRankName, 
-                    approval2rank: selectedEmployee2.companyRankName, app1username: selectedEmployee.username, app2username: selectedEmployee2.username
-                }
-            })
-            .then(function (res) {
-                if (res.status === 200) {
-                    alert('지출결의서 기안이 완료되었습니다.');
-                    navigate('/main')
-                } else {
-                    alert('error:' + res.status);
-                }
-            })
-    }
-
     return (
 
         <div>
-            <ApprovalList1
-                show={showModal}
-                onHide={closeModal}
-                onSelectEmployee={handleSelectEmployee}
-            />
-            <ApprovalList2
-                show={showModal2}
-                onHide={closeModal2}
-                onSelectEmployee={handleSelectEmployee2}
-            />
             <span
                 style={{
                     fontFamily: '"맑은 고딕"',
@@ -188,22 +128,6 @@ const Report = () => {
                                                 >
                                                     1차결재자
                                                 </td>
-
-                                                <input
-                                                    type="hidden"
-                                                    id="approval1rank"
-                                                    name="approval1rank"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                    value={selectedEmployee.companyRank} onChange={onChange}
-                                                />
                                                 <td
                                                     type="text"
                                                     id="approval2rankname"
@@ -211,21 +135,6 @@ const Report = () => {
                                                 >
                                                     2차결재자
                                                 </td>
-                                                <input
-                                                    type="hidden"
-                                                    id="approval2rank"
-                                                    name="approval2rank"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                    value={selectedEmployee2.companyRank} onChange={onChange}
-                                                />
                                             </tr>
                                             <tr>
                                                 <td
@@ -247,8 +156,8 @@ const Report = () => {
                                                             color: "red"
                                                         }}
                                                         readOnly="true"
-                                                        value={mdto.name}
                                                     />
+                                                    {mdto.name}
                                                 </td>
                                                 <td
                                                     style={{
@@ -261,7 +170,6 @@ const Report = () => {
                                                     id="ap1"
                                                 >
                                                     <input
-                                                        onClick={openModal}
                                                         type="text"
                                                         id="approvalList1"
                                                         name="approval1"
@@ -275,24 +183,9 @@ const Report = () => {
                                                         }}
                                                         readOnly="true"
                                                         text="등록"
-                                                        value={selectedEmployee.name} onChange={onChange}
+                                                        value={dto.approval1}
                                                     />
                                                 </td>
-                                                <input
-                                                    type="hidden"
-                                                    id="app1username"
-                                                    name="app1username"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                    value={selectedEmployee.username} onChange={onChange}
-                                                />
                                                 <td
                                                     style={{
                                                         width: 65,
@@ -304,9 +197,8 @@ const Report = () => {
                                                     id="ap2"
                                                 >
                                                     <input
-                                                        onClick={openModal2}
                                                         type="text"
-                                                        //id="approvalList2"
+                                                        id="approvalList2"
                                                         name="approval2"
                                                         defaultValue=""
                                                         style={{
@@ -317,22 +209,9 @@ const Report = () => {
                                                             color: "red"
                                                         }}
                                                         readOnly=""
-                                                        value={selectedEmployee2.name} onChange={onChange}
+                                                        value={dto.approval2}
                                                     />
                                                 </td>
-                                                <input
-                                                    type="hidden"
-                                                    //id="app2username"
-                                                    name="app2username"
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    value={selectedEmployee2.username} onChange={onChange}
-                                                />
                                             </tr>
                                         </tbody>
                                     </table>
@@ -418,7 +297,7 @@ const Report = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" value={wdate} onChange={onChange} />
+                                        <input type="date" name="wdate" value={wdate} onChange={onChange} readonly="true"/>
                                     </span>
                                 </td>
                             </tr>
@@ -508,7 +387,7 @@ const Report = () => {
                                             style={{ width: "100%" }}
                                             name="serviceLife"
                                             defaultValue="1년"
-                                            value={serviceLife} onChange={onChange}
+                                            value={dto.serviceLife} onChange={onChange}
                                         >
                                             <option onSelect={onChange} value={'1년'} selected="selected">1년</option>
                                             <option onSelect={onChange} value={'3년'} >3년</option>
@@ -559,7 +438,7 @@ const Report = () => {
                                             style={{ width: "100%" }}
                                             name="classification"
                                             defaultValue="1등급"
-                                            value={classification} onChange={onChange}
+                                            value={dto.classification} onChange={onChange}
                                         >
                                             <option onSelect={onChange} selected="selected">1등급</option>
                                             <option onSelect={onChange}>2등급</option>
@@ -669,7 +548,7 @@ const Report = () => {
                                             style={{ width: 700 }}
                                             placeholder="제목을 입력해주세요"
                                             name="title"
-                                            value={title} onChange={onChange}
+                                            value={dto.title} onChange={onChange}
                                         />
                                     </span>
                                 </td>
@@ -707,15 +586,9 @@ const Report = () => {
                                             placeholder="내용을 작성해주세요"
                                             name="content"
                                             defaultValue={""}
-                                            value={content} onChange={onChange}
+                                            value={dto.content} onChange={onChange}
                                         />
-                                        <input
-                                            type="button"
-                                            onClick={save}
-                                            defaultValue="작성"
-                                            id="reportbtn"
-                                            style={{ marginLeft: 750, marginTop: 5 }}
-                                        />
+
                                     </span>
                                     <br />
                                 </td>

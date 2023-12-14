@@ -13,7 +13,7 @@ export default function BoardList() {
     const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/board', { headers: { Authorization: token } })
+        axios.get('http://localhost:8081/auth/dataroom', { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -30,7 +30,7 @@ export default function BoardList() {
     }, [])
 
     const del = (num) => {
-        axios.post('http://localhost:8081/auth/board/del',
+        axios.post('http://localhost:8081/auth/dataroom/del',
             {},
             {
                 headers: { Authorization: token },
@@ -45,7 +45,6 @@ export default function BoardList() {
                 }
             });
     }
-
     return (
 
         <div className="dataroom">
@@ -55,61 +54,63 @@ export default function BoardList() {
                         <div className="col-md-12">
                             <div className="card">
                                 <div className="card-header card-header-danger">
-                                    <h2 className="card-title">자유게시판</h2>
+                                    <h2 className="card-title">자료실</h2>
+                                    {ismaster === 1 && (
                                     <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
                                         <div className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                            <a href={`/board/add`}><i className="bi bi-person-plus-fill">글 작성</i></a>
+                                            <a href={`/dataroom/add`}><i className="bi bi-person-plus-fill">자료 올리기</i></a>
                                         </div>
                                     </div>
+                                    )}
                                 </div>
                                 <div className="card-body">
                                     <div className="table-responsive">
                                         <table id="kt_datatable_example_2" className="table table-striped table-row-bordered gy-5 gs-7">
                                             <thead>
                                                 <tr className="fw-bold fs-6 text-gray-800">
-                                                    <th>글번호</th>
-                                                    <th>이름</th>
-                                                    <th>직급</th>
+                                                    <th>번호</th>
                                                     <th>제목</th>
-                                                    <th>작성일</th>
-                                                    <th>수정일</th>
-                                                    <th>조회수</th>
-                                                    <th>수정</th>
-                                                    <th>삭제</th>
+                                                    <th>작성자</th>
+                                                    <th>제목</th>
+                                                    <th>등록일</th>
+                                                    <th>다운로드수</th>
+                                                    {ismaster === 1 && (
+                                                        <>
+                                                            <th>수정</th>
+                                                            <th>삭제</th>
+                                                        </>
+                                                    )}
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {list.map((b) => (
+                                                {list.map((d) => (
                                                     <tr>
-                                                        <td>{b.num}</td>
-                                                        <td>{b.member.name}</td>
-                                                        <td>{b.member.companyRankName}</td>
+                                                        <td>{d.num}</td>
                                                         <td>
-                                                            <Link to={`/board/detail/${b.num}`} className="link">
-                                                                {b.title}
-                                                            </Link>
+                                                            <a href={`/dataroom/detail/${d.num}`} className="link">{d.title}</a>
                                                         </td>
-                                                        <td>{b.wdate}</td>
-                                                        <td>{b.udate}</td>
-                                                        <td>{b.cnt}</td>
+                                                        <td>{d.member.name}</td>
+                                                        <td>{d.title}</td>
+                                                        <td>{d.wdate}</td>
+                                                        <td>{d.cnt}</td>
                                                         <td style={{ padding: '2px' }}>
-                                                            {(loginid === b.member.username || ismaster === 1) && (
+                                                            {(ismaster === 1) && (
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                                                    <Link to={`/board/edit/${b.num}`}><i className="bi bi-pencil"></i>
-                                                                    </Link>
+                                                                    <a href={`/dataroom/edit/${d.num}`}><i className="bi bi-pencil"></i>
+                                                                    </a>
                                                                 </div>
                                                             )}
                                                         </td>
                                                         <td style={{ padding: '2px' }}>
-                                                            {(loginid === b.member.username || ismaster === 1) && (
+                                                            {(ismaster === 1) && (
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                                                    <a onClick={() => del(b.num)}><i className="bi bi-trash-fill del"></i>
+                                                                    <a onClick={() => del(d.num)}><i className="bi bi-trash-fill del"></i>
                                                                     </a>
                                                                 </div>
 

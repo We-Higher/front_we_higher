@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function DataroomDetail() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const n = useParams().num;
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function DataroomDetail() {
     });
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/dataroom/' + n, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/dataroom/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -42,7 +43,7 @@ export default function DataroomDetail() {
 
     const down = (fname, num) => {
 
-            axios.post('http://localhost:8081/auth/dataroom/down',
+            axios.post(`http://localhost:${myPort}/auth/dataroom/down`,
             {},
             {
                 headers: { Authorization: token },

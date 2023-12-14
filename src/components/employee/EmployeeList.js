@@ -1,38 +1,36 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import '../../css/dataroom.css';
 
 export default function EmployeeList() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
-    const loginid = sessionStorage.getItem("loginid");
     const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [mdto, setDto] = useState({});
     const { ismaster } = mdto;
-    const [type, setType] = useState("none"); 
+    const [type, setType] = useState("none");
     const [option, setOption] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/employee/list', { headers: { Authorization: token } })
-            .then(
-                function (res) {
-                    if (res.status === 200) {
-                        setList(res.data.list);
-                        let m = res.data.mdto;
-                        setDto({
-                            ismaster: m.isMaster
-                        })
-                    } else {
-                        alert('error:' + res.status);
-                    }
+        axios.get(`http://localhost:${myPort}/auth/employee/list`, { headers: { Authorization: token } })
+            .then(function (res) {
+                if (res.status === 200) {
+                    setList(res.data.list);
+                    let m = res.data.mdto;
+                    setDto({
+                        ismaster: m.isMaster
+                    })
+                } else {
+                    alert('error:' + res.status);
                 }
-            );
-    }, [])
+            });
+    }, [list]);
+
 
     const search = (type, option) => {
-        axios.get('http://localhost:8081/auth/employee/search',
+        axios.get(`http://localhost:${myPort}/auth/employee/search`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {
@@ -45,8 +43,21 @@ export default function EmployeeList() {
             );
     }
 
-    return (
+    const edit = (username) => {
+        var width = 600;
+        var height = 700;
+        var left = (window.innerWidth - width) / 2;
+        var top = (window.innerHeight - height) / 2;
 
+        window.open(`/edit/${username}`, "EmployeeEdit_window", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",history=no,resizable=no,status=no,scrollbars=yes,menubar=no");
+    }
+
+    // 회원가입 폼으로 이동
+    const join = () => {
+        navigate('/employee/join');
+    }
+
+    return (
         <div className="dataroom">
             <div className="main-content">
                 <div className="container-fluid">
@@ -63,12 +74,7 @@ export default function EmployeeList() {
                                         </div>
                                         <div className="input-group mb-3" style={{ paddingTop: '50px' }}>
                                             <div className="input-group-prepend">
-                                                <select
-                                                    name="type"
-                                                    className="form-select form-select-sm"
-                                                    value={type}
-                                                    onChange={(e) => setType(e.target.value)}
-                                                >
+                                                <select name="type" className="form-select form-select-sm" value={type} onChange={(e) => setType(e.target.value)} >
                                                     <option value="none">전체</option>
                                                     <option value="name">이름</option>
                                                     <option value="newNo">사번</option>
@@ -76,13 +82,7 @@ export default function EmployeeList() {
                                                     <option value="deptName">부서</option>
                                                 </select>
                                             </div>
-                                            <input
-                                                type="text"
-                                                name="option"
-                                                className="form-control form-control-sm"
-                                                value={option}
-                                                onChange={(e) => setOption(e.target.value)}
-                                            />
+                                            <input type="text" name="option" className="form-control form-control-sm" value={option} onChange={(e) => setOption(e.target.value)} />
                                             <div className="input-group-append">
                                                 <button
                                                     onClick={() => search(type, option)}
@@ -124,7 +124,7 @@ export default function EmployeeList() {
                                             </thead>
                                             <tbody>
                                                 {list.map((e) => (
-                                                    <tr>
+                                                    <tr key={e.newNo}>
                                                         <td>{e.newNo}</td>
                                                         <td>{e.name}</td>
                                                         <td>{e.companyRankName}</td>
@@ -137,8 +137,7 @@ export default function EmployeeList() {
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                                                    <a href={`/employee/edit/${e.num}`}><i className="bi bi-pencil"></i>
-                                                                    </a>
+                                                                    <i className="bi bi-pencil" onClick={() => edit(e.username)}></i>
                                                                 </div>
                                                             )}
                                                         </td>

@@ -1,13 +1,17 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { NavDropdown, Nav } from 'react-bootstrap';
+import Employeeicon from '../icons/Employeeicon';
+import Boardicon from '../icons/Boardicon';
+import Commuteicon from '../icons/Commuteicon';
+import Approvalicon from '../icons/Approvalicon';
+import Scheduleicon from '../icons/Scheduleicon';
+import '../../css/layout.css';
+
 export default function Sidebar() {
     const navigate = useNavigate();
 
     const main = (e) => {
         navigate('/');
-    }
-
-    const employee = (e) => {
-        navigate('/employee/list');
     }
 
     return (
@@ -45,308 +49,100 @@ export default function Sidebar() {
                                     {/*end::Svg Icon*/}
                                 </span>
                             </a>
+                        </div>
 
-                        </div>
-                        <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-                            data-kt-menu-flip="bottom" className="menu-item py-2" >
-                            <span className="menu-link menu-center" title="회원"
-                                data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
-                                data-bs-placement="right" onClick={employee}>
-                                <span className="menu-icon me-0">
-                                    {/*begin::Svg Icon | path: icons/duotone/General/User.svg*/}
-                                    <span className="svg-icon svg-icon-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            width="16" height="16"
-                                            fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16"
-                                            color="#ADB5BD">
-                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                            <path fill-rule="evenodd"
-                                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                        </svg>
-                                    </span>
-                                    {/*end::Svg Icon*/}
-                                </span>
-                            </span>
-                            <div className="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-                                <div className="menu-item">
-                                    <div className="menu-content">
-                                        <span className="menu-section fs-5 fw-bolder ps-1 py-1">회원정보</span>
-                                    </div>
-                                </div>
-                                <div data-kt-menu-trigger="click" className="menu-item menu-accordion">
-                                    <span className="menu-link">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">내 정보</span>
-                                        <span className="menu-arrow"></span>
-                                    </span>
-                                    <div className="menu-sub menu-sub-accordion">
-                                        <div className="menu-item">
-                                            <a className="menu-link"
-                                                href="@{/member/mypage(name=${#authentication.principal.username})}">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">마이페이지</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div data-kt-menu-trigger="click" className="menu-item menu-accordion">
-                                    <span className="menu-link">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">임직원 관리</span>
-                                        <span className="menu-arrow"></span>
-                                    </span>
-                                    <div className="menu-sub menu-sub-accordion">
-                                        <div className="menu-item">
-                                            <a className="menu-link" href="/employee/list">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">임직원 목록</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-                            data-kt-menu-flip="bottom" className="menu-item py-2">
-                            <span className="menu-link menu-center" title="전자결재" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                <span className="menu-icon me-0">
-                                    {/*begin::Svg Icon | path: icons/duotone/Shopping/Chart.svg*/}
-                                    <span className="svg-icon svg-icon-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" className="bi bi-layout-text-sidebar"
-                                            viewBox="0 0 16 16" color="#ADB5BD">
-                                            <path d="M3.5 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM3 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z" />
-                                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm12-1v14h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zm-1 0H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h9V1z" />
-                                        </svg>
-                                    </span>
-                                    {/*end::Svg Icon*/}
-                                </span>
-                            </span>
-                            <div className="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-                                <div className="menu-item">
-                                    <div className="menu-content">
-                                        <span className="menu-section fs-5 fw-bolder ps-1 py-1">전자결재</span>
-                                    </div>
-                                </div>
-                                <div data-kt-menu-trigger="click" className="menu-item menu-accordion">
-                                    <span className="menu-link">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">결재서류 작성</span>
-                                        <span className="menu-arrow"></span>
-                                    </span>
-                                    <div className="menu-sub menu-sub-accordion">
-                                        <div className="menu-item">
-                                            <a className="menu-link" id="report">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">품의서</span>
-                                            </a>
-                                        </div>
-                                        <div className="menu-item">
-                                            <a className="menu-link" id="expense">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">지출결의서</span>
-                                            </a>
-                                        </div>
-                                        <div className="menu-item">
-                                            <a className="menu-link" id="vacation">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">휴가신청서</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div data-kt-menu-trigger="click" className="menu-item menu-accordion">
-                                    <span className="menu-link">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">결재문서 목록</span>
-                                        <span className="menu-arrow"></span>
-                                    </span>
-                                    <div className="menu-sub menu-sub-accordion">
-                                        <div className="menu-item" if="${#authentication.principal.isMaster == 1}">
-                                            <a className="menu-link" href="/approval/draft">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">전체 결재문서</span>
-                                            </a>
-                                        </div>
-                                        <div className="menu-item">
-                                            <a className="menu-link" href="/approval/mydraft">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">기안 결재함</span>
-                                            </a>
-                                        </div>
-                                        <div className="menu-item">
-                                            <a className="menu-link" href="/approval/process">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">결재 대기함</span>
-                                            </a>
-                                        </div>
-                                        <div className="menu-item">
-                                            <a className="menu-link" href="/approval/myrefuse">
-                                                <span className="menu-bullet">
-                                                    <span className="bullet bullet-dot"></span>
-                                                </span>
-                                                <span className="menu-title">반려 결재함</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-                            data-kt-menu-flip="bottom" className="menu-item py-2">
-                            <span className="menu-link menu-center" title="근태관리" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                <span className="menu-icon me-0">
-                                    {/*begin::Svg Icon | path: icons/duotone/Communication/More.svg*/}
-                                    <span className="svg-icon svg-icon-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" className="bi bi-building" viewBox="0 0 16 16"
-                                            color="#ADB5BD">
-                                            <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
-                                            <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z" />
-                                        </svg>
-                                    </span>
-                                    {/*end::Svg Icon*/}
-                                </span>
-                            </span>
-                            <div className="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-                                <div className="menu-item">
-                                    <div className="menu-content">
-                                        <span className="menu-section fs-5 fw-bolder ps-1 py-1">근태관리</span>
-                                    </div>
-                                </div>
-                                <div className="menu-item">
-                                    <a className="menu-link" href="/commute/list">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">임직원 근태관리</span>
-                                    </a>
-                                </div>
-                                <div className="menu-item">
-                                    <a className="menu-link" href="/commute/mycommute">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">출퇴근 이력</span>
-                                    </a>
-                                </div>
-                                <div className="menu-item" if="${#authentication.principal.isMaster == 1}">
-                                    <a className="menu-link" href="/commute/editRequestList">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">근태 수정요청</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-                            data-kt-menu-flip="bottom" className="menu-item py-2">
-                            <span className="menu-link menu-center" title="일정 및 예약" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                <span className="menu-icon me-0">
-                                    {/*begin::Svg Icon | path: icons/duotone/Communication/More.svg*/}
-                                    <span className="svg-icon svg-icon-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" className="bi bi-calendar4-week"
-                                            viewBox="0 0 16 16" color="#ADB5BD">
-                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z" />
-                                            <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
-                                        </svg>
-                                    </span>
-                                    {/*end::Svg Icon*/}
-                                </span>
-                            </span>
-                            <div className="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-                                <div className="menu-item">
-                                    <div className="menu-content">
-                                        <span className="menu-section fs-5 fw-bolder ps-1 py-1">캘린더</span>
-                                    </div>
-                                </div>
-                                <div className="menu-item">
-                                    <a className="menu-link" href="/schedule">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">일정 보기</span>
-                                    </a>
-                                </div>
-                                <div className="menu-item">
-                                    <a className="menu-link" href="/meetingroom">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">회의실 예약</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-                            data-kt-menu-flip="bottom" className="menu-item py-2" >
-                            <span className="menu-link menu-center" title="자료실 및 게시판" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                <span className="menu-icon me-0">
-                                    {/*begin::Svg Icon | path: icons/duotone/Communication/More.svg*/}
-                                    <span className="svg-icon svg-icon-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            color="#ADB5BD"
-                                            fill="currentColor" className="bi bi-save2" viewBox="0 0 16 16">
-                                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.5h2a.5.5 0 0 1 .354.854l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5A.5.5 0 0 1 5.5 6.5h2V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
-                                        </svg>
-                                    </span>
-                                    {/*end::Svg Icon*/}
-                                </span>
-                            </span>
-                            <div className="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-                                <div className="menu-item">
-                                    <div className="menu-content">
-                                        <span className="menu-section fs-5 fw-bolder ps-1 py-1">자료실 및 게시판</span>
-                                    </div>
-                                </div>
-                                <div className="menu-item">
-                                    <a className="menu-link" href="/dataroom/list">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">자료실</span>
-                                    </a>
-                                </div>
-                                <div className="menu-item">
-                                    <a className="menu-link" href="/board/list">
-                                        <span className="menu-bullet">
-                                            <span className="bullet bullet-dot"></span>
-                                        </span>
-                                        <span className="menu-title">자유게시판</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        {/* 임직원 관리 */}
+                        <Nav className="ml-auto">
+                            <NavDropdown title={<Employeeicon />} id="nav-dropdown" className="position-static">
+                                {/* Submenu with more items */}
+                                <NavDropdown title="임직원 관리" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/employee/list">
+                                        임직원 목록
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="내 정보" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/member/mypage">
+                                        마이 페이지
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </NavDropdown>
+                        </Nav>
+
+                        {/* 전자결재 */}
+                        <Nav className="ml-auto">
+                            <NavDropdown title={<Approvalicon />} id="nav-dropdown">
+                                <NavDropdown title="결재문서 작성" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/approval/report">
+                                        품의서
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/approval/expense">
+                                        지출결의서
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/approval/vacation">
+                                        휴가신청서
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="결재문서 목록" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/approval/draft">
+                                        전체 결재문서
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/approval/mydraft">
+                                        기안 결재함
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/approval/process">
+                                        결재 대기함
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/approval/myrefuse">
+                                        반려 결재함
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </NavDropdown>
+                        </Nav>
+
+                        {/* 근태관리 */}
+                        <Nav className="ml-auto">
+                            <NavDropdown title={<Commuteicon />} id="nav-dropdown">
+                                <NavDropdown title="근태관리" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/commute/list">
+                                        임직원 근태관리
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/commute/mycommute">
+                                        나의 출퇴근 이력
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/commute/editlist">
+                                        근태 수정요청
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </NavDropdown>
+                        </Nav>
+
+                        {/* 일정 및 예약 */}
+                        <Nav className="ml-auto">
+                            <NavDropdown title={<Scheduleicon />} id="nav-dropdown">
+                                <NavDropdown title="예약 및 일정" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/commute/list">
+                                        회의실 예약
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/schedule/add">
+                                        일정 보기
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </NavDropdown>
+                        </Nav>
+                        
+                        <Nav className="ml-auto">
+                            <NavDropdown title={<Boardicon />} id="nav-dropdown">
+                                {/* Submenu with more items */}
+                                <NavDropdown title="자료실 및 게시판" id="submenu">
+                                    <NavDropdown.Item as={Link} to="/dataroom/list">
+                                        자료실
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/board/list">
+                                        자유게시판
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </NavDropdown>
+                        </Nav>
                     </div>
                     {/*end::Primary menu*/}
                 </div>

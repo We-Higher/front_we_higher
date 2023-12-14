@@ -1,0 +1,23 @@
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    flex: 1;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+.position-static {
+    position: static !important;
+}

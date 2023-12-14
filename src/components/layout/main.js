@@ -1,4 +1,6 @@
 export default function Main() {
+    const token = sessionStorage.getItem("token");
+
     return (
         <div className="content d-flex flex-column flex-column-fluid" id="kt_content">
             {/* <!--begin::Container--> */}
@@ -10,7 +12,7 @@ export default function Main() {
                         {/* <!--begin::Engage Widget 1--> */}
                         <div className="card card-xxl-stretch">
                             {/* <!--begin::Card body--> */}
-                            <div className="card-body d-flex flex-column justify-content-between h-100">
+                            <div className="card-body d-flex flex-column justify-content-between h-550px">
                                 {/* <!--begin::Section--> */}
                                 <div className="pt-12">
                                     {/* <!--begin::Title--> */}
@@ -22,26 +24,18 @@ export default function Main() {
                                             className="table table-striped table-row-bordered gy-5 gs-7">
                                             <thead>
                                                 <tr className="fw-bold fs-6 text-gray-800">
-                                                    <th
-                                                    // style="font-size: 15px;"
-                                                    >제목</th>
-                                                    <th
-                                                    // style="font-size: 15px;"
-                                                    >작성일</th>
+                                                    <th>제목</th>
+                                                    <th>작성일</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr each="b:${pagingNotify}">
-                                                    <td
-                                                    // style="font-size: 13px;"
-                                                    ><a
+                                                    <td><a
                                                         href="@{/board/notifyedit(num=${b.num })}"
                                                         text="${b.title }"></a><span
                                                             className="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">중 요!</span>
                                                     </td>
-                                                    <td text="${b.wdate }"
-                                                    // style="font-size: 13px;"
-                                                    ></td>
+                                                    <td text="${b.wdate }" ></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -100,7 +94,7 @@ export default function Main() {
                                                         <div className="col-lg-12 fv-row">
                                                             <span className="fw-bold fs-6">
                                                                 <div className="input-group input-group-sm mb-3">
-                                                                    <div className="scroll-y me-n5 pe-5 h-200px h-lg-auto"
+                                                                    <div className="scroll-y me-n5 pe-5 h-550px h-lg-auto"
                                                                         data-kt-scroll="true"
                                                                         data-kt-scroll-activate="{default: false, lg: true}"
                                                                         data-kt-scroll-max-height="auto"
@@ -218,5 +212,6 @@ export default function Main() {
             </div>
             {/* <!--end::Container--> */}
         </div>
+
     );
 }

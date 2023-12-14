@@ -2,10 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 export default function BoardAdd() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const [dto, setDto] = useState({ writer: sessionStorage.getItem('loginid'), content: '' });
     const navigate = useNavigate();
-    const {writer, content, f} = dto;
+    const { writer, content, f } = dto;
     const onChange = (e) => {
         const { name, value } = e.target;
         setDto({
@@ -16,11 +17,11 @@ export default function BoardAdd() {
     const save = () => {
 
         let fdata = new FormData();
-        let file =  document.getElementById('f');
+        let file = document.getElementById('f');
         fdata.append('content', content);
         fdata.append('f', file.files[0]);
-        axios.post('http://localhost:8081/auth/dataroom', fdata,
-            { headers: { Authorization: token }, "Content-Type":"multipart/form-data" })
+        axios.post(`http://localhost:${myPort}/auth/dataroom`, fdata,
+            { headers: { Authorization: token }, "Content-Type": "multipart/form-data" })
             .then(function (res) {
                 if (res.status === 200) {
                     navigate('/dataroom/list')
@@ -77,7 +78,7 @@ export default function BoardAdd() {
                         <span className="fw-bolder fs-6 text-dark">
                             <div className="input-group input-group-sm mb-3">
                                 <input type="file" name="f" id="f"
-                                    className="form-control" value={f} onChange={onChange}/>
+                                    className="form-control" value={f} onChange={onChange} />
                             </div>
                         </span>
                     </div>

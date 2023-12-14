@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 export default function BoardEdit() {
+    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const n = useParams().num;
     const [dto, setDto] = useState({
@@ -27,7 +28,7 @@ export default function BoardEdit() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8081/auth/board/edit/' + n, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/board/edit/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let b = res.data.dto;
@@ -47,7 +48,7 @@ export default function BoardEdit() {
     }, []);
 
     const edit = () => {
-        axios.put('http://localhost:8081/auth/board/edit',
+        axios.put(`http://localhost:${myPort}/auth/board/edit`,
             {},
             { headers: { Authorization: token }, params: { num:n, title:title, content:content } })
             .then(function (res) {

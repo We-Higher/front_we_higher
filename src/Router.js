@@ -10,6 +10,8 @@ import BoardAdd from "./components/board/BoardAdd";
 import BoardDetail from "./components/board/BoardDetail";
 import BoardEdit from "./components/board/BoardEdit";
 
+import NotifyList from "./components/notify/NotifyList";
+
 import EmployeeList from "./components/employee/EmployeeList";
 import EmployeeJoin from "./components/employee/EmployeeJoin";
 
@@ -24,13 +26,24 @@ import CommuteEdit from "./components/commute/CommuteEdit";
 import CommuteEditList from "./components/commute/CommuteEditList";
 
 import Report from "./components/approval/Report";
+import Expense from "./components/approval/Expense";
+import Vacation from "./components/approval/Vacation";
+
+import MyDraft from "./components/approval/MyDraft";
+import Draft from "./components/approval/Draft";
+import Process from "./components/approval/Process";
+import MyRefuse from "./components/approval/MyRefuse";
+
 import MailSend from "./components/mail/MailSend";
-import DemoApp from "./components/schedule/Calendar";
+
+import Schedule from "./components/schedule/Calendar";
 
 import ChatHome from "./components/chat/ChatHome";
 import ChatInvitation from "./components/chat/ChatInvitation";
 import ChatRoomList from "./components/chat/ChatRoomList";
 import ChatRoomDetail from "./components/chat/ChatRoomDetail";
+
+import Meetingroom from "./components/meetingroom/meetingroom";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
@@ -67,10 +80,17 @@ class Router extends Component {
                 <Route path="/commute/editlist" element={<CommuteEditList />} />
 
                 <Route path="/approval/report" element={<Report />} />
-
+				<Route path="/approval/expense" element={<Expense />} />
+       			<Route path="/approval/vacation" element={<Vacation />} />
+				
+				<Route path="/approval/draft" element={<Draft />} />
+				<Route path="/approval/mydraft" element={<MyDraft />} />
+				<Route path="/approval/process" element={<Process />} />
+				<Route path="/approval/myrefuse" element={<MyRefuse />} />	
                 <Route path="/mail/send" element={<MailSend />} />
 
-                <Route path="/schedule/calendar" element={<DemoApp />} />
+                <Route path="/schedule/calendar" element={<Schedule />} />
+				<Route path="/meetingroom/meetingroom" element={<Meetingroom  />} />
 
                 <Route path="/chat" element={<ChatHome />} />
                 <Route path="/chat/invitation" element={<ChatInvitation />} />
@@ -82,4 +102,3 @@ class Router extends Component {
 }
 
 export default Router;
-

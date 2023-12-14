@@ -12,7 +12,6 @@ import BoardEdit from "./components/board/BoardEdit";
 
 import EmployeeList from "./components/employee/EmployeeList";
 import EmployeeJoin from "./components/employee/EmployeeJoin";
-import EmployeeEdit from "./components/employee/EmployeeEdit";
 
 import DataroomList from "./components/dataroom/DataroomList";
 import DataroomAdd from "./components/dataroom/DataroomAdd";
@@ -26,6 +25,7 @@ import CommuteEditList from "./components/commute/CommuteEditList";
 
 import Report from "./components/approval/Report";
 import MailSend from "./components/mail/MailSend";
+import DemoApp from "./components/schedule/Calendar";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
@@ -33,6 +33,7 @@ class Router extends Component {
   render() {
     return (
       <Routes>
+
         <Route path="/" element={<Navigate to="/member/login" />} />
 
         <Route path="/member/login" element={<Login />} />
@@ -65,10 +66,12 @@ class Router extends Component {
 
         <Route path="/mail/send" element={<MailSend />} />
 
-
+       <Route path="/schedule/calendar" element={<DemoApp  />} />
+         
       </Routes>
     );
   }
 }
 
 export default Router;
+

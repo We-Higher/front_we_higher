@@ -1,19 +1,19 @@
-import {useParams} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import MY_PORT from "../../common/util";
-import {useStompClient, useSubscription} from "react-stomp-hooks";
+import { useStompClient, useSubscription } from "react-stomp-hooks";
 
 export default function ChatRoomDetail() {
     const token = sessionStorage.getItem("token")
     const loginid = sessionStorage.getItem("loginid")
 
-    const {id} = useParams()
+    const { id } = useParams()
     const [roomInfo, setRoomInfo] = useState()
     const [chatList, setChatList] = useState([])
     const [chat, setChat] = useState('');
     const [inviteList, setInviteList] = useState([])
-    const {user} = useState(null)
+    const [user, setUser] = useState(null)
 
     const stompClient = useStompClient();
 
@@ -23,11 +23,17 @@ export default function ChatRoomDetail() {
         setChatList([...chatList, recv])
     });
 
-
     useEffect(() => {
-        axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, {headers: {Authorization: token}})
+        console.log('useEffect');
+        loadRoom()
+    }, [])
+
+    const loadRoom = () => {
+        console.log('loadRoom');
+        axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, { headers: { Authorization: token } })
             .then(res => {
                 if (res.status === 200) {
+                    setUser(res.data.user)
                     setRoomInfo(res.data.chatRoom)
                     setChatList(res.data.clist)
                     setInviteList(res.data.nlist)
@@ -36,7 +42,7 @@ export default function ChatRoomDetail() {
                     console.log(res)
                 }
             })
-    }, []);
+    }
 
     const publishMessage = () => {
         if (chat !== "") {
@@ -50,15 +56,37 @@ export default function ChatRoomDetail() {
                 let seconds = ("0" + now.getSeconds()).slice(-2);
 
                 let timestamp = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
-                stompClient.publish({
-                    destination: '/pub/chat/message', body: JSON.stringify({
-                        type: 'TALK',
-                        sender: loginid,
-                        roomId: id,
-                        message: chat,
-                        timestamp: timestamp,
+
+                let params = new URLSearchParams()
+                params.append("type", "TALK")
+                params.append("room", id)
+                params.append("sender", user.id)
+                params.append("message", chat)
+                params.append('timestamp', timestamp)
+
+                axios
+                    .post('/chat/message/add',
+                        params,
+                        { headers: { Authorization: token } },
+                    )
+                    .then(function (response) {
+                        stompClient.publish({
+                            destination: '/pub/chat/message', body: JSON.stringify({
+                                type: 'TALK',
+                                roomId: id,
+                                sender: user.username,
+                                message: chat,
+                                roomPk: id,
+                                timestamp: timestamp,
+                                senderProfile: user.fname ? `/profile/${user.fname}` : '/img/default.png'
+                            })
+                        })
+                        setChat('')
                     })
-                })
+                    .catch(function (response) {
+                        console.log(response)
+                        alert("메세지 저장에 실패하였습니다.");
+                    });
             } else {
                 console.log('disconnected!!')
             }
@@ -101,6 +129,8 @@ export default function ChatRoomDetail() {
             ))}
         </ul>
         <h3>방정보</h3>
-        <p>{roomInfo?.id} / {roomInfo?.roomName}</p>
+        <p>{roomInfo?.id} / {roomInfo?.roomName} / {roomInfo?.participants.length} 명</p>
+        <h3>사용자 정보</h3>
+        <p>{user?.username} / {user?.id}</p>
     </>
 }

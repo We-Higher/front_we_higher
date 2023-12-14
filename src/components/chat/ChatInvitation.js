@@ -5,6 +5,7 @@ import $ from 'jquery';
 
 export default function ChatInvitation() {
     const [mList, setMList] = useState([])
+    const [checkedMember, setCheckedMember] = useState([])
     const token = sessionStorage.getItem("token")
     useEffect(() => {
         axios.get(`http://localhost:${MY_PORT}/chat/invitation`, {headers: {Authorization: token}})

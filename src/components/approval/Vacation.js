@@ -2,22 +2,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import ApprovalList1 from './ApprovalList1';
-import ApprovalList2 from './ApprovalList2';
 
-const Report = () => {
+export default function Vacation() {
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
-    const [dto, setDto2] = useState({
-        writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
-        serviceLife: '', classification: '', approval1: '', approval2: '',
-        approval1rank: '', approval2rank: '', app1username: '', app2username: '',
-    });
-
+    const [dto, setDto2] = useState({ writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '', 
+    serviceLife:'', classification: '', approval1:'' ,approval2:'', approval1rank:'', approval2rank:'', app1username:'', app2username:''});
     const navigate = useNavigate();
-    const { writer, title, content, wdate, serviceLife, classification, approval1,
+    const { writer, title, content , wdate, serviceLife, classification , approval1 ,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
+
     const onChange = (e) => {
         const { name, value } = e.target;
         setDto2({
@@ -27,7 +22,7 @@ const Report = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report`, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/report` , { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -35,53 +30,14 @@ const Report = () => {
                     alert('error:' + res.status);
                 }
             });
-        return () => {
-        };
     }, []);
-
-    const [showModal, setShowModal] = useState(false);
-    const [showModal2, setShowModal2] = useState(false);
-
-    const [selectedEmployee, setSelectedEmployee] = useState({});
-    const [selectedEmployee2, setSelectedEmployee2] = useState({});
-
-    const openModal = () => {
-        setShowModal(true);
-    };
-
-    const openModal2 = () => {
-        setShowModal2(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-    const closeModal2 = () => {
-        setShowModal2(false);
-    };
-
-    const handleSelectEmployee = (employee) => {
-
-        setSelectedEmployee(employee);
-    };
-
-    const handleSelectEmployee2 = (employee) => {
-
-        setSelectedEmployee2(employee);
-    };
 
     const save = () => {
         axios.post(`http://localhost:${myPort}/auth/approval/report`,
             {},
-            {
-                headers: { Authorization: token }, params: {
-                    writer: writer, title: title, content: content,
-                    wdate: wdate, serviceLife: serviceLife, classification: classification, approval1: selectedEmployee.name,
-                    approval2: selectedEmployee2.name, approval1rank: selectedEmployee.companyRankName, 
-                    approval2rank: selectedEmployee2.companyRankName, app1username: selectedEmployee.username, app2username: selectedEmployee2.username
-                }
-            })
+            { headers: { Authorization: token }, params: { writer:writer, title:title, content:content ,
+                 wdate:wdate, serviceLife:serviceLife, classification:classification , approval1:approval1,
+                approval2:approval2, approval1rank:approval1rank, approval2rank:approval2rank, app1username:app1username, app2username:app2username } })
             .then(function (res) {
                 if (res.status === 200) {
                     alert('지출결의서 기안이 완료되었습니다.');
@@ -94,17 +50,15 @@ const Report = () => {
 
     return (
 
-        <div>
-            <ApprovalList1
-                show={showModal}
-                onHide={closeModal}
-                onSelectEmployee={handleSelectEmployee}
-            />
-            <ApprovalList2
-                show={showModal2}
-                onHide={closeModal2}
-                onSelectEmployee={handleSelectEmployee2}
-            />
+        <span
+            style={{
+                fontFamily: '"맑은 고딕"',
+                fontSize: "10pt",
+                lineHeight: "normal",
+                marginTop: 0,
+                marginBottom: 0
+            }}
+        >
             <span
                 style={{
                     fontFamily: '"맑은 고딕"',
@@ -114,16 +68,7 @@ const Report = () => {
                     marginBottom: 0
                 }}
             >
-                <span
-                    style={{
-                        fontFamily: '"맑은 고딕"',
-                        fontSize: "10pt",
-                        lineHeight: "normal",
-                        marginTop: 0,
-                        marginBottom: 0
-                    }}
-                >
-                    {/* 문서 헤더 시작*/}
+                {/* 문서 헤더 시작*/}
                     <table
                         style={{
                             width: 800,
@@ -182,13 +127,12 @@ const Report = () => {
                                             <tr style={{ textAlign: "center", fontSize: "small" }}>
                                                 <td>기안자</td>
                                                 <td
-                                                    input type="text"
+                                                    type="text"
                                                     id="approval1rankname"
                                                     name="approval1rankname"
                                                 >
                                                     1차결재자
                                                 </td>
-
                                                 <input
                                                     type="hidden"
                                                     id="approval1rank"
@@ -202,7 +146,6 @@ const Report = () => {
                                                         color: "red"
                                                     }}
                                                     readOnly=""
-                                                    value={selectedEmployee.companyRank} onChange={onChange}
                                                 />
                                                 <td
                                                     type="text"
@@ -224,7 +167,6 @@ const Report = () => {
                                                         color: "red"
                                                     }}
                                                     readOnly=""
-                                                    value={selectedEmployee2.companyRank} onChange={onChange}
                                                 />
                                             </tr>
                                             <tr>
@@ -236,19 +178,7 @@ const Report = () => {
                                                         textAlign: "center"
                                                     }}
                                                 >
-                                                    <input
-                                                        type="text"
-                                                        defaultValue=""
-                                                        style={{
-                                                            width: 65,
-                                                            height: 40,
-                                                            fontSize: 12,
-                                                            textAlign: "center",
-                                                            color: "red"
-                                                        }}
-                                                        readOnly="true"
-                                                        value={mdto.name}
-                                                    />
+                                                    {mdto.name}
                                                 </td>
                                                 <td
                                                     style={{
@@ -261,7 +191,6 @@ const Report = () => {
                                                     id="ap1"
                                                 >
                                                     <input
-                                                        onClick={openModal}
                                                         type="text"
                                                         id="approvalList1"
                                                         name="approval1"
@@ -273,9 +202,8 @@ const Report = () => {
                                                             textAlign: "center",
                                                             color: "red"
                                                         }}
-                                                        readOnly="true"
+                                                        readOnly=""
                                                         text="등록"
-                                                        value={selectedEmployee.name} onChange={onChange}
                                                     />
                                                 </td>
                                                 <input
@@ -291,7 +219,6 @@ const Report = () => {
                                                         color: "red"
                                                     }}
                                                     readOnly=""
-                                                    value={selectedEmployee.username} onChange={onChange}
                                                 />
                                                 <td
                                                     style={{
@@ -304,9 +231,8 @@ const Report = () => {
                                                     id="ap2"
                                                 >
                                                     <input
-                                                        onClick={openModal2}
                                                         type="text"
-                                                        //id="approvalList2"
+                                                        id="approvalList2"
                                                         name="approval2"
                                                         defaultValue=""
                                                         style={{
@@ -317,13 +243,13 @@ const Report = () => {
                                                             color: "red"
                                                         }}
                                                         readOnly=""
-                                                        value={selectedEmployee2.name} onChange={onChange}
                                                     />
                                                 </td>
                                                 <input
                                                     type="hidden"
-                                                    //id="app2username"
+                                                    id="app2username"
                                                     name="app2username"
+                                                    defaultValue=""
                                                     style={{
                                                         width: 65,
                                                         height: 40,
@@ -331,7 +257,7 @@ const Report = () => {
                                                         textAlign: "center",
                                                         color: "red"
                                                     }}
-                                                    value={selectedEmployee2.username} onChange={onChange}
+                                                    readOnly=""
                                                 />
                                             </tr>
                                         </tbody>
@@ -418,7 +344,7 @@ const Report = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" value={wdate} onChange={onChange} />
+                                        <input type="date" name="wdate" value={wdate} onChange={onChange}/>
                                     </span>
                                 </td>
                             </tr>
@@ -460,7 +386,7 @@ const Report = () => {
                                         }}
                                         data-value=""
                                         data-autotype=""
-                                        value={mdto.name}
+                                        value={mdto.name} onChange={onChange}
                                     >
                                         {mdto.name}
                                     </span>
@@ -507,7 +433,6 @@ const Report = () => {
                                             className="editor_slt"
                                             style={{ width: "100%" }}
                                             name="serviceLife"
-                                            defaultValue="1년"
                                             value={serviceLife} onChange={onChange}
                                         >
                                             <option onSelect={onChange} value={'1년'} selected="selected">1년</option>
@@ -558,7 +483,6 @@ const Report = () => {
                                             className="editor_slt"
                                             style={{ width: "100%" }}
                                             name="classification"
-                                            defaultValue="1등급"
                                             value={classification} onChange={onChange}
                                         >
                                             <option onSelect={onChange} selected="selected">1등급</option>
@@ -722,33 +646,32 @@ const Report = () => {
                             </tr>
                         </tbody>
                     </table>
-                    {/* 제목 및 내용 끝 */}
-                    {/* 푸터*/}
-                    <table
-                        style={{
-                            width: 800,
-                            fontSize: 12,
-                            fontFamily: "malgun gothic,dotum,arial,tahoma"
-                        }}
-                    >
-                        <tbody>
-                            <tr></tr>
-                        </tbody>
-                    </table>
-                    {/* 푸터 끝*/}
-                </span>
-                <p
+                {/* 제목 및 내용 끝 */}
+                {/* 푸터*/}
+                <table 
                     style={{
-                        fontFamily: '"맑은 고딕"',
-                        fontSize: "10pt",
-                        lineHeight: 20,
-                        marginTop: 0,
-                        marginBottom: 0
+                        width: 800,
+                        fontSize: 12,
+                        fontFamily: "malgun gothic,dotum,arial,tahoma"
                     }}
-                />
+                >
+                    <tbody>
+                        <tr></tr>
+                    </tbody>
+                </table>
+                {/* 푸터 끝*/}
             </span>
-        </div>
-    )
-}
+            <p
+                style={{
+                    fontFamily: '"맑은 고딕"',
+                    fontSize: "10pt",
+                    lineHeight: 20,
+                    marginTop: 0,
+                    marginBottom: 0
+                }}
+            />
+        </span>
 
-export default Report;
+    )
+
+}

@@ -5,19 +5,15 @@ import { useParams } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
 
-const Vacation = () => {
+const VacationEdit = () => {
+
+    const n = useParams().num;
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
-    const [dto, setDto2] = useState({
-        writer: sessionStorage.getItem('loginid'), type: '', startDate: '', endDate: '',
-        reason: '', wdate: '', approval1: '', approval2: '', approval1rank: '',
-        approval2rank: '', app1username: '', app1username: '', app2username: '',
-    });
+    const [dto, setDto2] = useState({});
 
     const navigate = useNavigate();
-    const { writer, type, startDate, endDate, reason, wdate, approval1,
-        approval2, approval1rank, approval2rank, app1username, app2username } = dto;
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -28,60 +24,44 @@ const Vacation = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/vacation`, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/vacation/editread/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
+                    setDto2(res.data.dto);
                 } else {
                     alert('error:' + res.status);
                 }
+            })
+            .catch(function (error) {
+                alert("오류: " + error.message);
             });
         return () => {
         };
     }, []);
 
-    const [showModal, setShowModal] = useState(false);
-    const [showModal2, setShowModal2] = useState(false);
-
-    const [selectedEmployee, setSelectedEmployee] = useState({});
-    const [selectedEmployee2, setSelectedEmployee2] = useState({});
-
-    const openModal = () => {
-        setShowModal(true);
-    };
-
-    const openModal2 = () => {
-        setShowModal2(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-    const closeModal2 = () => {
-        setShowModal2(false);
-    };
-
-    const handleSelectEmployee = (employee) => {
-
-        setSelectedEmployee(employee);
-    };
-
-    const handleSelectEmployee2 = (employee) => {
-
-        setSelectedEmployee2(employee);
-    };
-
-    const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/approval/vacation`,
+    const approve = (num) => {
+        axios.post(`http://localhost:${myPort}/auth/approval/vacation/approve`,
             {},
             {
-                headers: { Authorization: token }, params: {
-                    writer: writer, type: type, startDate: startDate, endDate: endDate,
-                    wdate: wdate, reason: reason, approval1: selectedEmployee.name,
-                    approval2: selectedEmployee2.name, approval1rank: selectedEmployee.companyRankName,
-                    approval2rank: selectedEmployee2.companyRankName, app1username: selectedEmployee.username, app2username: selectedEmployee2.username
+                headers: { Authorization: token },
+                params: { num: num }
+            })
+            .then(function (res) {
+                if (res.status === 200) {
+                    navigate('/approval/process')
+                } else {
+                    alert('error:' + res.status);
                 }
+            })
+    }
+
+    const refuse = (num) => {
+        axios.post(`http://localhost:${myPort}/auth/approval/vacation/refuse`,
+            {},
+            {
+                headers: { Authorization: token },
+                params: { num: num }
             })
             .then(function (res) {
                 if (res.status === 200) {
@@ -95,16 +75,6 @@ const Vacation = () => {
     return (
 
         <div>
-            <ApprovalList1
-                show={showModal}
-                onHide={closeModal}
-                onSelectEmployee={handleSelectEmployee}
-            />
-            <ApprovalList2
-                show={showModal2}
-                onHide={closeModal2}
-                onSelectEmployee={handleSelectEmployee2}
-            />
             <span
                 style={{
                     fontFamily: '"맑은 고딕"',
@@ -317,10 +287,10 @@ const Vacation = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "red"
+                                                    color: "black"
                                                 }}
                                                 readOnly=""
-                                                value={selectedEmployee.companyRank} onChange={onChange}
+                                                value={dto.approval1rank}
                                             />
                                             <td
                                                 type="text"
@@ -339,10 +309,10 @@ const Vacation = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "red"
+                                                    color: "black"
                                                 }}
                                                 readOnly=""
-                                                value={selectedEmployee2.companyRank} onChange={onChange}
+                                                value={dto.approval2rank}
                                             />
                                         </tr>
                                         <tr>
@@ -363,7 +333,7 @@ const Vacation = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "red"
+                                                        color: "black"
                                                     }}
                                                     readOnly="true"
                                                     value={mdto.name}
@@ -375,12 +345,11 @@ const Vacation = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "red"
+                                                    color: "black"
                                                 }}
                                                 id="ap1"
                                             >
                                                 <input
-                                                    onClick={openModal}
                                                     type="text"
                                                     id="approvalList1"
                                                     name="approval1"
@@ -390,12 +359,26 @@ const Vacation = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "red"
+                                                        color: "black"
                                                     }}
                                                     readOnly="true"
                                                     text="등록"
-                                                    value={selectedEmployee.name} onChange={onChange}
+                                                    value={dto.approval1}
                                                 />
+                                                {dto.status == 1 && dto.rstatus == 0 && (
+                                                    <img
+                                                        src="/approve.png"
+                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                        alt="Approval Image"
+                                                    />
+                                                )}
+                                                {dto.status == 1 && dto.rstatus == -1 && (
+                                                    <img
+                                                        src="/approve.png"
+                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                        alt="Approval Image"
+                                                    />
+                                                )}
                                             </td>
                                             <input
                                                 type="hidden"
@@ -407,10 +390,10 @@ const Vacation = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "red"
+                                                    color: "black"
                                                 }}
                                                 readOnly="true"
-                                                value={selectedEmployee.username} onChange={onChange}
+                                                value={dto.app1username}
                                             />
                                             <td
                                                 style={{
@@ -418,12 +401,11 @@ const Vacation = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "red"
+                                                    color: "black"
                                                 }}
                                                 id="ap2"
                                             >
                                                 <input
-                                                    onClick={openModal2}
                                                     type="text"
                                                     id="approvalList2"
                                                     name="approval2"
@@ -433,10 +415,10 @@ const Vacation = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "red"
+                                                        color: "black"
                                                     }}
                                                     readOnly=""
-                                                    value={selectedEmployee2.name} onChange={onChange}
+                                                    value={dto.approval2}
                                                 />
                                             </td>
                                             <input
@@ -449,10 +431,10 @@ const Vacation = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "red"
+                                                    color: "black"
                                                 }}
                                                 readOnly=""
-                                                value={selectedEmployee2.username} onChange={onChange}
+                                                value={dto.app2username}
                                             />
                                         </tr>
                                     </tbody>
@@ -718,7 +700,8 @@ const Vacation = () => {
                                         className="ipt_editor ipt_editor_date"
                                         type="date"
                                         name="wdate"
-                                        value={wdate} onChange={onChange}
+                                        value={dto.wdate}
+                                        readonly="true"
                                     />
                                 </span>
                             </td>
@@ -788,7 +771,7 @@ const Vacation = () => {
                                             className="editor_slt"
                                             style={{ width: "100%" }}
                                             name="type"
-                                            value={type} onChange={onChange}
+                                            value={dto.type} onChange={onChange} disabled
                                         >
                                             <option onSelect={onChange} selected="selected">연차휴가</option>
                                             <option onSelect={onChange}>병가</option>
@@ -849,14 +832,14 @@ const Vacation = () => {
                                         className="ipt_editor ipt_editor_date"
                                         type="date"
                                         name="startDate"
-                                        value={startDate} onChange={onChange}
+                                        value={dto.startDate}
                                     />{" "}
                                     ~{" "}
                                     <input
                                         className="ipt_editor ipt_editor_date"
                                         type="date"
                                         name="endDate"
-                                        value={endDate} onChange={onChange}
+                                        value={dto.endDate}
                                     />
                                 </span>
                             </td>
@@ -965,7 +948,7 @@ const Vacation = () => {
                                         style={{ marginLeft: 3, marginTop: 3, marginBottom: 3 }}
                                         name="reason"
                                         defaultValue={""}
-                                        value={reason} onChange={onChange}
+                                        value={dto.reason}
                                     />
                                 </span>
                             </td>
@@ -1004,16 +987,24 @@ const Vacation = () => {
                         </tr>
                     </tbody>
                 </table>
-                <input
-                    type="button"
-                    onClick={save}
-                    defaultValue="제출"
-                    id="vacationbtn"
-                    style={{ marginLeft: 750, marginTop: 5 }}
-                />
             </span>
+            <table style={{ width: '800px', fontSize: '12px', fontFamily: 'malgun gothic, dotum, arial, tahoma' }}>
+                <tbody>
+                    <tr>
+                        <input type="button" value="결재" style={{ marginLeft: '715px', marginTop: '5px' }} onClick={() => approve(dto.vacationNum)} />
+
+                        <input
+                            type="button"
+                            value="반려"
+                            style={{ marginLeft: '5px', marginTop: '5px' }}
+                            onClick={() => refuse(dto.vacationNum)}
+                            id="defer"
+                        />
+                    </tr>
+                </tbody>
+            </table>
         </div>
     )
 }
 
-export default Vacation;
+export default VacationEdit;

@@ -73,7 +73,7 @@ export default function Draft() {
                                                 <td>지출결의서</td>
                                                 <td>{e.member.name}</td>
                                                 <td>
-                                                    <a href={`/approval/expense/editread?expenseNum=${e.expenseNum}`}>{e.title}</a>
+                                                    <Link to={`/approval/expense/editread/${e.expenseNum}`}>{e.title}</Link>
                                                 </td>
                                                 <td>{e.wdate}</td>
                                                 <td>{e.rstatus === -1 ? '반려' : e.status >= 0 && e.status < 2 && e.rstatus === 0 ? '결재중' : e.status === 2 ? '결재완료' : ''}</td>
@@ -84,7 +84,7 @@ export default function Draft() {
                                                 <td>품의서</td>
                                                 <td>{r.member.name}</td>
                                                 <td>
-                                                    <a href={`/approval/report/editread?reportNum=${r.reportNum}`}>{r.title}</a>
+                                                    <Link to={`/approval/report/editread/${r.reportNum}`}>{r.title}</Link>
                                                 </td>
                                                 <td>{r.wdate}</td>
                                                 <td>{r.rstatus === -1 ? '반려' : r.status >= 0 && r.status < 2 && r.rstatus === 0 ? '결재중' : r.status === 2 && r.rstatus === 0 ? '결재완료' : ''}</td>
@@ -95,7 +95,7 @@ export default function Draft() {
                                                 <td>휴가신청서</td>
                                                 <td>{v.member.name}</td>
                                                 <td>
-                                                    <a href={`/approval/vacation/editread?vacationNum=${v.vacationNum}`}>{v.member.name} 휴가신청</a>
+                                                    <Link to={`/approval/vacation/editread/${v.vacationNum}`}>{v.member.name} 휴가신청</Link>
                                                 </td>
                                                 <td>{v.wdate}</td>
                                                 <td>{v.rstatus === -1 ? '반려' : v.status >= 0 && v.status < 2 && v.rstatus === 0 ? '결재중' : v.status === 2 ? '결재완료' : ''}</td>

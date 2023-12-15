@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
 
-const Report = () => {
+const ReportEditRead = () => {
 
     const n = useParams().num;
     const token = sessionStorage.getItem("token");
@@ -14,8 +14,6 @@ const Report = () => {
     const [dto, setDto2] = useState({});
 
     const navigate = useNavigate();
-    const { writer, title, content, wdate, serviceLife, classification, approval1,
-        approval2, approval1rank, approval2rank, app1username, app2username } = dto;
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -26,7 +24,7 @@ const Report = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report/editread/` + n , { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/report/editread/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -98,6 +96,20 @@ const Report = () => {
                                     colSpan={2}
                                 >
                                     품 &nbsp;의 &nbsp;서
+                                    {dto.rstatus == -1 && (
+                                        <img
+                                            src="/refuse.png"
+                                            style={{ position: 'absolute', width: '130px', height: '130px', marginLeft: '-250px', marginTop: '-90px' }}
+                                            alt="Refuse Image"
+                                        />
+                                    )}
+                                    {dto.status == 2 && (
+                                        <img
+                                            src="/fapprove.png"
+                                            style={{ position: 'absolute', width: '130px', height: '130px', marginLeft: '-250px', marginTop: '-90px' }}
+                                            alt="Refuse Image"
+                                        />
+                                    )}
                                 </td>
                                 <td
                                     style={{
@@ -153,11 +165,11 @@ const Report = () => {
                                                             height: 40,
                                                             fontSize: 12,
                                                             textAlign: "center",
-                                                            color: "red"
+                                                            color: "black"
                                                         }}
-                                                        readOnly="true"
+                                                        value={mdto.name}
                                                     />
-                                                    {mdto.name}
+
                                                 </td>
                                                 <td
                                                     style={{
@@ -165,7 +177,7 @@ const Report = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "red"
+                                                        color: "black"
                                                     }}
                                                     id="ap1"
                                                 >
@@ -179,12 +191,33 @@ const Report = () => {
                                                             height: 40,
                                                             fontSize: 12,
                                                             textAlign: "center",
-                                                            color: "red"
+                                                            color: "black"
                                                         }}
                                                         readOnly="true"
                                                         text="등록"
                                                         value={dto.approval1}
                                                     />
+                                                    {dto.status == 1 && dto.rstatus == 0 && (
+                                                        <img
+                                                            src="/approve.png"
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            alt="Approval Image"
+                                                        />
+                                                    )}
+                                                    {dto.status == 1 && dto.rstatus == -1 && (
+                                                        <img
+                                                            src="/approve.png"
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            alt="Approval Image"
+                                                        />
+                                                    )}
+                                                    {dto.status == 2 && dto.rstatus == 0 && (
+                                                        <img
+                                                            src="/approve.png"
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            alt="Approval Image"
+                                                        />
+                                                    )}
                                                 </td>
                                                 <td
                                                     style={{
@@ -192,7 +225,7 @@ const Report = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "red"
+                                                        color: "black"
                                                     }}
                                                     id="ap2"
                                                 >
@@ -206,11 +239,18 @@ const Report = () => {
                                                             height: 40,
                                                             fontSize: 12,
                                                             textAlign: "center",
-                                                            color: "red"
+                                                            color: "black"
                                                         }}
                                                         readOnly=""
                                                         value={dto.approval2}
                                                     />
+                                                    {dto.status == 2 && (
+                                                        <img
+                                                            src="/approve.png"
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            alt="Approval Image"
+                                                        />
+                                                    )}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -297,7 +337,7 @@ const Report = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" value={wdate} onChange={onChange} readonly="true"/>
+                                        <input type="date" name="wdate" value={dto.wdate} readonly="true" />
                                     </span>
                                 </td>
                             </tr>
@@ -387,11 +427,12 @@ const Report = () => {
                                             style={{ width: "100%" }}
                                             name="serviceLife"
                                             defaultValue="1년"
-                                            value={dto.serviceLife} onChange={onChange}
+                                            value={dto.serviceLife}
+                                            disabled
                                         >
-                                            <option onSelect={onChange} value={'1년'} selected="selected">1년</option>
-                                            <option onSelect={onChange} value={'3년'} >3년</option>
-                                            <option onSelect={onChange} value={'5년'} >5년</option>
+                                            <option value={'1년'} selected="selected">1년</option>
+                                            <option value={'3년'} >3년</option>
+                                            <option value={'5년'} >5년</option>
                                         </select>
                                     </span>
                                 </td>
@@ -438,13 +479,14 @@ const Report = () => {
                                             style={{ width: "100%" }}
                                             name="classification"
                                             defaultValue="1등급"
-                                            value={dto.classification} onChange={onChange}
+                                            value={dto.classification}
+                                            disabled
                                         >
-                                            <option onSelect={onChange} selected="selected">1등급</option>
-                                            <option onSelect={onChange}>2등급</option>
-                                            <option onSelect={onChange}>3등급</option>
-                                            <option onSelect={onChange}>4등급</option>
-                                            <option onSelect={onChange}>5등급</option>
+                                            <option>1등급</option>
+                                            <option>2등급</option>
+                                            <option>3등급</option>
+                                            <option>4등급</option>
+                                            <option>5등급</option>
                                         </select>
                                     </span>
                                 </td>
@@ -548,7 +590,8 @@ const Report = () => {
                                             style={{ width: 700 }}
                                             placeholder="제목을 입력해주세요"
                                             name="title"
-                                            value={dto.title} onChange={onChange}
+                                            value={dto.title}
+                                            readonly="true"
                                         />
                                     </span>
                                 </td>
@@ -587,6 +630,7 @@ const Report = () => {
                                             name="content"
                                             defaultValue={""}
                                             value={dto.content} onChange={onChange}
+                                            readonly="true"
                                         />
 
                                     </span>
@@ -624,4 +668,4 @@ const Report = () => {
     )
 }
 
-export default Report;
+export default ReportEditRead;

@@ -77,7 +77,7 @@ export default function Process() {
                                                 <td>지출결의서</td>
                                                 <td>{e.member.name}</td>
                                                 <td>
-                                                    <a href={`/approval/expense/editread?expenseNum=${e.expenseNum}`}>{e.title}</a>
+                                                    <Link to={`/approval/expense/edit/${e.expenseNum}`}>{e.title}</Link>
                                                 </td>
                                                 <td>{e.wdate}</td>
                                             </tr>
@@ -87,7 +87,7 @@ export default function Process() {
                                                 <td>품의서</td>
                                                 <td>{r.member.name}</td>
                                                 <td>
-                                                    <a href={`/approval/report/editread?reportNum=${r.reportNum}`}>{r.title}</a>
+                                                    <Link to={`/approval/report/edit/${r.reportNum}`}>{r.title}</Link>
                                                 </td>
                                                 <td>{r.wdate}</td>
                                             </tr>
@@ -97,7 +97,7 @@ export default function Process() {
                                                 <td>휴가신청서</td>
                                                 <td>{v.member.name}</td>
                                                 <td>
-                                                    <a href={`/approval/vacation/editread?vacationNum=${v.vacationNum}`}>{v.member.name} 휴가신청</a>
+                                                    <Link to={`/approval/vacation/edit/${v.vacationNum}`}>{v.member.name} 휴가신청</Link>
                                                 </td>
                                                 <td>{v.wdate}</td>
                                             </tr>

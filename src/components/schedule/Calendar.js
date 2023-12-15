@@ -6,7 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import axios from 'axios';
 
-function DemoApp() {
+function Schedule() {
     const myPort = process.env.REACT_APP_MY_PORT
     const token = sessionStorage.getItem("token");
     const [events, setEvents] = useState([])
@@ -29,6 +29,7 @@ function DemoApp() {
 
     console.log('events', events);
 
+    //일정 추가
     const handleDateSelect = async (selectInfo) => {
         let title = prompt('일정을 입력해주세요.');
         if (title) {
@@ -51,6 +52,7 @@ function DemoApp() {
         }
     };
 
+    //일정 삭제
     const handleEventClick = async (info) => {
         console.log(info);
         if (window.confirm(`${info.event.title} 일정을 삭제하시겠습니까?`)) {
@@ -74,6 +76,7 @@ function DemoApp() {
         }
     };
 
+    //수정(Drop)
     const handleEventDrop = async (info) => {
         if (window.confirm(`${info.event.title} 일정을 수정하시겠습니까?`)) {
             const events = [{
@@ -109,23 +112,62 @@ function DemoApp() {
         }
     };
 
+    // 수정(시간 Resize)
+    const handleEventResize = async (info) => {
+        if (window.confirm(`${info.event.title} 일정을 수정하시겠습니까?`)) {
+            const events = [{
+                title: info.event._def.title,
+                start: info.event.start.getTime(),
+                end: info.event.end.getTime(),
+            }];
+
+            const calId = info.event.extendedProps.cal_Id;
+            if (calId === '') {
+                calId = info.event._def.publicId
+            }
+            try {
+                const response = await axios({
+                    method: 'put',
+                    url: `http://localhost:${myPort}/auth/schedule/${calId}`,
+                    headers: { Authorization: token, 'Content-Type': 'application/json' },
+                    data: JSON.stringify(events)
+                });
+
+                if (response.data.flag) {
+                    loadEvents();
+                } else {
+                    alert(response.data.msg);
+                    info.revert();
+                }
+            } catch (error) {
+                console.error('Error updating schedule', error);
+                info.revert();
+            }
+        } else {
+            info.revert();
+        }
+    };
+    
     return (
-        <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-            }}
-            editable={true}
-            selectable={true}
-            select={handleDateSelect}
-            eventClick={handleEventClick}
-            eventDrop={handleEventDrop}
-            events={events}
-        />
+        <div style={{ marginTop: '20px', width: '80%', margin: 'auto' }}>
+            <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                }}
+                editable={true}
+                selectable={true}
+                select={handleDateSelect}
+                eventClick={handleEventClick}
+                eventDrop={handleEventDrop}
+                eventResize={handleEventResize}
+                events={events}
+            />
+        </div>
     );
 }
 
-export default DemoApp;
+export default Schedule;

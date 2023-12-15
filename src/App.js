@@ -7,6 +7,8 @@ import Router from './Router';
 import Login from './components/member/Login';
 import EmployeeEdit from './components/employee/EmployeeEdit';
 import './css/layout.css';
+import './css/style.bundle.css';
+import './css/plugins.bundle.css';
 import { StompSessionProvider } from "react-stomp-hooks";
 import MY_PORT from './common/util';
 import './css/style.bundle.css';
@@ -14,13 +16,11 @@ import './css/plugins.bundle.css';
 
 export default function App() {
   const token = sessionStorage.getItem('token');
-
   return (
     <StompSessionProvider
       url={`http://localhost:${MY_PORT}/ws-stomp`}>
       <BrowserRouter>
         <Routes>
-          {/* Private routes with layout */}
           {token ? (
             <Route
               path="/*"
@@ -46,15 +46,9 @@ export default function App() {
               }
             />
           ) : (
-            // Public routes
             <Route path="/" element={<Login />} />
           )}
-
-          {/* EmployeeEdit route without layout */}
-          <Route
-            path="/edit/:username"
-            element={<EmployeeEdit />}
-          />
+          <Route path="/edit/:username" element={<EmployeeEdit />} />
         </Routes>
       </BrowserRouter>
     </StompSessionProvider>

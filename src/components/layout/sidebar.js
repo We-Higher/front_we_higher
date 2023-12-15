@@ -6,6 +6,8 @@ import Commuteicon from '../icons/Commuteicon';
 import Approvalicon from '../icons/Approvalicon';
 import Scheduleicon from '../icons/Scheduleicon';
 import '../../css/layout.css';
+import '../../css/style.bundle.css';
+import '../../css/plugins.bundle.css';
 
 export default function Sidebar() {
     const navigate = useNavigate();
@@ -13,7 +15,6 @@ export default function Sidebar() {
     const main = (e) => {
         navigate('/');
     }
-
     return (
         <div id="sidebar" fragment="sidebarFragment">
             <div id="kt_aside" className="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside"
@@ -27,8 +28,8 @@ export default function Sidebar() {
                     <img alt="Logo" src="/logo3.png" className="h-55px" onClick={main} />
                 </div>
                 {/*end::Logo*/}
-                <div className="aside-nav d-flex flex-column flex-lg-center flex-column-fluid w-100 pt-5 pt-lg-0"
-                    id="kt_aside_nav">
+                <div className="aside-nav d-flex flex-column flex-lg-row flex-column-fluid w-100 pt-5 pt-lg-0"
+                    id="kt_aside_nav" style={{marginTop:150}}>
                     {/*begin::Primary menu*/}
                     <div id="kt_aside_menu"
                         className="menu menu-column menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-5"
@@ -120,10 +121,10 @@ export default function Sidebar() {
                         <Nav className="ml-auto">
                             <NavDropdown title={<Scheduleicon />} id="nav-dropdown">
                                 <NavDropdown title="예약 및 일정" id="submenu">
-                                    <NavDropdown.Item as={Link} to="/commute/list">
+                                    <NavDropdown.Item as={Link} to="/meetingroom/meetingroom">
                                         회의실 예약
                                     </NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} to="/schedule/add">
+                                    <NavDropdown.Item as={Link} to="/schedule/calendar">
                                         일정 보기
                                     </NavDropdown.Item>
                                 </NavDropdown>

@@ -50573,3 +50573,7 @@ body {
 .menu-link .svg-icon-1 path {
     fill: gray; /* 변경할 색상 */
 }
+
+.ml-auto {
+    margin-top: 10;
+}

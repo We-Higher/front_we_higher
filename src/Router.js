@@ -29,14 +29,19 @@ import Report from "./components/approval/Report";
 import Expense from "./components/approval/Expense";
 import Vacation from "./components/approval/Vacation";
 
-import MyDraft from "./components/approval/MyDraft";
 import Draft from "./components/approval/Draft";
 import Process from "./components/approval/Process";
+import MyDraft from "./components/approval/MyDraft";
 import MyRefuse from "./components/approval/MyRefuse";
+import ApprovalList1 from "./components/approval/ApprovalList1";
+import ApprovalList2 from "./components/approval/ApprovalList2";
+
+import ReportEditRead from "./components/approval/ReportEditRead";
+import ReportEdit from "./components/approval/ReportEdit";
+import VacationEdit from "./components/approval/VacationEdit";
+import VacationEditRead from "./components/approval/VacationEditRead";
 
 import MailSend from "./components/mail/MailSend";
-
-import Schedule from "./components/schedule/Calendar";
 
 import ChatHome from "./components/chat/ChatHome";
 import ChatInvitation from "./components/chat/ChatInvitation";
@@ -44,6 +49,7 @@ import ChatRoomList from "./components/chat/ChatRoomList";
 import ChatRoomDetail from "./components/chat/ChatRoomDetail";
 
 import Meetingroom from "./components/meetingroom/meetingroom";
+import Schedule from "./components/schedule/Calendar";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
@@ -67,7 +73,7 @@ class Router extends Component {
                 <Route path="/board/detail/:num" element={<BoardDetail />} />
                 <Route path="/board/edit/:num" element={<BoardEdit />} />
 
-                {/* <Route path="/board/notify" element={<NotifyList />} /> */}
+                <Route path="/notify/list" element={<NotifyList />} />
 
                 <Route path="/dataroom/list" element={<DataroomList />} />
                 <Route path="/dataroom/add" element={<DataroomAdd />} />
@@ -80,25 +86,34 @@ class Router extends Component {
                 <Route path="/commute/editlist" element={<CommuteEditList />} />
 
                 <Route path="/approval/report" element={<Report />} />
-				<Route path="/approval/expense" element={<Expense />} />
-       			<Route path="/approval/vacation" element={<Vacation />} />
-				
-				<Route path="/approval/draft" element={<Draft />} />
-				<Route path="/approval/mydraft" element={<MyDraft />} />
-				<Route path="/approval/process" element={<Process />} />
-				<Route path="/approval/myrefuse" element={<MyRefuse />} />	
-                <Route path="/mail/send" element={<MailSend />} />
+                <Route path="/approval/expense" element={<Expense />} />
+                <Route path="/approval/vacation" element={<Vacation />} />
 
-                <Route path="/schedule/calendar" element={<Schedule />} />
-				<Route path="/meetingroom/meetingroom" element={<Meetingroom  />} />
+                <Route path="/approval/draft" element={<Draft />} />
+                <Route path="/approval/process" element={<Process />} />
+                <Route path="/approval/mydraft" element={<MyDraft />} />
+                <Route path="/approval/myrefuse" element={<MyRefuse />} />
+                <Route path="/approval/approvalList1" element={<ApprovalList1 />} />
+                <Route path="/approval/ApprovalList2" element={<ApprovalList2 />} />
+
+                <Route path="/approval/report/editread/:num" element={<ReportEditRead />} />
+                <Route path="/approval/report/edit/:num" element={<ReportEdit />} />
+                <Route path="/approval/vacation/edit/:num" element={<VacationEdit />} />
+                <Route path="/approval/vacation/editread/:num" element={<VacationEditRead />} />
+
+                <Route path="/mail/send" element={<MailSend />} />
 
                 <Route path="/chat" element={<ChatHome />} />
                 <Route path="/chat/invitation" element={<ChatInvitation />} />
                 <Route path="/chat/room" element={<ChatRoomList />} />
                 <Route path="/chat/room/:id" element={<ChatRoomDetail />} />
+
+                <Route path="/meetingroom/meetingroom" element={<Meetingroom  />} />
+                <Route path="/schedule/calendar" element={<Schedule  />} />
             </Routes>
         );
     }
 }
 
 export default Router;
+

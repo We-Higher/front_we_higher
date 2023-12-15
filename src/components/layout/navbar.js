@@ -14,10 +14,15 @@ export default function Navbar() {
   const loginid = sessionStorage.getItem("loginid");
   const navigate = useNavigate();
 
+  const redirect = (url) => {
+    window.location.href = url;
+  };
+
   const logout = () => {
     sessionStorage.clear();
     alert('로그아웃 되셨습니다.');
-    window.location.reload();
+    redirect('/');
+    // window.location.reload();
   }
 
   const attendence = () => {

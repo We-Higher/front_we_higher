@@ -45,6 +45,7 @@ function Meetingroom() {
           headers: { Authorization: token },
         });
       }
+      console.log(response.data);
       setEvents(response.data);
     } catch (error) {
       console.error('Error loading events', error);
@@ -103,9 +104,10 @@ function Meetingroom() {
                             },
                         }]);
                         setForceRerender(prevValue => !prevValue);
-                    } catch (error) {
+                      } catch (error) {
                         console.error('이벤트 저장 오류', error);
                     }
+                    loadEvents();
                 }
             }
         }
@@ -231,16 +233,20 @@ function Meetingroom() {
                   }}
                   editable={true}
                   selectable={true}
-                  events={events.map((event) => ({
-                    id: event.cal_Id,
-                    title: event.title,
-                    start: event.start,
-                    end: event.end,
-                    className: `room-${event.roomId}`,
-                    extendedProps: {
-                      roomId: event.roomId,
-                    },
-                  }))}
+                  events={events.map((event) => {
+                    console.log('렌더링할 이벤트:', event);
+                    return {
+                        id: event.cal_Id,
+                        title: event.title,
+                        start: event.start,
+                        end: event.end,
+                        className: `room-${event.roomId}`,
+                        extendedProps: {
+                            roomId: event.roomId,
+                        },
+                    };
+                })}
+    
                   select={handleDateSelect}
                   eventClick={handleEventClick}
                   eventDrop={handleEventDrop}

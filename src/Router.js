@@ -44,6 +44,7 @@ import ChatRoomList from "./components/chat/ChatRoomList";
 import ChatRoomDetail from "./components/chat/ChatRoomDetail";
 
 import Meetingroom from "./components/meetingroom/meetingroom";
+import Schedule from "./components/schedule/Calendar";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
@@ -82,20 +83,19 @@ class Router extends Component {
         <Route path="/approval/vacation" element={<Vacation />} />
 
         <Route path="/approval/draft" element={<Draft />} />
-        <Route path="/approval/mydraft" element={<MyDraft />} />
-        <Route path="/approval/process" element={<Process />} />
-        <Route path="/approval/myrefuse" element={<MyRefuse />} />
-        
+		    <Route path="/approval/mydraft" element={<MyDraft />} />
+		    <Route path="/approval/process" element={<Process />} />
+			  <Route path="/approval/myrefuse" element={<MyRefuse />} />	
+                  
         <Route path="/mail/send" element={<MailSend />} />
-
-        <Route path="/meetingroom/meetingroom" element={<Meetingroom />} />
-
-        <Route path="/schedule/calendar" element={<Schedule />} />
 
         <Route path="/chat" element={<ChatHome />} />
         <Route path="/chat/invitation" element={<ChatInvitation />} />
         <Route path="/chat/room" element={<ChatRoomList />} />
         <Route path="/chat/room/:id" element={<ChatRoomDetail />} />
+                  
+        <Route path="/meetingroom/meetingroom" element={<Meetingroom  />} />
+        <Route path="/schedule/calendar" element={<Schedule  />} />
       </Routes>
     );
   }

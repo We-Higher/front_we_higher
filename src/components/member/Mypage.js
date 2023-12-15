@@ -27,13 +27,14 @@ export default function Mypage() {
     }, []);
 
     return (
+
         <div className="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div className="container" id="kt_content_container">
                 <div className="card mb-5 mb-xl-10">
                     <div className="card-body pt-9 pb-0">
                         <div className="d-flex flex-wrap flex-sm-nowrap mb-3">
                             <div className="me-7 mb-4">
-                                <div className="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative d-flex">
+                                <div className="symbol symb ol-100px symbol-lg-160px symbol-fixed position-relative d-flex">
                                     <div className="cursor-pointer symbol symbol-160px symbol-md-160px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
                                         {loginid === null ? (
                                             <img src="/default.png" alt="image" style={{ maxWidth: '100%', height: 'auto' }} />
@@ -111,78 +112,80 @@ export default function Mypage() {
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div className="card-header cursor-pointer">
-                                    <div className="card-title m-0">
-                                        <h3 className="fw-bolder m-0">상세 프로필</h3>
-                                    </div>
-                                    <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px  align-self-center" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                        <i className="bi bi-pencil" />
-                                    </div>
-                                </div>
-
-                                <div className="card-body p-9">
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">이 름 (Full Name)</label>
-                                        <div className="col-lg-8">
-                                            <span className="fw-bolder fs-6 text-dark">{mdto.name}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">직 급 (Rank)</label>
-                                        <div className="col-lg-8 fv-row">
-                                            <span className="fw-bold fs-6">{mdto.companyRankName}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">부 서 (Department)</label>
-                                        <div className="col-lg-8 fv-row">
-                                            <span className="fw-bold fs-6">{mdto.deptName}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">회 사 (Company)</label>
-                                        <div className="col-lg-8 fv-row">
-                                            <span className="fw-bold fs-6">{mdto.companyName}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">사 번 (Emp_Number)</label>
-                                        <div className="col-lg-8 fv-row">
-                                            <span className="fw-bold fs-6">{mdto.newNo}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">핸드폰 번호 (Phone)</label>
-                                        <div className="col-lg-8 fv-row">
-                                            <span className="fw-bold fs-6">{mdto.phone}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">사내전화 (Contact Phone)</label>
-                                        <div className="col-lg-8 d-flex align-items-center">
-                                            <span className="fw-bolder fs-6 me-2">{mdto.comCall}</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-7">
-                                        <label className="col-lg-4 fw-bold text-muted">국 가 (Country)</label>
-                                        <div className="col-lg-8">
-                                            <span className="fw-bolder fs-6 text-dark">대한민국</span>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-10">
-                                        <label className="col-lg-4 fw-bold text-muted">잔여 연차일(Remain Vacation)</label>
-                                        <div className="col-lg-8">
-                                            <span className="fw-bold fs-6">{mdto.remain}</span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                    <div className="card-header cursor-pointer">
+                        <div className="card-title m-0">
+                            <h3 className="fw-bolder m-0">상세 프로필</h3>
+                        </div>
+                        <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px  align-self-center" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
+                            <i className="bi bi-pencil" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="card-body p-9">
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">이 름 (Full Name)</label>
+                        <div className="col-lg-8">
+                            <span className="fw-bolder fs-6 text-dark">{mdto.name}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">직 급 (Rank)</label>
+                        <div className="col-lg-8 fv-row">
+                            <span className="fw-bold fs-6">{mdto.companyRankName}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">부 서 (Department)</label>
+                        <div className="col-lg-8 fv-row">
+                            <span className="fw-bold fs-6">{mdto.deptName}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">회 사 (Company)</label>
+                        <div className="col-lg-8 fv-row">
+                            <span className="fw-bold fs-6">{mdto.companyName}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">사 번 (Emp_Number)</label>
+                        <div className="col-lg-8 fv-row">
+                            <span className="fw-bold fs-6">{mdto.newNo}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">핸드폰 번호 (Phone)</label>
+                        <div className="col-lg-8 fv-row">
+                            <span className="fw-bold fs-6">{mdto.phone}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">사내전화 (Contact Phone)</label>
+                        <div className="col-lg-8 d-flex align-items-center">
+                            <span className="fw-bolder fs-6 me-2">{mdto.comCall}</span>
+                        </div>
+                    </div>
+                    <div className="row mb-7">
+                        <label className="col-lg-4 fw-bold text-muted">국 가 (Country)</label>
+                        <div className="col-lg-8">
+                            <span className="fw-bolder fs-6 text-dark">대한민국</span>
+                        </div>
+                    </div>
+                    <div className="row mb-10">
+                        <label className="col-lg-4 fw-bold text-muted">잔여 연차일(Remain Vacation)</label>
+                        <div className="col-lg-8">
+                            <span className="fw-bold fs-6">{mdto.remain}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     );
 }

@@ -11,14 +11,18 @@ import Profileicon from '../icons/Profileicon';
 export default function Navbar() {
   const myPort = process.env.REACT_APP_MY_PORT;
   const token = sessionStorage.getItem("token");
-
   const loginid = sessionStorage.getItem("loginid");
   const navigate = useNavigate();
+
+  const redirect = (url) => {
+    window.location.href = url;
+  };
 
   const logout = () => {
     sessionStorage.clear();
     alert('로그아웃 되셨습니다.');
-    window.location.href = '/';
+    redirect('/');
+    // window.location.reload();
   }
 
   const attendence = () => {

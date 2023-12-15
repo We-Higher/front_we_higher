@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Main() {
     const token = sessionStorage.getItem("token");
 
@@ -43,8 +45,8 @@ export default function Main() {
                                     {/* <!--end::Text--> */}
                                     {/* <!--begin::Action--> */}
                                     <div className="text-center py-7 mb-18">
-                                        <a href="/board/notify" className="btn btn-primary fs-6 px-6"
-                                            data-bs-target="#kt_modal_create_app">전체 공지사항</a>
+                                        <Link to='/notify/list' className="btn btn-primary fs-6 px-6"
+                                            data-bs-target="#kt_modal_create_app">전체 공지사항</Link>
                                     </div>
                                     {/* <!--end::Action--> */}
                                 </div>

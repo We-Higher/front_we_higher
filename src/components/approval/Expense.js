@@ -1,16 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import ApprovalList1 from './ApprovalList1';
+import ApprovalList2 from './ApprovalList2';
 
 export default function Expense() {
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
-    const [dto, setDto2] = useState({ writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '', 
-    serviceLife:'', classification: '', approval1:'' ,approval2:'', approval1rank:'', approval2rank:'', app1username:'', app2username:''});
+    const [dto, setDto2] = useState({
+        writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
+        category: '', detail: '', sum: '', note: '', approval1: '', approval2: '', approval1rank: '', approval2rank: '', app1username: '', app2username: ''
+    });
     const navigate = useNavigate();
-    const { writer, title, content , wdate, serviceLife, classification , approval1 ,
+    const { writer, title, content, wdate, category, detail, sum, note, approval1,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
 
     const onChange = (e) => {
@@ -22,7 +25,7 @@ export default function Expense() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report` , { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/approval/expense`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -33,11 +36,15 @@ export default function Expense() {
     }, []);
 
     const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/approval/report`,
+        axios.post(`http://localhost:${myPort}/auth/approval/expense`,
             {},
-            { headers: { Authorization: token }, params: { writer:writer, title:title, content:content ,
-                 wdate:wdate, serviceLife:serviceLife, classification:classification , approval1:approval1,
-                approval2:approval2, approval1rank:approval1rank, approval2rank:approval2rank, app1username:app1username, app2username:app2username } })
+            {
+                headers: { Authorization: token }, params: {
+                    writer: writer, title: title, content: content,
+                    wdate: wdate, category: category, detail: detail, sum: sum, note: note, approval1: approval1,
+                    approval2: approval2, approval1rank: approval1rank, approval2rank: approval2rank, app1username: app1username, app2username: app2username
+                }
+            })
             .then(function (res) {
                 if (res.status === 200) {
                     alert('지출결의서 기안이 완료되었습니다.');
@@ -48,630 +55,373 @@ export default function Expense() {
             })
     }
 
-    return (
+    const [showModal, setShowModal] = useState(false);
+    const [showModal2, setShowModal2] = useState(false);
 
-        <span
-            style={{
-                fontFamily: '"맑은 고딕"',
-                fontSize: "10pt",
-                lineHeight: "normal",
-                marginTop: 0,
-                marginBottom: 0
-            }}
-        >
-            <span
-                style={{
-                    fontFamily: '"맑은 고딕"',
-                    fontSize: "10pt",
-                    lineHeight: "normal",
-                    marginTop: 0,
-                    marginBottom: 0
-                }}
-            >
-                {/* 문서 헤더 시작*/}
-                    <table
-                        style={{
-                            width: 800,
-                            borderCollapse: "collapse !important",
-                            color: "black",
-                            background: "white",
-                            border: "1px solid black",
-                            fontSize: 12,
-                            fontFamily: "malgun gothic,dotum,arial,tahoma"
-                        }}
-                    >
+    const [selectedEmployee, setSelectedEmployee] = useState({});
+    const [selectedEmployee2, setSelectedEmployee2] = useState({});
+
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const openModal2 = () => {
+        setShowModal2(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    const closeModal2 = () => {
+        setShowModal2(false);
+    };
+
+    const handleSelectEmployee = (employee) => {
+
+        setSelectedEmployee(employee);
+    };
+
+    const handleSelectEmployee2 = (employee) => {
+
+        setSelectedEmployee2(employee);
+    };
+
+    return (
+        <div>
+            <ApprovalList1
+                show={showModal}
+                onHide={closeModal}
+                onSelectEmployee={handleSelectEmployee}
+            />
+            <ApprovalList2
+                show={showModal2}
+                onHide={closeModal2}
+                onSelectEmployee={handleSelectEmployee2}
+            />
+            <div style={{ fontFamily: '돋움', fontSize: '9pt', lineHeight: 'normal', marginTop: '0px', marginBottom: '0px' }}>
+                <span style={{ fontFamily: '돋움', fontSize: '9pt', lineHeight: 'normal', marginTop: '0px', marginBottom: '0px' }}>
+                    <table style={{ border: '0px solid rgb(0, 0, 0)', width: '800px', fontFamily: 'malgun gothic,dotum,arial,tahoma', marginTop: '1px', borderCollapse: 'collapse' }}>{/* Header */}
                         <colgroup>
-                            <col style={{ width: 90 }} />
-                            <col style={{ width: 180 }} />
-                            <col style={{ width: 90 }} />
-                            <col style={{ width: 120 }} />
-                            <col style={{ width: 90 }} />
-                            <col style={{}} />
+                            <col width={310} />
+                            <col width={490} />
                         </colgroup>
                         <tbody>
                             <tr>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        border: "1px solid black",
-                                        height: "90px !important",
-                                        fontSize: 27,
-                                        fontWeight: "bold",
-                                        textAlign: "center",
-                                        verticalAlign: "middle"
-                                    }}
-                                    colSpan={2}
-                                >
-                                    품 &nbsp;의 &nbsp;서
+                                <td style={{ background: 'white', padding: '0px !important', border: '0px currentColor', height: '60px', textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: 'bold', verticalAlign: 'middle' }} colSpan={2} className="dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l">
+                                    지출결의서
                                 </td>
-                                <td
-                                    style={{
-                                        padding: 10,
-                                        height: 20,
-                                        marginLeft: "vertical-align: middle",
-                                        border: "1px solid black",
-                                        textAlign: "center"
-                                    }}
-                                    colSpan={4}
-                                >
-                                    <table border="1px solid black" style={{ marginLeft: 280 }}>
+                            </tr>
+                            <tr>
+                                <td style={{ background: 'white', padding: '0px !important', border: 'currentColor', textAlign: 'left', color: 'black', fontSize: '12px', fontWeight: 'normal', verticalAlign: 'top' }}>
+                                    <table style={{ border: '1px solid rgb(0, 0, 0)', fontFamily: 'malgun gothic,dotum,arial,tahoma', marginTop: '1px', borderCollapse: 'collapse' }}>{/* User */}
+                                        <colgroup>
+                                            <col width={90} />
+                                            <col width={290} />
+                                        </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th
-                                                    colSpan={3}
-                                                    style={{ border: 0, textAlign: "center", fontSize: 15 }}
-                                                >
-                                                    [결재선]
-                                                </th>
-                                            </tr>
-                                            <tr style={{ textAlign: "center", fontSize: "small" }}>
-                                                <td>기안자</td>
-                                                <td
-                                                    type="text"
-                                                    id="approval1rankname"
-                                                    name="approval1rankname"
-                                                >
-                                                    1차결재자
+                                                <td style={{ background: 'rgb(226, 226, 226)', padding: '5px', border: '1px solid black', height: '18px', textAlign: 'center', color: 'rgb(0, 0, 0)', fontSize: '12px', fontWeight: 'bold', verticalAlign: 'middle' }}>
+                                                    기안자
                                                 </td>
-                                                <input
-                                                    type="hidden"
-                                                    id="approval1rank"
-                                                    name="approval1rank"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                />
-                                                <td
-                                                    type="text"
-                                                    id="approval2rankname"
-                                                    name="approval2rankname"
-                                                >
-                                                    2차결재자
+                                                <td style={{ background: 'rgb(255, 255, 255)', padding: '5px', border: '1px solid black', textAlign: 'left', color: 'rgb(0, 0, 0)', fontSize: '12px', fontWeight: 'normal', verticalAlign: 'middle' }}>
+                                                    <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={0} data-dsl="{{label:draftUser}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype>{mdto.name}</span>
                                                 </td>
-                                                <input
-                                                    type="hidden"
-                                                    id="approval2rank"
-                                                    name="approval2rank"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                />
                                             </tr>
                                             <tr>
-                                                <td
-                                                    style={{
-                                                        width: 70,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center"
-                                                    }}
-                                                >
-                                                    {mdto.name}
+                                                <td style={{ background: 'rgb(226, 226, 226)', padding: '5px', border: '1px solid black', height: '18px', textAlign: 'center', color: 'rgb(0, 0, 0)', fontSize: '12px', fontWeight: 'bold', verticalAlign: 'middle' }}>
+                                                    소속
                                                 </td>
-                                                <td
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    id="ap1"
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        id="approvalList1"
-                                                        name="approval1"
-                                                        defaultValue=""
-                                                        style={{
-                                                            width: 65,
-                                                            height: 40,
-                                                            fontSize: 12,
-                                                            textAlign: "center",
-                                                            color: "red"
-                                                        }}
-                                                        readOnly=""
-                                                        text="등록"
-                                                    />
+                                                <td style={{ background: 'rgb(255, 255, 255)', padding: '5px', border: '1px solid black', textAlign: 'left', color: 'rgb(0, 0, 0)', fontSize: '12px', fontWeight: 'normal', verticalAlign: 'middle' }}>
+                                                    <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={1} data-dsl="{{label:draftDept}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype>{mdto.deptName}</span>
                                                 </td>
-                                                <input
-                                                    type="hidden"
-                                                    id="app1username"
-                                                    name="app1username"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                />
-                                                <td
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    id="ap2"
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        id="approvalList2"
-                                                        name="approval2"
-                                                        defaultValue=""
-                                                        style={{
-                                                            width: 65,
-                                                            height: 40,
-                                                            fontSize: 12,
-                                                            textAlign: "center",
-                                                            color: "red"
-                                                        }}
-                                                        readOnly=""
-                                                    />
-                                                </td>
-                                                <input
-                                                    type="hidden"
-                                                    id="app2username"
-                                                    name="app2username"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "red"
-                                                    }}
-                                                    readOnly=""
-                                                />
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "center",
-                                        fontWeight: "bold"
-                                    }}
-                                >
-                                    기안부서
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "left"
-                                    }}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={8}
-                                        data-dsl="{{label:draftDept}}"
-                                        data-wrapper=""
-                                        style={{
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                        data-autotype=""
-                                    >
-                                        {mdto.deptName}
-                                    </span>
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "center",
-                                        fontWeight: "bold"
-                                    }}
-                                >
-                                    기 안 일
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "left"
-                                    }}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={10}
-                                        data-dsl="{{label:draftDate}}"
-                                        data-wrapper=""
-                                        style={{
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                        data-autotype=""
-                                    >
-                                        <input type="date" name="wdate" value={wdate} onChange={onChange}/>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "center",
-                                        fontWeight: "bold"
-                                    }}
-                                >
-                                    기 안 자
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "left"
-                                    }}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={9}
-                                        data-dsl="{{label:draftUser}}"
-                                        data-wrapper=""
-                                        style={{
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                        data-autotype=""
-                                        value={mdto.name} onChange={onChange}
-                                    >
-                                        {mdto.name}
-                                    </span>
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "center",
-                                        fontWeight: "bold"
-                                    }}
-                                >
-                                    보존년한
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "left"
-                                    }}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={11}
-                                        data-dsl="{{label:preserveDuration}}"
-                                        data-wrapper=""
-                                        style={{
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                        data-autotype=""
-                                    >
-                                        <select
-                                            className="editor_slt"
-                                            style={{ width: "100%" }}
-                                            name="serviceLife"
-                                            value={serviceLife} onChange={onChange}
-                                        >
-                                            <option onSelect={onChange} value={'1년'} selected="selected">1년</option>
-                                            <option onSelect={onChange} value={'3년'} >3년</option>
-                                            <option onSelect={onChange} value={'5년'} >5년</option>
-                                        </select>
-                                    </span>
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "center",
-                                        fontWeight: "bold"
-                                    }}
-                                >
-                                    비밀등급
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "left"
-                                    }}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={13}
-                                        data-dsl="{{label:securityLevel}}"
-                                        data-wrapper=""
-                                        style={{
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                        data-autotype=""
-                                    >
-                                        <select
-                                            className="editor_slt"
-                                            style={{ width: "100%" }}
-                                            name="classification"
-                                            value={classification} onChange={onChange}
-                                        >
-                                            <option onSelect={onChange} selected="selected">1등급</option>
-                                            <option onSelect={onChange}>2등급</option>
-                                            <option onSelect={onChange}>3등급</option>
-                                            <option onSelect={onChange}>4등급</option>
-                                            <option onSelect={onChange}>5등급</option>
-                                        </select>
+                                <td style={{ background: 'white', padding: '0px !important', border: 'currentColor', textAlign: 'right', color: 'black', fontSize: '12px', fontWeight: 'normal', verticalAlign: 'top' }}>
+                                    <span unselectable="on" contentEditable="false" className="comp_wrap" data-wrapper>
+                                        <table border="1px solid black" style={{ marginLeft: '280px' }}>
+                                            <tbody><tr><th colSpan={3} style={{ border: '0px', textAlign: 'center', fontSize: '15px' }}>[결재선]</th></tr>
+                                                <tr style={{ textAlign: 'center', fontSize: 'small' }}>
+                                                    <td>기안자</td>
+                                                    <td type="text" id="approval1rankname" name="approval1rankname">1차결재자</td>
+                                                    <input
+                                                        type="hidden"
+                                                        id="approval1rank"
+                                                        name="approval1rank"
+                                                        defaultValue=""
+                                                        style={{
+                                                            width: 65,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center",
+                                                            color: "red"
+                                                        }}
+                                                        readOnly=""
+                                                        value={selectedEmployee.companyRank} onChange={onChange}
+                                                    />
+                                                    <td
+                                                        type="text"
+                                                        id="approval2rankname"
+                                                        name="approval2rankname"
+                                                    >
+                                                        2차결재자
+                                                    </td>
+                                                    <input
+                                                        type="hidden"
+                                                        id="approval2rank"
+                                                        name="approval2rank"
+                                                        defaultValue=""
+                                                        style={{
+                                                            width: 65,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center",
+                                                            color: "red"
+                                                        }}
+                                                        readOnly=""
+                                                        value={selectedEmployee2.companyRank} onChange={onChange}
+                                                    />
+                                                </tr>
+                                                <tr>
+                                                    <td
+                                                        style={{
+                                                            width: 70,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center"
+                                                        }}
+                                                    >
+                                                        <input
+                                                            type="text"
+                                                            defaultValue=""
+                                                            style={{
+                                                                width: 65,
+                                                                height: 40,
+                                                                fontSize: 12,
+                                                                textAlign: "center",
+                                                                color: "red"
+                                                            }}
+                                                            readOnly="true"
+                                                            value={mdto.name}
+                                                        />
+                                                    </td>
+                                                    <td
+                                                        style={{
+                                                            width: 65,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center",
+                                                            color: "red"
+                                                        }}
+                                                        id="ap1"
+                                                    >
+                                                        <input
+                                                            onClick={openModal}
+                                                            type="text"
+                                                            id="approvalList1"
+                                                            name="approval1"
+                                                            defaultValue=""
+                                                            style={{
+                                                                width: 65,
+                                                                height: 40,
+                                                                fontSize: 12,
+                                                                textAlign: "center",
+                                                                color: "red"
+                                                            }}
+                                                            readOnly="true"
+                                                            text="등록"
+                                                            value={selectedEmployee.name} onChange={onChange}
+                                                        />
+                                                    </td>
+                                                    <input
+                                                        type="hidden"
+                                                        id="app1username"
+                                                        name="app1username"
+                                                        defaultValue=""
+                                                        style={{
+                                                            width: 65,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center",
+                                                            color: "red"
+                                                        }}
+                                                        readOnly=""
+                                                        value={selectedEmployee.username} onChange={onChange}
+                                                    />
+                                                    <td
+                                                        style={{
+                                                            width: 65,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center",
+                                                            color: "red"
+                                                        }}
+                                                        id="ap2"
+                                                    >
+                                                        <input
+                                                            onClick={openModal2}
+                                                            type="text"
+                                                            //id="approvalList2"
+                                                            name="approval2"
+                                                            defaultValue=""
+                                                            style={{
+                                                                width: 65,
+                                                                height: 40,
+                                                                fontSize: 12,
+                                                                textAlign: "center",
+                                                                color: "red"
+                                                            }}
+                                                            readOnly=""
+                                                            value={selectedEmployee2.name} onChange={onChange}
+                                                        />
+                                                    </td>
+                                                    <input
+                                                        type="hidden"
+                                                        //id="app2username"
+                                                        name="app2username"
+                                                        style={{
+                                                            width: 65,
+                                                            height: 40,
+                                                            fontSize: 12,
+                                                            textAlign: "center",
+                                                            color: "red"
+                                                        }}
+                                                        value={selectedEmployee2.username} onChange={onChange}
+                                                    />
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    {/* 문서 헤더 끝*/}
-                    {/* 마진 시작*/}
-                    <table
-                        style={{
-                            width: 800,
-                            borderCollapse: "collapse",
-                            borderSpacing: 0,
-                            border: "1px solid black"
-                        }}
-                    >
-                        <tbody>
-                            <tr>
-                                <td
-                                    style={{
-                                        padding: "0px !important",
-                                        height: 10,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        fontSize: 9
-                                    }}
-                                >
-                                    <p
-                                        style={{
-                                            fontFamily: '"맑은 고딕"',
-                                            fontSize: "7pt",
-                                            lineHeight: 14,
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                    >
-                                        <br />
-                                    </p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table
-                        style={{
-                            width: 800,
-                            borderCollapse: "collapse !important",
-                            color: "black",
-                            background: "white",
-                            border: "1px solid black",
-                            fontSize: 12,
-                            fontFamily: "malgun gothic,dotum,arial,tahoma"
-                        }}
-                    >
-                        <colgroup>
-                            <col style={{ width: 90 }} />
-                            <col style={{ width: 710 }} />
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "center",
-                                        fontWeight: "bold"
-                                    }}
-                                >
-                                    제 &nbsp;&nbsp;&nbsp; 목
-                                </td>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 20,
-                                        verticalAlign: "middle",
-                                        border: "1px solid black",
-                                        textAlign: "left"
-                                    }}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={6}
-                                        data-dsl="{{text:subject}}"
-                                        data-wrapper=""
-                                        style={{
-                                            width: "100%",
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                    >
-                                        <input
-                                            className="ipt_editor"
-                                            type="text"
-                                            style={{ width: 700 }}
-                                            placeholder="제목을 입력해주세요"
-                                            name="title"
-                                            value={title} onChange={onChange}
-                                        />
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{
-                                        padding: 3,
-                                        height: 540,
-                                        verticalAlign: "top",
-                                        border: "1px solid black"
-                                    }}
-                                    colSpan={2}
-                                >
-                                    <span
-                                        unselectable="on"
-                                        contentEditable="false"
-                                        className="comp_wrap"
-                                        data-cid={7}
-                                        data-dsl="{{editor}}"
-                                        data-wrapper=""
-                                        style={{
-                                            width: "100%",
-                                            fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt",
-                                            lineHeight: "normal",
-                                            marginTop: 0,
-                                            marginBottom: 0
-                                        }}
-                                        data-value=""
-                                    >
-                                        <textarea
-                                            cols={128}
-                                            rows={32}
-                                            placeholder="내용을 작성해주세요"
-                                            name="content"
-                                            defaultValue={""}
-                                            value={content} onChange={onChange}
-                                        />
-                                        <input
-                                            type="button"
-                                            onClick={save}
-                                            defaultValue="작성"
-                                            id="reportbtn"
-                                            style={{ marginLeft: 750, marginTop: 5 }}
-                                        />
-                                    </span>
-                                    <br />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                {/* 제목 및 내용 끝 */}
-                {/* 푸터*/}
-                <table 
-                    style={{
-                        width: 800,
-                        fontSize: 12,
-                        fontFamily: "malgun gothic,dotum,arial,tahoma"
-                    }}
-                >
+                </span>
+            </div>
+            <div style={{ fontFamily: '돋움', fontSize: '9pt', lineHeight: 'normal', marginTop: '0px', marginBottom: '0px' }}><br /></div>
+            <table border={0} cellPadding={0} cellSpacing={0} style={{ borderCollapse: 'collapse', width: '800px', height: '142px' }}>
+                <colgroup>
+                    <col width={72} style={{ width: '72px' }} />
+                    <col width={27} style={{ width: '27px' }} />
+                    <col width={50} span={3} style={{ width: '51px' }} />
+                    <col width={72} style={{ width: '72px' }} />
+                    <col width={84} style={{ width: '84px' }} />
+                    <col width={43} style={{ width: '43px' }} />
+                    <col width={72} span={4} style={{ width: '72px' }} />
+                    <col width={96} style={{ width: '96px' }} />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td height={30} width={79} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', textAlign: 'center', border: '1px solid windowtext', height: '30px', width: '80px', backgroundColor: 'rgb(226, 226, 226)' }}>
+                            <strong style={{ fontSize: '9pt' }}>제 목</strong>
+                        </td>
+                        <td colSpan={12} width={760} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', borderImage: 'initial', fontSize: '10pt', textAlign: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: 'windowtext black windowtext windowtext', width: '720px' }}>
+                            <p style={{ textAlign: 'left', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={4} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype>
+                                    <input className="ipt_editor" type="text" style={{ width: '720px', marginLeft: '10px' }} name="title" /></span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height={30} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', textAlign: 'center', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderLeft: '1px solid windowtext', borderImage: 'initial', height: '30px', borderTop: 'none', backgroundColor: 'rgb(226, 226, 226)', width: '83px' }} className="dext_table_border_t">
+                            <strong style={{ fontSize: '9pt' }}>작성일</strong>
+                        </td>
+                        <td colSpan={6} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '303px' }} className="dext_table_border_l">
+                            <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={5} data-dsl="{{calendar}}" data-wrapper style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_date" type="date" name="wdate" /></span>
+                            </p>
+                        </td>
+                        <td style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', textAlign: 'center', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderLeft: '1px solid windowtext', borderImage: 'initial', height: '30px', borderTop: 'none', backgroundColor: 'rgb(226, 226, 226)', width: '79px' }} className="dext_table_border_t">
+                            <strong style={{ fontSize: '9pt' }}>총 금액</strong>
+                        </td>
+                        <td colSpan={5} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '242px' }} className="dext_table_border_l">
+                            <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={6} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype>{dto.sum}</span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height={150} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', textAlign: 'center', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderLeft: '1px solid windowtext', borderImage: 'initial', height: '51px', borderTop: 'none', backgroundColor: 'rgb(226, 226, 226)', width: '83px' }} className="dext_table_border_t">
+                            <strong style={{ fontSize: '9pt' }}>사 유</strong>
+                        </td>
+                        <td colSpan={12} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'top', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '683px', height: '51px', backgroundRepeat: 'no-repeat' }} className="dext_table_border_l">
+                            <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={8} data-dsl="{{textarea}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><textarea className="txta_editor" cols={87} rows={10} style={{ marginLeft: '-6px', marginTop: '3px', marginBottom: '3px' }} name="content" defaultValue={""} /></span>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="divCustomWrapper" style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt', lineHeight: 'normal', marginTop: '0px', marginBottom: '0px' }}>
+                <span style={{ marginLeft: '755px' }}><input type="button" id="plus1" data-bypass style={{ fontSize: '10px', width: '40px', margin: '5px' }} defaultValue="추가" /></span><table id="dynamic_table1" className="detailSection" style={{ marginTop: '5px !important', height: '100px', border: '1px solid black' }}>
+                    <colgroup>
+                        <col width={135} />
+                        <col width={180} />
+                        <col width={240} />
+                        <col width={120} />
+                        <col width={120} />
+                        <col width={120} />
+                    </colgroup>
                     <tbody>
-                        <tr></tr>
+                        <tr style={{ textAlign: 'center' }}>
+                            <th className="subjectColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{}}>
+                                <span style={{ fontSize: '9pt' }}>
+                                    일 자
+                                </span>
+                            </th>
+                            <th className="subjectColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{}}>
+                                <span style={{ fontSize: '9pt' }}>
+                                    분 류
+                                </span>
+                            </th>
+                            <th className="subjectColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{}}>
+                                <span style={{ fontSize: '9pt' }}>
+                                    사용 내역
+                                </span>
+                            </th>
+                            <th className="subjectColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{}}>
+                                <span style={{ fontSize: '9pt' }}>
+                                    금 액
+                                </span>
+                            </th>
+                            <th className="subjectColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{}}>
+                                <span style={{ fontSize: '9pt' }}>
+                                    비 고
+                                </span>
+                            </th>
+                        </tr>
+                        <tr className="copyRow1">
+                            <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={9} data-dsl="{{calendar}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_date" type="date" name="rdate" /></span>
+                            </td>
+                            <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={10} data-dsl="{{cSel__물품구입비_잡비_회식비_식비_교통비_기타}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><select className="editor_slt" style={{ width: '100px' }} name="category"><option selected="selected">물품구입비</option><option>잡비</option><option>회식비</option><option>식비</option><option>교통비</option><option>기타</option></select></span>
+                                <span contentEditable="false" className="comp_hover" data-content-protect-cover="true" data-origin={10} style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }}>
+                                    <a contentEditable="false" className="ic_prototype ic_prototype_trash" data-content-protect-cover="true" data-component-delete-button="true" />
+                                </span>
+                            </td>
+                            <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={12} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><input className="ipt_editor" type="text" style={{ width: '250px' }} name="detail" /></span>
+                            </td>
+                            <td className="detailColumn centerCol price dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={11} data-dsl="{{currency_0}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_currency" type="number" style={{ width: '120px' }} name="sum" /></span>
+                            </td>
+                            <td className="detailColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px' }}>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={13} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><input className="ipt_editor" type="text" style={{ width: '120px' }} name="note" /></span>
+                            </td>
+                            <td>
+                                <input type="button" className="minus1" data-bypass style={{ fontSize: '10px', width: '40px' }} defaultValue="삭제" />
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                {/* 푸터 끝*/}
-            </span>
-            <p
-                style={{
-                    fontFamily: '"맑은 고딕"',
-                    fontSize: "10pt",
-                    lineHeight: 20,
-                    marginTop: 0,
-                    marginBottom: 0
-                }}
-            />
-        </span>
-
+                <span style={{ fontFamily: '"맑은 고딕"', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
+                    <strong>* 영수증 별도 제출</strong></span>
+                <input type="submit" defaultValue="작성" style={{ marginLeft: '760px', marginTop: '5px' }} />
+            </div>
+        </div>
     )
 
 }

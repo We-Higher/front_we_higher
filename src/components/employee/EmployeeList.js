@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/dataroom.css';
+import EmployeeEdit from './EmployeeEdit';
 
 export default function EmployeeList() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -43,15 +44,20 @@ export default function EmployeeList() {
             );
     }
 
-    const edit = (username) => {
-        var width = 600;
-        var height = 700;
-        var left = (window.innerWidth - width) / 2;
-        var top = (window.innerHeight - height) / 2;
+    const [showModal, setShowModal] = useState();
 
-        window.open(`/edit/${username}`, "EmployeeEdit_window", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + ",history=no,resizable=no,status=no,scrollbars=yes,menubar=no");
-    }
+    const openModal = (username) => {
+        alert(username);
+        setShowModal(true);
+        setDto((prevDto) => ({
+            ...prevDto,
+            username: username
+        }));
+    };
 
+    const closeModal = () => {
+        setShowModal(false);
+    };
     // 회원가입 폼으로 이동
     const join = () => {
         navigate('/employee/join');
@@ -59,6 +65,11 @@ export default function EmployeeList() {
 
     return (
         <div className="dataroom">
+            <EmployeeEdit
+                show={showModal}
+                onHide={closeModal}
+                username={mdto.username}
+            />
             <div className="main-content">
                 <div className="container-fluid">
                     <div className="row">
@@ -137,7 +148,7 @@ export default function EmployeeList() {
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                                                    <i className="bi bi-pencil" onClick={() => edit(e.username)}></i>
+                                                                    <i className="bi bi-pencil" onClick={() => openModal(e.username)}></i>
                                                                 </div>
                                                             )}
                                                         </td>

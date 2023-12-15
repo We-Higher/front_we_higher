@@ -106,31 +106,141 @@ export default function ChatRoomDetail() {
     }
 
     return <>
-        <h1>ChatRoomDetail</h1>
-        <form onSubmit={(event) => handleSubmit(event, chat)}>
-            <textarea rows="1" placeholder="Type a message" onChange={handleChange} value={chat}></textarea>
-            <button type="submit" id="sendMessageButton">보내기</button>
-        </form>
-
-        <div className={'chat-list'}>{chatList.length}</div>
-
-        <ul>
-            {chatList.map((msg, i) => (
-                // <li key={i}>{msg.sender.username} - {msg.message} - {msg.timestamp}</li>
-                <li key={i}>{msg.message}</li>
-            ))}
-        </ul>
-
-        <h3>초대할 사람</h3>
-        <ul>
-            {inviteList.map(m => (
-                // <></>
-                <li key={m.id}>{m.username}</li>
-            ))}
-        </ul>
-        <h3>방정보</h3>
-        <p>{roomInfo?.id} / {roomInfo?.roomName} / {roomInfo?.participants.length} 명</p>
-        <h3>사용자 정보</h3>
-        <p>{user?.username} / {user?.id}</p>
+        <div className=" container-xxl " id="kt_content_container">
+            {/*begin::Layout*/}
+            <div className="d-flex flex-column flex-lg-row">
+                {/*begin::Sidebar*/}
+                {/*end::Sidebar*/}
+                {/*begin::Content*/}
+                <div className="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+                    {/*begin::Messenger*/}
+                    <div className="card" id="kt_chat_messenger">
+                        {/*begin::Card header*/}
+                        <div className="card-header" id="kt_chat_messenger_header">
+                            {/*begin::Title*/}
+                            <div className="card-title">
+                                {/*begin::Users*/}
+                                {/*end::Users*/}
+                            </div>
+                            {/*end::Title*/}
+                            {/*begin::Card toolbar*/}
+                            {/*end::Card toolbar*/}
+                        </div>
+                        {/*end::Card header*/}
+                        {/*begin::Card body*/}
+                        <div className="card-body" id="kt_chat_messenger_body">
+                            {/*begin::Messages*/}
+                            <div className="scroll-y me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px" style={{ minHeight: '733px' }} id="messages">
+                                {chatList.map((c, i) => (
+                                    c.sender.id !== user.id ?
+                                        <>
+                                            {/*begin::Message(in)*/}
+                                            <div className="d-flex justify-content-start mb-10">
+                                                {/*begin::Wrapper*/}
+                                                <div className="d-flex flex-column align-items-start">
+                                                    {/*begin::User*/}
+                                                    <div className="d-flex align-items-center mb-2">
+                                                        {/*begin::Avatar*/}
+                                                        <div className="symbol  symbol-35px symbol-circle ">
+                                                            {c.sender.originFname === null ?
+                                                                <img src="/img/default.png" alt="image" />
+                                                                :
+                                                                <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                            }
+                                                        </div>
+                                                        {/*end::Avatar*/}
+                                                        {/*begin::Details*/}
+                                                        <div className="ms-3">
+                                                            <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{c.sender.name}</a>
+                                                            <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                        </div>
+                                                        {/*end::Details*/}
+                                                    </div>
+                                                    {/*end::User*/}
+                                                    {/*begin::Text*/}
+                                                    <div className="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text" style={{ whiteSpace: 'pre-line' }}>
+                                                        {c.message}
+                                                    </div>
+                                                    {/*end::Text*/}
+                                                </div>
+                                                {/*end::Wrapper*/}
+                                            </div>
+                                            {/*end::Message(in)*/}
+                                        </> :
+                                        <>
+                                            {/*begin::Message(out)*/}
+                                            <div className="d-flex justify-content-end mb-10">
+                                                {/*begin::Wrapper*/}
+                                                <div className="d-flex flex-column align-items-end">
+                                                    {/*begin::User*/}
+                                                    <div className="d-flex align-items-center mb-2">
+                                                        {/*begin::Details*/}
+                                                        <div className="me-3">
+                                                            <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                            <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">{c.sender.name}</a>
+                                                        </div>
+                                                        {/*end::Details*/}
+                                                        {/*begin::Avatar*/}
+                                                        <div className="symbol  symbol-35px symbol-circle ">
+                                                            {c.sender.originFname === null ?
+                                                                <img src="/img/default.png" alt="image" />
+                                                                :
+                                                                <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                            }
+                                                        </div>
+                                                        {/*end::Avatar*/}
+                                                    </div>
+                                                    {/*end::User*/}
+                                                    {/*begin::Text*/}
+                                                    <div className="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end" data-kt-element="message-text" style={{ whiteSpace: 'pre-line' }}>
+                                                        {c.message}
+                                                    </div>
+                                                    {/*end::Text*/}
+                                                </div>
+                                                {/*end::Wrapper*/}
+                                            </div>
+                                            {/*end::Message(out)*/}
+                                        </>
+                                ))}
+                            </div>
+                            {/*end::Messages*/}
+                        </div>
+                        {/*end::Card body*/}
+                        {/*begin::Card footer*/}
+                        <div className="card-footer pt-4" id="kt_chat_messenger_footer">
+                            <form onSubmit={(event) => handleSubmit(event, chat)}>
+                                {/*begin::Input*/}
+                                <textarea className="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message" id="messageInput" onChange={handleChange} value={chat}></textarea>
+                                {/*end::Input*/}
+                                {/*begin:Toolbar*/}
+                                <div className="d-flex flex-stack">
+                                    {/*begin::Actions*/}
+                                    <div className="d-flex align-items-center me-2">
+                                        <button className="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon"><i className="bi bi-paperclip fs-3" /></button>
+                                        <button className="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon"><i className="bi bi-upload fs-3" /></button>
+                                    </div>
+                                    {/*end::Actions*/}
+                                    {/*begin::Send*/}
+                                    <button className="btn btn-primary" type="submit" data-kt-element="send" id="sendMessageButton">보내기</button>
+                                    {/*end::Send*/}
+                                </div>
+                                {/*end::Toolbar*/}
+                            </form>
+                        </div>
+                        {/*end::Card footer*/}
+                    </div>
+                    {/*end::Messenger*/}
+                </div>
+                {/*end::Content*/}
+            </div>
+            {/*end::Layout*/}
+            {/*begin::Modals*/}
+            {/*begin::Modal - View Users*/}
+            {/*end::Modal - View Users*/}
+            {/*begin::Modal - Users Search*/}
+            {/*end::Modal - Users Search*/}
+            {/*end::Modals*/}
+        </div>
+        {/*end::Container*/}
     </>
 }

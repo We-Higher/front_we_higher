@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
 

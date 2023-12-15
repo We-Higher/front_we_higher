@@ -10,6 +10,8 @@ import BoardAdd from "./components/board/BoardAdd";
 import BoardDetail from "./components/board/BoardDetail";
 import BoardEdit from "./components/board/BoardEdit";
 
+import NotifyList from "./components/notify/NotifyList";
+
 import EmployeeList from "./components/employee/EmployeeList";
 import EmployeeJoin from "./components/employee/EmployeeJoin";
 
@@ -40,12 +42,14 @@ import VacationEdit from "./components/approval/VacationEdit";
 import VacationEditRead from "./components/approval/VacationEditRead";
 
 import MailSend from "./components/mail/MailSend";
-import DemoApp from "./components/schedule/Calendar";
 
 import ChatHome from "./components/chat/ChatHome";
 import ChatInvitation from "./components/chat/ChatInvitation";
 import ChatRoomList from "./components/chat/ChatRoomList";
 import ChatRoomDetail from "./components/chat/ChatRoomDetail";
+
+import Meetingroom from "./components/meetingroom/meetingroom";
+import Schedule from "./components/schedule/Calendar";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
@@ -69,7 +73,7 @@ class Router extends Component {
                 <Route path="/board/detail/:num" element={<BoardDetail />} />
                 <Route path="/board/edit/:num" element={<BoardEdit />} />
 
-                {/* <Route path="/board/notify" element={<NotifyList />} /> */}
+                <Route path="/notify/list" element={<NotifyList />} />
 
                 <Route path="/dataroom/list" element={<DataroomList />} />
                 <Route path="/dataroom/add" element={<DataroomAdd />} />
@@ -99,12 +103,13 @@ class Router extends Component {
 
                 <Route path="/mail/send" element={<MailSend />} />
 
-                <Route path="/schedule/calendar" element={<DemoApp />} />
-
                 <Route path="/chat" element={<ChatHome />} />
                 <Route path="/chat/invitation" element={<ChatInvitation />} />
                 <Route path="/chat/room" element={<ChatRoomList />} />
                 <Route path="/chat/room/:id" element={<ChatRoomDetail />} />
+
+                <Route path="/meetingroom/meetingroom" element={<Meetingroom  />} />
+                <Route path="/schedule/calendar" element={<Schedule  />} />
             </Routes>
         );
     }

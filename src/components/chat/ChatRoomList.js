@@ -3,14 +3,11 @@ import { Link } from "react-router-dom";
 
 export default function ChatRoomList(props) {
   const rooms = props.rooms
-  useEffect(() => {
-    console.log('ChatRoomList Render');
-  }, []);
 
   let roomsItems = rooms.length > 0 && (
     <>
       {rooms.map((room, i) => (
-        <div className="d-flex align-items-sm-center my-9">
+        <div className="d-flex align-items-sm-center my-9" key={room.id}>
           <div className="d-flex align-items-center flex-row-fluid flex-wrap">
             <div className="flex-grow-1 me-2">
               <Link className="text-gray-800 text-hover-primary fs-4 fw-bolder" to={`/chat/room/${room.id}`}>
@@ -44,7 +41,7 @@ export default function ChatRoomList(props) {
         {/*begin::Card body*/}
         <div className="card-body" id="kt_chat_messenger_body">
           {/*begin::Rooms*/}
-          <div className="scroll-y me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px" style={{ minHeight: '733px' }} id="chatrooms">
+          <div className="scroll-y me-n5 pe-5 h-300px h-lg-auto scroll-list" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px" style={{ minHeight: '733px' }} id="chatrooms">
             {roomsItems}
           </div>
           {/*end::Rooms*/}

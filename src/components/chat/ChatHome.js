@@ -1,18 +1,21 @@
 import axios from 'axios'
-import { MY_PORT } from '../../common/util'
+import { API_BASE_URL } from '../../common/util'
 import { useEffect, useState } from 'react'
 import ChatInvitation from './ChatInvitation'
 import ChatRoomList from './ChatRoomList'
 import $ from 'jquery'
+import '../../css/chat/chat_home.css'
 
 export default function ChatHome() {
   const token = sessionStorage.getItem('token')
   const [rooms, setRooms] = useState([])
 
   useEffect(() => {
-    axios.get(
-      `http://localhost:${MY_PORT}/chat/room`,
-      { headers: { Authorization: token } })
+    console.log(API_BASE_URL)
+    axios
+      .get(
+        `${API_BASE_URL}/chat/room`,
+        { headers: { Authorization: token } })
       .then(function (res) {
         if (res.status === 200) {
           setRooms(res.data.rooms)
@@ -24,7 +27,7 @@ export default function ChatHome() {
 
   const onAddRoom = (data) => {
     axios
-      .post(`http://localhost:${MY_PORT}/chat/room`,
+      .post(`${API_BASE_URL}/chat/room`,
         data,
         {
           headers: {
@@ -37,9 +40,9 @@ export default function ChatHome() {
         alert(response.data.room.roomName + "방 개설에 성공하였습니다.")
         setRooms([response.data.room, ...rooms])
         $('#room_name').val('')
-        let participants = document.querySelectorAll('input[name="participants"]:checked')
-        participants.forEach(function (participant) {
-          participant.checked = false;
+        let checkedMembers = document.querySelectorAll('input[name="participants"]:checked')
+        checkedMembers.forEach(function (checkedMember) {
+          checkedMember.checked = false;
         })
       })
       .catch(function (response) {

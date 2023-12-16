@@ -10,7 +10,7 @@ import './css/layout.css';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
 import { StompSessionProvider } from "react-stomp-hooks";
-import MY_PORT from './common/util';
+import { MY_PORT } from './common/util';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
 

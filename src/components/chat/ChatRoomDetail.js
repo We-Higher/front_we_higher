@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import MY_PORT from "../../common/util";
 import { useStompClient, useSubscription } from "react-stomp-hooks";
+import { MY_PORT } from "../../common/util";
 
 export default function ChatRoomDetail() {
     const token = sessionStorage.getItem("token")

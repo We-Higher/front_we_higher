@@ -1,10 +1,11 @@
 import axios from "axios";
-import MY_PORT from "../../common/util";
 import { useEffect, useState } from "react";
 import $ from 'jquery';
+import { MY_PORT } from "../../common/util";
 
-export default function ChatInvitation() {
+export default function ChatInvitation(props) {
   const [mList, setMList] = useState([])
+  const onAddRoom = props.onAddRoom
   const [checkedMember, setCheckedMember] = useState([])
   const token = sessionStorage.getItem("token")
   useEffect(() => {
@@ -24,6 +25,9 @@ export default function ChatInvitation() {
 
   const submitHandler = (event) => {
     event.preventDefault()
+
+    
+
     let roomName = $('#room_name').val();
     if (roomName === "") {
       alert("방 제목을 입력해 주십시요.");
@@ -35,29 +39,9 @@ export default function ChatInvitation() {
       let data = {
         roomName: roomName,
         participants: participantsArray
-      };
+      }
 
-      axios
-        .post(`http://localhost:${MY_PORT}/chat/room`,
-          data,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: token,
-            }
-          }
-        )
-        .then(function (response) {
-          alert(response.data.roomName + "방 개설에 성공하였습니다.")
-          $('#room_name').val('')
-          participants.forEach(function (participant) {
-            participant.checked = false;
-          })
-        })
-        .catch(function (response) {
-          console.log(response)
-          alert("채팅방 개설에 실패하였습니다.");
-        });
+      onAddRoom(data)
     }
 
   }
@@ -94,7 +78,7 @@ export default function ChatInvitation() {
                     {/*begin::Avatar*/}
                     <div div className="symbol  symbol-45px symbol-circle " >
                       {m.originFname === null ?
-                        <img src="/img/default.png" alt="image" />
+                        <img src="/default.png" alt="image" />
                         :
                         <img src={`/profile/${m.originFname}`} alt="image" />
                       }

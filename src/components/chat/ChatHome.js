@@ -25,7 +25,7 @@ export default function ChatHome() {
       })
   }, [])
 
-  const onAddRoom = (data) => {
+  const addRoomHandler = (data) => {
     axios
       .post(`${API_BASE_URL}/chat/room`,
         data,
@@ -51,6 +51,25 @@ export default function ChatHome() {
       });
   }
 
+  const outRoomHandler = (id) => {
+    axios
+      .post('/chat/room/out/' + id,
+        '',
+        {
+          headers: {
+            Authorization: token,
+          }
+        }
+      )
+      .then(function (response) {
+        alert(response.data.room.roomName + '방을 나갔습니다.')
+        setRooms(rooms.filter(room => room.id !== Number(id)))
+      })
+      .catch(function (response) {
+        console.log(response)
+        alert("나가기 실패!");
+      })
+  }
 
   return <>
     <div className="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -58,8 +77,8 @@ export default function ChatHome() {
       <div className=" container-xxl " id="kt_content_container">
         {/*begin::Layout*/}
         <div className="d-flex flex-column flex-lg-row">
-          <ChatInvitation onAddRoom={onAddRoom}></ChatInvitation>
-          <ChatRoomList rooms={rooms}></ChatRoomList>
+          <ChatInvitation onAddRoom={addRoomHandler}></ChatInvitation>
+          <ChatRoomList rooms={rooms} onOutRoom={outRoomHandler}></ChatRoomList>
         </div>
         {/*end::Layout*/}
       </div>

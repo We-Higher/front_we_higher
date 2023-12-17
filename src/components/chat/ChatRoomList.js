@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function ChatRoomList(props) {
   const rooms = props.rooms
+  const outRoomHandler = props.onOutRoom
 
   let roomsItems = rooms.length > 0 && (
     <>
@@ -15,7 +16,7 @@ export default function ChatRoomList(props) {
               </Link>
             </div>
             <span className="badge fs-6 badge-light fw-bold my-2">{room.participants.length} 명</span>
-            <button className="btn btn-danger btn-sm out-room" data-room-id={room.id}>나가기</button>
+            <button className="btn btn-danger btn-sm out-room" onClick={(e)=>outRoomHandler(e.target.dataset.roomId)} data-room-id={room.id}>나가기</button>
           </div>
         </div>
       ))}

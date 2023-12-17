@@ -1,12 +1,14 @@
 import axios from "axios";
-import MY_PORT from "../../common/util";
 import { useEffect, useState } from "react";
 import $ from 'jquery';
+import { MY_PORT } from "../../common/util";
 
-export default function ChatInvitation() {
+export default function ChatInvitation(props) {
   const [mList, setMList] = useState([])
+  const onAddRoom = props.onAddRoom
   const [checkedMember, setCheckedMember] = useState([])
   const token = sessionStorage.getItem("token")
+
   useEffect(() => {
     axios.get(`http://localhost:${MY_PORT}/chat/invitation`, { headers: { Authorization: token } })
       .then(res => {
@@ -18,12 +20,9 @@ export default function ChatInvitation() {
       })
   }, [])
 
-  // let data = mList.map((m) => {
-  //     return <li key={m.id}>{m.username}<input type="checkbox" value={m.id} name="participants"></input></li>
-  // })
-
   const submitHandler = (event) => {
     event.preventDefault()
+
     let roomName = $('#room_name').val();
     if (roomName === "") {
       alert("방 제목을 입력해 주십시요.");
@@ -35,29 +34,9 @@ export default function ChatInvitation() {
       let data = {
         roomName: roomName,
         participants: participantsArray
-      };
+      }
 
-      axios
-        .post(`http://localhost:${MY_PORT}/chat/room`,
-          data,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: token,
-            }
-          }
-        )
-        .then(function (response) {
-          alert(response.data.roomName + "방 개설에 성공하였습니다.")
-          $('#room_name').val('')
-          participants.forEach(function (participant) {
-            participant.checked = false;
-          })
-        })
-        .catch(function (response) {
-          console.log(response)
-          alert("채팅방 개설에 실패하였습니다.");
-        });
+      onAddRoom(data)
     }
 
   }
@@ -84,17 +63,16 @@ export default function ChatInvitation() {
         {/*begin::Card body*/}
         <div className="card-body pt-5" id="kt_chat_contacts_body">
           {/*begin::List*/}
-          <div className="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px">
+          <div className="scroll-y me-n5 pe-5 h-200px h-lg-auto scroll-list" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px">
             {/*begin::User*/}
-            <div className="d-flex flex-stack py-4">
-              {mList.map((m, i) => (
-                <>
+            {mList.map((m, i) => (
+                <div className="d-flex flex-stack py-4" key={m.id}>
                   {/*begin::Details*/}
                   < div className="d-flex align-items-center" >
                     {/*begin::Avatar*/}
                     <div div className="symbol  symbol-45px symbol-circle " >
                       {m.originFname === null ?
-                        <img src="/img/default.png" alt="image" />
+                        <img src="/default.png" alt="no-image" />
                         :
                         <img src={`/profile/${m.originFname}`} alt="image" />
                       }
@@ -127,14 +105,9 @@ export default function ChatInvitation() {
                     </div>
                   </div>
                   {/*end::checkbox*/}
-                </>
-              ))}
-
-            </div>
+                </div>
+            ))}
             {/*end::User*/}
-            {/*begin::Separator*/}
-            <div className="separator separator-dashed" />
-            {/*end::Separator*/}
           </div>
           {/*end::List*/}
         </div>

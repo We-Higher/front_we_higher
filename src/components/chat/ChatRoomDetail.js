@@ -1,35 +1,39 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import MY_PORT from "../../common/util";
-import { useStompClient, useSubscription } from "react-stomp-hooks";
+import { useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import axios from 'axios'
+import { useStompClient, useSubscription } from 'react-stomp-hooks'
+import { MY_PORT } from '../../common/util'
 
 export default function ChatRoomDetail() {
-    const token = sessionStorage.getItem("token")
-    const loginid = sessionStorage.getItem("loginid")
+    const token = sessionStorage.getItem('token')
+    const loginid = sessionStorage.getItem('loginid')
 
     const { id } = useParams()
     const [roomInfo, setRoomInfo] = useState()
     const [chatList, setChatList] = useState([])
-    const [chat, setChat] = useState('');
+    const [chat, setChat] = useState('')
     const [inviteList, setInviteList] = useState([])
     const [user, setUser] = useState(null)
 
-    const stompClient = useStompClient();
+    const stompClient = useStompClient()
 
     useSubscription(`/sub/chat/room/${id}`, (message) => {
         const recv = JSON.parse(message.body)
         console.log('message', recv)
         setChatList([...chatList, recv])
-    });
+    })
 
     useEffect(() => {
-        console.log('useEffect');
         loadRoom()
     }, [])
 
+    useEffect(() => {
+        let scroll = document.getElementById('messages')
+        scroll.scrollTop = scroll.scrollHeight
+    }, [chatList])
+
     const loadRoom = () => {
-        console.log('loadRoom');
+        console.log('loadRoom')
         axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, { headers: { Authorization: token } })
             .then(res => {
                 if (res.status === 200) {
@@ -45,53 +49,42 @@ export default function ChatRoomDetail() {
     }
 
     const publishMessage = () => {
-        if (chat !== "") {
-            if (stompClient) {
-                let now = new Date();
-                let year = now.getFullYear();
-                let month = ("0" + (now.getMonth() + 1)).slice(-2);  // 월은 0부터 시작하므로 1을 더해줍니다.
-                let date = ("0" + now.getDate()).slice(-2);
-                let hours = ("0" + now.getHours()).slice(-2);
-                let minutes = ("0" + now.getMinutes()).slice(-2);
-                let seconds = ("0" + now.getSeconds()).slice(-2);
+        if (chat === '') {
+            alert('내용을 입력해 주세요.')
+            return
+        }
+        if (stompClient) {
+            let now = new Date()
+            let year = now.getFullYear()
+            let month = ('0' + (now.getMonth() + 1)).slice(-2)
+            let date = ('0' + now.getDate()).slice(-2)
+            let hours = ('0' + now.getHours()).slice(-2)
+            let minutes = ('0' + now.getMinutes()).slice(-2)
+            let seconds = ('0' + now.getSeconds()).slice(-2)
 
-                let timestamp = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+            let timestamp = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
 
-                let params = new URLSearchParams()
-                params.append("type", "TALK")
-                params.append("room", id)
-                params.append("sender", user.id)
-                params.append("message", chat)
-                params.append('timestamp', timestamp)
+            let params = new URLSearchParams()
+            params.append('type', 'TALK')
+            params.append('room', id)
+            params.append('sender', user.id)
+            params.append('message', chat)
+            params.append('timestamp', timestamp)
 
-                axios
-                    .post('/chat/message/add',
-                        params,
-                        { headers: { Authorization: token } },
-                    )
-                    .then(function (response) {
-                        stompClient.publish({
-                            destination: '/pub/chat/message', body: JSON.stringify({
-                                type: 'TALK',
-                                roomId: id,
-                                sender: user.username,
-                                message: chat,
-                                roomPk: id,
-                                timestamp: timestamp,
-                                senderProfile: user.fname ? `/profile/${user.fname}` : '/img/default.png'
-                            })
-                        })
-                        setChat('')
-                    })
-                    .catch(function (response) {
-                        console.log(response)
-                        alert("메세지 저장에 실패하였습니다.");
-                    });
-            } else {
-                console.log('disconnected!!')
-            }
+            axios
+                .post('/chat/message/add',
+                    params,
+                    { headers: { Authorization: token } },
+                )
+                .then(function (response) {
+                    setChat('')
+                })
+                .catch(function (response) {
+                    console.log(response)
+                    alert('메세지 저장에 실패하였습니다.')
+                })
         } else {
-            alert("내용을 입력해 주세요.");
+            alert('disconnected!!')
         }
     }
 
@@ -130,77 +123,74 @@ export default function ChatRoomDetail() {
                         {/*begin::Card body*/}
                         <div className="card-body" id="kt_chat_messenger_body">
                             {/*begin::Messages*/}
-                            <div className="scroll-y me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px" style={{ minHeight: '733px' }} id="messages">
+                            <div className="scroll-y me-n5 pe-5 h-300px h-lg-auto scroll-list" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer" data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px" style={{ minHeight: '733px' }} id="messages">
                                 {chatList.map((c, i) => (
                                     c.sender.id !== user.id ?
-                                        <>
-                                            {/*begin::Message(in)*/}
-                                            <div className="d-flex justify-content-start mb-10">
-                                                {/*begin::Wrapper*/}
-                                                <div className="d-flex flex-column align-items-start">
-                                                    {/*begin::User*/}
-                                                    <div className="d-flex align-items-center mb-2">
-                                                        {/*begin::Avatar*/}
-                                                        <div className="symbol  symbol-35px symbol-circle ">
-                                                            {c.sender.originFname === null ?
-                                                                <img src="/img/default.png" alt="image" />
-                                                                :
-                                                                <img src={`/profile/${c.sender.originFname}`} alt="image" />
-                                                            }
-                                                        </div>
-                                                        {/*end::Avatar*/}
-                                                        {/*begin::Details*/}
-                                                        <div className="ms-3">
-                                                            <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{c.sender.name}</a>
-                                                            <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
-                                                        </div>
-                                                        {/*end::Details*/}
+                                        // begin::Message(in)
+                                        <div className="d-flex justify-content-start mb-10" key={c.id}>
+                                            {/*begin::Wrapper*/}
+                                            <div className="d-flex flex-column align-items-start">
+                                                {/*begin::User*/}
+                                                <div className="d-flex align-items-center mb-2">
+                                                    {/*begin::Avatar*/}
+                                                    <div className="symbol  symbol-35px symbol-circle ">
+                                                        {c.sender.originFname === null ?
+                                                            <img src="/default.png" alt="no-image" />
+                                                            :
+                                                            <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                        }
                                                     </div>
-                                                    {/*end::User*/}
-                                                    {/*begin::Text*/}
-                                                    <div className="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text" style={{ whiteSpace: 'pre-line' }}>
-                                                        {c.message}
+                                                    {/*end::Avatar*/}
+                                                    {/*begin::Details*/}
+                                                    <div className="ms-3">
+                                                        <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{c.sender.name}</a>
+                                                        <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
                                                     </div>
-                                                    {/*end::Text*/}
+                                                    {/*end::Details*/}
                                                 </div>
-                                                {/*end::Wrapper*/}
-                                            </div>
-                                            {/*end::Message(in)*/}
-                                        </> :
-                                        <>
-                                            {/*begin::Message(out)*/}
-                                            <div className="d-flex justify-content-end mb-10">
-                                                {/*begin::Wrapper*/}
-                                                <div className="d-flex flex-column align-items-end">
-                                                    {/*begin::User*/}
-                                                    <div className="d-flex align-items-center mb-2">
-                                                        {/*begin::Details*/}
-                                                        <div className="me-3">
-                                                            <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
-                                                            <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">{c.sender.name}</a>
-                                                        </div>
-                                                        {/*end::Details*/}
-                                                        {/*begin::Avatar*/}
-                                                        <div className="symbol  symbol-35px symbol-circle ">
-                                                            {c.sender.originFname === null ?
-                                                                <img src="/img/default.png" alt="image" />
-                                                                :
-                                                                <img src={`/profile/${c.sender.originFname}`} alt="image" />
-                                                            }
-                                                        </div>
-                                                        {/*end::Avatar*/}
-                                                    </div>
-                                                    {/*end::User*/}
-                                                    {/*begin::Text*/}
-                                                    <div className="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end" data-kt-element="message-text" style={{ whiteSpace: 'pre-line' }}>
-                                                        {c.message}
-                                                    </div>
-                                                    {/*end::Text*/}
+                                                {/*end::User*/}
+                                                {/*begin::Text*/}
+                                                <div className="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text" style={{ whiteSpace: 'pre-line' }}>
+                                                    {c.message}
                                                 </div>
-                                                {/*end::Wrapper*/}
+                                                {/*end::Text*/}
                                             </div>
-                                            {/*end::Message(out)*/}
-                                        </>
+                                            {/*end::Wrapper*/}
+                                        </div>
+                                        // end::Message(in)
+                                        :
+                                        // begin::Message(out)
+                                        <div className="d-flex justify-content-end mb-10" key={c.id}>
+                                            {/*begin::Wrapper*/}
+                                            <div className="d-flex flex-column align-items-end">
+                                                {/*begin::User*/}
+                                                <div className="d-flex align-items-center mb-2">
+                                                    {/*begin::Details*/}
+                                                    <div className="me-3">
+                                                        <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                        <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">{c.sender.name}</a>
+                                                    </div>
+                                                    {/*end::Details*/}
+                                                    {/*begin::Avatar*/}
+                                                    <div className="symbol  symbol-35px symbol-circle ">
+                                                        {c.sender.originFname === null ?
+                                                            <img src="/default.png" alt="image" />
+                                                            :
+                                                            <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                        }
+                                                    </div>
+                                                    {/*end::Avatar*/}
+                                                </div>
+                                                {/*end::User*/}
+                                                {/*begin::Text*/}
+                                                <div className="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end" data-kt-element="message-text" style={{ whiteSpace: 'pre-line' }}>
+                                                    {c.message}
+                                                </div>
+                                                {/*end::Text*/}
+                                            </div>
+                                            {/*end::Wrapper*/}
+                                        </div>
+                                    // end::Message(out)
                                 ))}
                             </div>
                             {/*end::Messages*/}

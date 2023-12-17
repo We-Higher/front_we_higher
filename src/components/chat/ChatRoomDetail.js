@@ -3,13 +3,15 @@ import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { useStompClient, useSubscription } from 'react-stomp-hooks'
 import { MY_PORT } from '../../common/util'
+import ChatDetailParticipants from "./ChatDetailParticipants";
 
 export default function ChatRoomDetail() {
     const token = sessionStorage.getItem('token')
     const loginid = sessionStorage.getItem('loginid')
 
     const { id } = useParams()
-    const [roomInfo, setRoomInfo] = useState()
+    const [roomInfo, setRoomInfo] = useState(null)
+    const [roomParticipants, setRoomParticipants] = useState(null)
     const [chatList, setChatList] = useState([])
     const [chat, setChat] = useState('')
     const [inviteList, setInviteList] = useState([])
@@ -37,11 +39,13 @@ export default function ChatRoomDetail() {
         axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, { headers: { Authorization: token } })
             .then(res => {
                 if (res.status === 200) {
+                    console.log(res.data)
                     setUser(res.data.user)
                     setRoomInfo(res.data.chatRoom)
                     setChatList(res.data.clist)
                     setInviteList(res.data.nlist)
-
+                    setRoomParticipants(res.data.chatRoom.participants)
+                    console.log('roomParticipants', roomParticipants)
                 } else {
                     console.log(res)
                 }
@@ -113,6 +117,7 @@ export default function ChatRoomDetail() {
                             {/*begin::Title*/}
                             <div className="card-title">
                                 {/*begin::Users*/}
+                                <ChatDetailParticipants participants={roomParticipants}></ChatDetailParticipants>
                                 {/*end::Users*/}
                             </div>
                             {/*end::Title*/}

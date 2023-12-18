@@ -85,7 +85,7 @@ const Vacation = () => {
             })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/approval/process')
+                    navigate('/approval/draft')
                 } else {
                     alert('error:' + res.status);
                 }
@@ -299,13 +299,30 @@ const Vacation = () => {
                                             </th>
                                         </tr>
                                         <tr style={{ textAlign: "center", fontSize: "small" }}>
-                                            <td>기안자</td>
+                                            <td>
+                                                <input type="text" style={{
+                                                    width: 65,
+                                                    height: 20,
+                                                    fontSize: 12,
+                                                    textAlign: "center",
+                                                    color: "black"
+                                                }} value="기안자">
+                                                </input></td>
                                             <td
                                                 type="text"
                                                 id="approval1rankname"
                                                 name="approval1rankname"
                                             >
-                                                1차결재자
+                                                <input type="text" style={{
+                                                    width: 65,
+                                                    height: 20,
+                                                    fontSize: 12,
+                                                    textAlign: "center",
+                                                    color: "black"
+                                                }}  defaultValue="1차결재자"
+                                                    value={selectedEmployee.companyRankName}
+                                                >
+                                                </input>
                                             </td>
                                             <input
                                                 type="hidden"
@@ -327,7 +344,16 @@ const Vacation = () => {
                                                 id="approval2rankname"
                                                 name="approval2rankname"
                                             >
-                                                2차결재자
+                                                <input type="text" style={{
+                                                    width: 65,
+                                                    height: 20,
+                                                    fontSize: 12,
+                                                    textAlign: "center",
+                                                    color: "black"
+                                                }}  defaultValue="2차결재자"
+                                                    value={selectedEmployee2.companyRankName}
+                                                >
+                                                </input>
                                             </td>
                                             <input
                                                 type="hidden"
@@ -1007,7 +1033,7 @@ const Vacation = () => {
                 <input
                     type="button"
                     onClick={save}
-                    defaultValue="제출"
+                    defaultValue="작성"
                     id="vacationbtn"
                     style={{ marginLeft: 750, marginTop: 5 }}
                 />

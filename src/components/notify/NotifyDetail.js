@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
-export default function BoardDetail() {
+export default function NotifyDetail() {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const n = useParams().num;
@@ -18,7 +18,7 @@ export default function BoardDetail() {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/board/` + n, { headers: { Authorization: token } })
+        axios.get(`http://localhost:${myPort}/auth/notify/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -42,17 +42,17 @@ export default function BoardDetail() {
     return (
         <div className="container py-4">
             <div className="text-end mt-5">
-                <Link to="/board/list" className="btn btn-secondary" style={{ fontSize: '13px' }}>
+                <Link to={`/notify/list`} className="btn btn-secondary" style={{ fontSize: '13px' }} >
                     목록
                 </Link>
             </div>
             <p className="card-text" style={{ fontSize: '20px' }}>
-                <strong>[자유게시판]</strong>
+                <strong>[공지사항]</strong>
             </p>
             <div className="card mt-5 mb-3">
                 <div className="card-header">
                     <h2 className="card-title" id="title">
-                        {title}
+                        {title}<span className="badge badge-pro badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">중 요!</span>
                     </h2>
                 </div>
                 <div className="card-body">
@@ -85,48 +85,6 @@ export default function BoardDetail() {
                         />
                     </p>
                 </div>
-            </div>
-            <div className="comment-count">
-                <strong>댓글 &nbsp;</strong>
-                <span id="count">0</span>
-            </div>
-
-            <div className="comment-box" id="commentbox"></div>
-
-            <span className="c-icon">
-                <i className="fa-solid fa-user"></i>
-                <div className="comment-name">
-                    <span className="anonym">
-                        작성자
-                        <input
-                            type="hidden"
-                            className="form-control"
-                            id="com_writer"
-                            placeholder="이름"
-                            name="com_writer"
-                            value={writer}
-                            readOnly
-                            style={{ width: '250px', border: 'none' }}
-                        />
-                    </span>
-                </div>
-                {/* <img src="/익명.jpg" width="50px" alt="My Image" /> */}
-            </span>
-            <div className="mb-3 comment-sbox">
-                <textarea
-                    className="form-control comment-input"
-                    id="com_content"
-                    cols="80"
-                    rows="2"
-                    name="com_content"
-                    placeholder="댓글을 입력하세요."
-                ></textarea>
-            </div>
-
-            <div className="regBtn text-end">
-                <button className="btn btn-primary mb-3" style={{ right: '10%' }} id="Comment_regist">
-                    등 록
-                </button>
             </div>
         </div>
     );

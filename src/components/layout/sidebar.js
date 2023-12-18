@@ -1,5 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { NavDropdown, Nav } from 'react-bootstrap';
+import { NavDropdown, Nav, NavLink } from 'react-bootstrap';
 import Employeeicon from '../icons/Employeeicon';
 import Boardicon from '../icons/Boardicon';
 import Commuteicon from '../icons/Commuteicon';
@@ -13,7 +13,7 @@ export default function Sidebar() {
     const navigate = useNavigate();
 
     const main = (e) => {
-        navigate('/');
+        navigate('/main');
     }
     return (
         <div id="sidebar" fragment="sidebarFragment">
@@ -29,7 +29,7 @@ export default function Sidebar() {
                 </div>
                 {/*end::Logo*/}
                 <div className="aside-nav d-flex flex-column flex-lg-row flex-column-fluid w-100 pt-5 pt-lg-0"
-                    id="kt_aside_nav" style={{marginTop:150}}>
+                    id="kt_aside_nav" style={{ marginTop: 150 }}>
                     {/*begin::Primary menu*/}
                     <div id="kt_aside_menu"
                         className="menu menu-column menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-5"
@@ -74,16 +74,39 @@ export default function Sidebar() {
                             <NavDropdown title={<Approvalicon />} id="nav-dropdown">
                                 <NavDropdown title="결재문서 작성" id="submenu">
                                     <NavDropdown.Item as={Link} to="/approval/report">
-                                        품의서
+                                        <div class="menu-item">
+                                            <a class="menu-link" id="vacation">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">품의서</span>
+                                            </a>
+                                        </div>
                                     </NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to="/approval/expense">
-                                        지출결의서
+                                        <div class="menu-item">
+                                            <a class="menu-link" id="vacation">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">지출결의서</span>
+                                            </a>
+                                        </div>
                                     </NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to="/approval/vacation">
-                                        휴가신청서
+                                        <div class="menu-item">
+                                            <a class="menu-link" id="vacation">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">휴가신청서</span>
+                                            </a>
+                                        </div>
                                     </NavDropdown.Item>
                                 </NavDropdown>
-                                <NavDropdown title="결재문서 목록" id="submenu">
+
+                                <NavDropdown title="결재문서 목록" id="submenu" className="menu-item menu-accordion">
+
                                     <NavDropdown.Item as={Link} to="/approval/draft">
                                         전체 결재문서
                                     </NavDropdown.Item>
@@ -130,7 +153,7 @@ export default function Sidebar() {
                                 </NavDropdown>
                             </NavDropdown>
                         </Nav>
-                        
+
                         <Nav className="ml-auto">
                             <NavDropdown title={<Boardicon />} id="nav-dropdown">
                                 {/* Submenu with more items */}

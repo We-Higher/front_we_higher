@@ -53,8 +53,8 @@ const ApprovalList1 = ({ show, onHide, onSelectEmployee }) => {
                                 <tr className="fw-bold fs-6 text-gray-800">
                                     <th style={{ width: '75px' }}>이름</th>
                                     <th style={{ width: '75px' }}>사번</th>
-                                    <th style={{ width: '210px' }}>부서</th>
-                                    <th style={{ width: '100px' }}>직급</th>
+                                    <th style={{ width: '120px' }}>부서</th>
+                                    <th style={{ width: '85px' }}>직급</th>
                                     <th style={{ width: '50px' }}>선택</th>
                                 </tr>
                             </thead>
@@ -69,7 +69,8 @@ const ApprovalList1 = ({ show, onHide, onSelectEmployee }) => {
                                             {e.username}
                                         </td>
                                         <td>
-                                            <Button onClick={() => handleSelectEmployee(e)}>선택</Button>
+                                            <Button onClick={() => handleSelectEmployee(e)}
+                                                >선택</Button>
                                         </td>
                                     </tr>
                                 ))}

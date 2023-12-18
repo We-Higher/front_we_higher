@@ -144,7 +144,7 @@ export default function Navbar() {
 
         <div className="d-flex align-items-center ms-1 ms-lg-3">
           {/* 사용자 정보 */}
-          <NavDropdown title={<Profileicon />} id="nav-dropdown">
+          <NavDropdown title={<Profileicon />} id="nav-dropdown">       
             <NavDropdown.Item as={Link} to="/member/mypage">
               내 정보
             </NavDropdown.Item>

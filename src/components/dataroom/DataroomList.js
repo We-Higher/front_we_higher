@@ -11,6 +11,8 @@ export default function BoardList() {
     const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [mdto, setDto] = useState({});
+    const [type, setType] = useState("none");
+    const [option, setOption] = useState("");
     const { ismaster } = mdto;
 
     useEffect(() => {
@@ -29,6 +31,20 @@ export default function BoardList() {
                 }
             );
     }, [])
+
+    const search = (type, option) => {
+        axios.get(`http://localhost:${myPort}/auth/dataroom/search`,
+            { headers: { Authorization: token }, params: { type: type, option: option } })
+            .then(
+                function (res) {
+                    if (res.status === 200) {
+                        setList(res.data.list);
+                    } else {
+                        alert('error:' + res.status);
+                    }
+                }
+            );
+    }
 
     const del = (num) => {
         axios.post(`http://localhost:${myPort}/auth/dataroom/del`,
@@ -56,15 +72,34 @@ export default function BoardList() {
                             <div className="card">
                                 <div className="card-header card-header-danger">
                                     <h2 className="card-title">자료실</h2>
-                                    {ismaster === 1 && (
                                     <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
-                                        <div className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center"
-                                            data-kt-menu-trigger="click" data-kt-menu-attach="parent"
-                                            data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                            <a href={`/dataroom/add`}><i className="bi bi-person-plus-fill">자료 올리기</i></a>
+                                        {ismaster === 1 && (
+                                            <Link to={`/dataroom/add`}><i className="bi bi-person-plus-fill">자료 올리기</i></Link>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <div className="input-group mb-3" style={{ paddingTop: '50px' }}>
+                                            <div className="input-group-prepend">
+                                                <select name="type" className="form-select form-select-sm" value={type} onChange={(e) => setType(e.target.value)} >
+                                                    <option value="none">전체</option>
+                                                    <option value="name">작성자</option>
+                                                    <option value="title">제목</option>
+                                                </select>
+                                            </div>
+                                            <input type="text" name="option" className="form-control form-control-sm" value={option} onChange={(e) => setOption(e.target.value)} />
+                                            <div className="input-group-append">
+                                                <button
+                                                    onClick={() => search(type, option)}
+                                                    value="검색"
+                                                    name="search"
+                                                    className="btn btn-success btn-sm"
+                                                    style={{ zIndex: 0 }}
+                                                >
+                                                    검색
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                    )}
                                 </div>
                                 <div className="card-body">
                                     <div className="table-responsive">
@@ -90,7 +125,7 @@ export default function BoardList() {
                                                     <tr>
                                                         <td>{d.num}</td>
                                                         <td>
-                                                            <a href={`/dataroom/detail/${d.num}`} className="link">{d.title}</a>
+                                                            <Link to={`/dataroom/detail/${d.num}`} className="link">{d.title}</Link>
                                                         </td>
                                                         <td>{d.member.name}</td>
                                                         <td>{d.title}</td>
@@ -101,8 +136,7 @@ export default function BoardList() {
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                                                    <a href={`/dataroom/edit/${d.num}`}><i className="bi bi-pencil"></i>
-                                                                    </a>
+                                                                    <Link to={`/dataroom/edit/${d.num}`}><i className="bi bi-pencil"></i></Link>
                                                                 </div>
                                                             )}
                                                         </td>

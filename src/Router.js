@@ -3,6 +3,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 
 import Login from "./components/member/Login";
 import Mypage from "./components/member/Mypage";
+import MypageEdit from "./components/member/MypageEdit";
 import Main from "./components/layout/main";
 
 import BoardList from "./components/board/BoardList";
@@ -11,6 +12,9 @@ import BoardDetail from "./components/board/BoardDetail";
 import BoardEdit from "./components/board/BoardEdit";
 
 import NotifyList from "./components/notify/NotifyList";
+import NotifyAdd from "./components/notify/NotifyAdd";
+import NotifyEdit from "./components/notify/NotifyEdit";
+import NotifyDetail from "./components/notify/NotifyDetail";
 
 import EmployeeList from "./components/employee/EmployeeList";
 import EmployeeJoin from "./components/employee/EmployeeJoin";
@@ -40,6 +44,8 @@ import ReportEditRead from "./components/approval/ReportEditRead";
 import ReportEdit from "./components/approval/ReportEdit";
 import VacationEdit from "./components/approval/VacationEdit";
 import VacationEditRead from "./components/approval/VacationEditRead";
+import ExpenseEdit from "./components/approval/ExpenseEdit";
+import ExpenseEditRead from "./components/approval/ExpenseEditRead";
 
 import MailSend from "./components/mail/MailSend";
 
@@ -62,6 +68,7 @@ class Router extends Component {
                 <Route path="/member/login" element={<Login />} />
                 {/* <Route path="/edit/:username" element={<EmployeeEdit />} /> */}
                 <Route path="/member/mypage" element={<Mypage />} />
+                <Route path="/member/mypageEdit" element={<MypageEdit />} />
 
                 <Route path="/main" element={<Main />} />
 
@@ -74,6 +81,9 @@ class Router extends Component {
                 <Route path="/board/edit/:num" element={<BoardEdit />} />
 
                 <Route path="/notify/list" element={<NotifyList />} />
+                <Route path="/notify/add" element={<NotifyAdd />} />
+                <Route path="/notify/edit/:num" element={<NotifyEdit />} />
+                <Route path="/notify/detail/:num" element={<NotifyDetail />} />
 
                 <Route path="/dataroom/list" element={<DataroomList />} />
                 <Route path="/dataroom/add" element={<DataroomAdd />} />
@@ -100,6 +110,8 @@ class Router extends Component {
                 <Route path="/approval/report/edit/:num" element={<ReportEdit />} />
                 <Route path="/approval/vacation/edit/:num" element={<VacationEdit />} />
                 <Route path="/approval/vacation/editread/:num" element={<VacationEditRead />} />
+                <Route path="/approval/expense/edit/:num" element={<ExpenseEdit />} />
+                <Route path="/approval/expense/editread/:num" element={<ExpenseEditRead />} />
 
                 <Route path="/mail/send" element={<MailSend />} />
 

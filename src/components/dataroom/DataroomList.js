@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 import DataroomEdit from './DataroomEdit';
 import DataroomAdd from './DataroomAdd';
+import { Link } from 'react-router-dom';
+
 
 export default function BoardList() {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
-    const loginid = sessionStorage.getItem("loginid");
-    const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [mdto, setDto] = useState({});
     const [dto, setDto2] = useState({});
@@ -19,23 +17,34 @@ export default function BoardList() {
     const [showModal, setShowModal] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
     const { ismaster } = mdto;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const [hasPreviousPage, setHasPreviousPage] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/dataroom`, { headers: { Authorization: token } })
-            .then(
-                function (res) {
-                    if (res.status === 200) {
-                        setList(res.data.list);
-                        let m = res.data.mdto;
-                        setDto({
-                            ismaster: m.isMaster
-                        })
-                    } else {
-                        alert('error:' + res.status);
-                    }
+        fetchData(currentPage);
+    }, [currentPage]); // 현재 페이지가 변경될 때 효과 발생 
+
+    const fetchData = (page) => {
+        axios.get(`http://localhost:${myPort}/auth/dataroom?page=${page}`, { headers: { Authorization: token } })
+            .then((res) => {
+                if (res.status === 200) {
+                    setList(res.data.list);
+                    setDto({
+                        ismaster: res.data.mdto.isMaster
+                    });
+                    setHasNextPage(res.data.hasNext);
+                    setHasPreviousPage(res.data.hasPrevious);
+                    setTotalPages(res.data.totalPages);
+                } else {
+                    alert('에러: ' + res.status);
                 }
-            );
-    }, [])
+            })
+            .catch((error) => {
+                console.error('데이터 가져오기 오류:', error);
+            });
+    };
 
     const search = (type, option) => {
         axios.get(`http://localhost:${myPort}/auth/dataroom/search`,
@@ -50,6 +59,10 @@ export default function BoardList() {
                 }
             );
     }
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
     const del = (num) => {
         axios.post(`http://localhost:${myPort}/auth/dataroom/del`,
@@ -182,7 +195,6 @@ export default function BoardList() {
                                                                         <a onClick={() => del(d.num)}><i className="bi bi-trash-fill del"></i>
                                                                         </a>
                                                                     </div>
-
                                                                 )}
                                                             </td>
                                                         </tr>
@@ -196,8 +208,34 @@ export default function BoardList() {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
+            <div className="card-footer d-flex justify-content-center py-4">
+                <nav aria-label="...">
+                    <ul className="pagination">
+                        <li className={`page-item ${hasPreviousPage ? '' : 'disabled'}`}>
+                            <button className="page-link" tabIndex="-1" onClick={() => handlePageChange(currentPage - 1)}>
+                                이전
+                            </button>
+                        </li>
+                        {[...Array(totalPages)].map((_, index) => {
+                            const page = index + 1;
+                            const isCurrentPage = page === currentPage;
+                            return (
+                                <li key={page} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                                        {page}
+                                    </button>
+                                </li>
+                            );
+                        })}
+                        <li className={`page-item ${hasNextPage ? '' : 'disabled'}`}>
+                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                                다음
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     );
-
-}
+} 

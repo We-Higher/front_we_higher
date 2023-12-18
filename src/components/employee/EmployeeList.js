@@ -14,21 +14,38 @@ export default function EmployeeList() {
     const { ismaster } = mdto;
     const [type, setType] = useState("none");
     const [option, setOption] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const [hasPreviousPage, setHasPreviousPage] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/employee/list`, { headers: { Authorization: token } })
-            .then(function (res) {
+        fetchData(currentPage);
+    }, [currentPage]);
+
+    const fetchData = (page) => {
+        axios.get(`http://localhost:${myPort}/auth/employee?page=${page}`, { headers: { Authorization: token } })
+            .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
-                    let m = res.data.mdto;
                     setDto({
-                        ismaster: m.isMaster
-                    })
+                        ismaster: res.data.mdto.isMaster
+                    });
+                    setHasNextPage(res.data.hasNext);
+                    setHasPreviousPage(res.data.hasPrevious);
+                    setTotalPages(res.data.totalPages);
                 } else {
-                    alert('error:' + res.status);
+                    alert('에러: ' + res.status);
                 }
+            })
+            .catch((error) => {
+                console.error('데이터 가져오기 오류:', error);
             });
-    }, []);
+    };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
     const search = (type, option) => {
         axios.get(`http://localhost:${myPort}/auth/employee/search`,
@@ -181,6 +198,33 @@ export default function EmployeeList() {
                     </div>
                 </div>
             </div>
-        </div >
+            <div className="card-footer d-flex justify-content-center py-4">
+                <nav aria-label="...">
+                    <ul className="pagination">
+                        <li className={`page-item ${hasPreviousPage ? '' : 'disabled'}`}>
+                            <button className="page-link" tabIndex="-1" onClick={() => handlePageChange(currentPage - 1)}>
+                                이전
+                            </button>
+                        </li>
+                        {[...Array(totalPages)].map((_, index) => {
+                            const page = index + 1;
+                            const isCurrentPage = page === currentPage;
+                            return (
+                                <li key={page} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                                        {page}
+                                    </button>
+                                </li>
+                            );
+                        })}
+                        <li className={`page-item ${hasNextPage ? '' : 'disabled'}`}>
+                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                                다음
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     );
-}
+} 

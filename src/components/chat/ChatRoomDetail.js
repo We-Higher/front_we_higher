@@ -42,7 +42,6 @@ export default function ChatRoomDetail() {
     }, [chatList])
 
     const loadRoom = () => {
-        console.log('loadRoom')
         axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, { headers: { Authorization: token } })
             .then(res => {
                 if (res.status === 200) {
@@ -82,7 +81,7 @@ export default function ChatRoomDetail() {
             params.append('timestamp', timestamp)
 
             axios
-                .post('/chat/message/add',
+                .post(`http://localhost:${MY_PORT}/chat/message/add`,
                     params,
                     { headers: { Authorization: token } },
                 )
@@ -113,7 +112,7 @@ export default function ChatRoomDetail() {
         let dList = Array.from(data).map(c => c.value)
 
         axios
-          .post('/chat/room/invite/' + roomInfo.id,
+          .post(`http://localhost:${MY_PORT}/chat/room/invite/` + roomInfo.id,
             nList,
             {
                 headers: { Authorization: token }

@@ -1,36 +1,44 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
+import { Link } from 'react-router-dom';
 
 export default function BoardList() {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
-    const loginid = sessionStorage.getItem("loginid");
-    const navigate = useNavigate();
     const [list, setList] = useState([]);
     const [mdto, setDto] = useState({});
     const [type, setType] = useState("none");
     const [option, setOption] = useState("");
     const { ismaster } = mdto;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const [hasPreviousPage, setHasPreviousPage] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/dataroom`, { headers: { Authorization: token } })
-            .then(
-                function (res) {
-                    if (res.status === 200) {
-                        setList(res.data.list);
-                        let m = res.data.mdto;
-                        setDto({
-                            ismaster: m.isMaster
-                        })
-                    } else {
-                        alert('error:' + res.status);
-                    }
+        fetchData(currentPage);
+    }, [currentPage]); // 현재 페이지가 변경될 때 효과 발생 
+
+    const fetchData = (page) => {
+        axios.get(`http://localhost:${myPort}/auth/dataroom?page=${page}`, { headers: { Authorization: token } })
+            .then((res) => {
+                if (res.status === 200) {
+                    setList(res.data.list);
+                    setDto({
+                        ismaster: res.data.mdto.isMaster
+                    });
+                    setHasNextPage(res.data.hasNext);
+                    setHasPreviousPage(res.data.hasPrevious);
+                    setTotalPages(res.data.totalPages);
+                } else {
+                    alert('에러: ' + res.status);
                 }
-            );
-    }, [])
+            })
+            .catch((error) => {
+                console.error('데이터 가져오기 오류:', error);
+            });
+    };
 
     const search = (type, option) => {
         axios.get(`http://localhost:${myPort}/auth/dataroom/search`,
@@ -45,6 +53,10 @@ export default function BoardList() {
                 }
             );
     }
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
     const del = (num) => {
         axios.post(`http://localhost:${myPort}/auth/dataroom/del`,
@@ -61,9 +73,9 @@ export default function BoardList() {
                     alert(res.status);
                 }
             });
-    }
-    return (
+    };
 
+    return (
         <div className="dataroom">
             <div className="main-content">
                 <div className="container-fluid">
@@ -112,7 +124,7 @@ export default function BoardList() {
                                                     <th>제목</th>
                                                     <th>등록일</th>
                                                     <th>다운로드수</th>
-                                                    {ismaster === 1 && (
+                                                    {mdto.ismaster === 1 && (
                                                         <>
                                                             <th>수정</th>
                                                             <th>삭제</th>
@@ -122,7 +134,7 @@ export default function BoardList() {
                                             </thead>
                                             <tbody>
                                                 {list.map((d) => (
-                                                    <tr>
+                                                    <tr key={d.num}>
                                                         <td>{d.num}</td>
                                                         <td>
                                                             <Link to={`/dataroom/detail/${d.num}`} className="link">{d.title}</Link>
@@ -132,7 +144,7 @@ export default function BoardList() {
                                                         <td>{d.wdate}</td>
                                                         <td>{d.cnt}</td>
                                                         <td style={{ padding: '2px' }}>
-                                                            {(ismaster === 1) && (
+                                                            {(mdto.ismaster === 1) && (
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
@@ -141,14 +153,12 @@ export default function BoardList() {
                                                             )}
                                                         </td>
                                                         <td style={{ padding: '2px' }}>
-                                                            {(ismaster === 1) && (
+                                                            {(mdto.ismaster === 1) && (
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                                                    <a onClick={() => del(d.num)}><i className="bi bi-trash-fill del"></i>
-                                                                    </a>
+                                                                    <a onClick={() => del(d.num)}><i className="bi bi-trash-fill del"></i></a>
                                                                 </div>
-
                                                             )}
                                                         </td>
                                                     </tr>
@@ -162,7 +172,33 @@ export default function BoardList() {
                     </div>
                 </div>
             </div>
-        </div >
+            <div className="card-footer d-flex justify-content-center py-4">
+                <nav aria-label="...">
+                    <ul className="pagination">
+                        <li className={`page-item ${hasPreviousPage ? '' : 'disabled'}`}>
+                            <button className="page-link" tabIndex="-1" onClick={() => handlePageChange(currentPage - 1)}>
+                                이전
+                            </button>
+                        </li>
+                        {[...Array(totalPages)].map((_, index) => {
+                            const page = index + 1;
+                            const isCurrentPage = page === currentPage;
+                            return (
+                                <li key={page} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                                        {page}
+                                    </button>
+                                </li>
+                            );
+                        })}
+                        <li className={`page-item ${hasNextPage ? '' : 'disabled'}`}>
+                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                                다음
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     );
-
-}
+} 

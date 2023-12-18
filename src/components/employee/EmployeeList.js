@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../css/dataroom.css';
 import EmployeeEdit from './EmployeeEdit';
+import EmployeeJoin from './EmployeeJoin';
 
 export default function EmployeeList() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -61,6 +62,7 @@ export default function EmployeeList() {
     }
 
     const [showModal, setShowModal] = useState();
+    const [showModal2, setShowModal2] = useState(false);
 
     const openModal = (username) => {
         // alert(username);
@@ -74,6 +76,15 @@ export default function EmployeeList() {
     const closeModal = () => {
         setShowModal(false);
     };
+
+    const openModal2 = () => {
+        setShowModal2(true);
+    };
+
+    const closeModal2 = () => {
+        setShowModal2(false);
+    };
+
     // 회원가입 폼으로 이동
     const join = () => {
         navigate('/employee/join');
@@ -86,6 +97,10 @@ export default function EmployeeList() {
                 onHide={closeModal}
                 username={mdto.username}
             />
+            <EmployeeJoin
+                show={showModal2}
+                onHide={closeModal2}
+            />
             <div className="main-content">
                 <div className="container-fluid">
                     <div className="row">
@@ -93,9 +108,11 @@ export default function EmployeeList() {
                             <div className="card">
                                 <div className="card-header card-header-danger">
                                     <h2 className="card-title">임직원 목록</h2>
-                                    <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
-                                        <Link to='/employee/join'><i className="bi bi-person-plus-fill">회원가입</i></Link>
+                                    {ismaster === 1 && (
+                                    <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">                                     
+                                            <Link onClick={() => openModal2()} ><i className="bi bi-person-plus-fill">회원가입</i></Link>
                                     </div>
+                                     )}
                                     <div>
                                         <div className="input-group mb-3" style={{ paddingTop: '50px' }}>
                                             <div className="input-group-prepend">
@@ -144,7 +161,9 @@ export default function EmployeeList() {
                                                     <th>휴대전화</th>
                                                     <th>이메일</th>
                                                     <th>내선전화</th>
+                                                    {(ismaster === 1) && (
                                                     <th>수정</th>
+                                                    )}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -157,15 +176,17 @@ export default function EmployeeList() {
                                                         <td>{e.phone}</td>
                                                         <td>{e.email}</td>
                                                         <td>{e.comCall}</td>
+                                                        {(ismaster === 1) && (
                                                         <td style={{ padding: '2px' }}>
-                                                            {(ismaster === 1) && (
+                                                            
                                                                 <div className="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px align-self-center"
                                                                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                                                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
                                                                     <i className="bi bi-pencil" onClick={() => openModal(e.username)}></i>
                                                                 </div>
-                                                            )}
+                                                          
                                                         </td>
+                                                          )}
                                                     </tr>
                                                 ))}
                                             </tbody>

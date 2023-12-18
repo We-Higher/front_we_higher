@@ -1,20 +1,70 @@
+import axios from "axios";
 import { useNavigate, Link } from 'react-router-dom';
 import { NavDropdown, Nav, NavLink } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+
 import Employeeicon from '../icons/Employeeicon';
 import Boardicon from '../icons/Boardicon';
 import Commuteicon from '../icons/Commuteicon';
 import Approvalicon from '../icons/Approvalicon';
 import Scheduleicon from '../icons/Scheduleicon';
+
 import '../../css/layout.css';
 import '../../css/style.bundle.css';
 import '../../css/plugins.bundle.css';
 
 export default function Sidebar() {
     const navigate = useNavigate();
+    const myPort = process.env.REACT_APP_MY_PORT;
+    const token = sessionStorage.getItem("token");
+    const [mdto, setDto] = useState({});
+
+    useEffect(() => {
+        axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+            .then(
+                function (res) {
+                    if (res.status === 200) {
+                        if (res.data.flag) {
+                            setDto(res.data.mdto);
+                        } else {
+                            alert('검색안됨');
+                        }
+                    } else {
+                        alert('error:' + res.status);
+                    }
+                }
+            );
+    }, []);
 
     const main = (e) => {
         navigate('/main');
     }
+
+    const openInNewWindow = () => {
+        const width = 820;
+        const height = 760;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        window.open('/approval/report', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+      };
+
+      const openInNewWindow2 = () => {
+        const width = 800;
+        const height = 550;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        window.open('/approval/expense', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+      };
+
+      const openInNewWindow3 = () => {
+        const width = 805;
+        const height = 780;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        window.open('/approval/vacation', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+      };
+
+
     return (
         <div id="sidebar" fragment="sidebarFragment">
             <div id="kt_aside" className="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside"
@@ -73,7 +123,7 @@ export default function Sidebar() {
                         <Nav className="ml-auto">
                             <NavDropdown title={<Approvalicon />} id="nav-dropdown">
                                 <NavDropdown title="결재문서 작성" id="submenu">
-                                    <NavDropdown.Item as={Link} to="/approval/report">
+                                    <NavDropdown.Item as={Link} onClick={openInNewWindow}>
                                         <div class="menu-item">
                                             <a class="menu-link" id="vacation">
                                                 <span class="menu-bullet">
@@ -83,7 +133,7 @@ export default function Sidebar() {
                                             </a>
                                         </div>
                                     </NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} to="/approval/expense">
+                                    <NavDropdown.Item as={Link} onClick={openInNewWindow2}>
                                         <div class="menu-item">
                                             <a class="menu-link" id="vacation">
                                                 <span class="menu-bullet">
@@ -93,7 +143,7 @@ export default function Sidebar() {
                                             </a>
                                         </div>
                                     </NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} to="/approval/vacation">
+                                    <NavDropdown.Item as={Link} onClick={openInNewWindow3}>
                                         <div class="menu-item">
                                             <a class="menu-link" id="vacation">
                                                 <span class="menu-bullet">
@@ -133,9 +183,11 @@ export default function Sidebar() {
                                     <NavDropdown.Item as={Link} to="/commute/mycommute">
                                         나의 출퇴근 이력
                                     </NavDropdown.Item>
+                                    {mdto.isMaster === 1 && (
                                     <NavDropdown.Item as={Link} to="/commute/editlist">
                                         근태 수정요청
                                     </NavDropdown.Item>
+                                      )}
                                 </NavDropdown>
                             </NavDropdown>
                         </Nav>

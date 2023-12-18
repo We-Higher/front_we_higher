@@ -6,6 +6,9 @@ import React from 'react';
 import Router from './Router';
 import Login from './components/member/Login';
 import EmployeeEdit from './components/employee/EmployeeEdit';
+import Report from "./components/approval/Report";
+import Expense from "./components/approval/Expense";
+import Vacation from "./components/approval/Vacation";
 import './css/layout.css';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
@@ -49,6 +52,9 @@ export default function App() {
             <Route path="/" element={<Login />} />
           )}
           <Route path="/edit/:username" element={<EmployeeEdit />} />
+          <Route path="/approval/report" element={<Report />} />
+          <Route path="/approval/expense" element={<Expense />} />
+          <Route path="/approval/vacation" element={<Vacation />} />
         </Routes>
       </BrowserRouter>
     </StompSessionProvider>

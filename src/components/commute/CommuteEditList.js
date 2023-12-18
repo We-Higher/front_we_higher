@@ -40,7 +40,7 @@ export default function CommuteEditList() {
         )
             .then(function (res) {
                 if (res.status === 200) {   
-                    alert('수정 요청이 승인');
+                    alert('수정 요청이 승인되었습니다.');
                 } else {
                     alert(res.status);
                 }
@@ -57,7 +57,7 @@ export default function CommuteEditList() {
         )
             .then(function (res) {
                 if (res.status === 200) {
-                    alert('수정 요청이 반려');
+                    alert('수정 요청이 반려되었습니다.');
                 } else {
                     alert(res.status);
                 }

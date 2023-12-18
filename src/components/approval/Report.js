@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
+import '../../css/form.css';
 
 const Report = () => {
     const token = sessionStorage.getItem("token");
@@ -77,13 +78,13 @@ const Report = () => {
                 headers: { Authorization: token }, params: {
                     writer: writer, title: title, content: content,
                     wdate: wdate, serviceLife: serviceLife, classification: classification, approval1: selectedEmployee.name,
-                    approval2: selectedEmployee2.name, approval1rank: selectedEmployee.companyRankName, 
+                    approval2: selectedEmployee2.name, approval1rank: selectedEmployee.companyRankName,
                     approval2rank: selectedEmployee2.companyRankName, app1username: selectedEmployee.username, app2username: selectedEmployee2.username
                 }
             })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/approval/process')
+                    navigate('/approval/draft')
                 } else {
                     alert('error:' + res.status);
                 }
@@ -103,6 +104,7 @@ const Report = () => {
                 onHide={closeModal2}
                 onSelectEmployee={handleSelectEmployee2}
             />
+
             <span
                 style={{
                     fontFamily: '"맑은 고딕"',
@@ -167,7 +169,7 @@ const Report = () => {
                                     }}
                                     colSpan={4}
                                 >
-                                    <table border="1px solid black" style={{ marginLeft: 280 }}>
+                                    <table border="1px solid black" style={{ marginLeft: 300 }}>
                                         <tbody>
                                             <tr>
                                                 <th
@@ -178,15 +180,32 @@ const Report = () => {
                                                 </th>
                                             </tr>
                                             <tr style={{ textAlign: "center", fontSize: "small" }}>
-                                                <td>기안자</td>
+                                                <td>
+                                                    <input type="text" style={{
+                                                        width: 65,
+                                                        height: 20,
+                                                        fontSize: 12,
+                                                        textAlign: "center",
+                                                        color: "black"
+                                                    }} value="기안자">
+                                                    </input>
+                                                </td>
                                                 <td
                                                     input type="text"
                                                     id="approval1rankname"
                                                     name="approval1rankname"
                                                 >
-                                                    1차결재자
+                                                    <input type="text" style={{
+                                                        width: 65,
+                                                        height: 20,
+                                                        fontSize: 12,
+                                                        textAlign: "center",
+                                                        color: "black"
+                                                    }} defaultValue="1차결재자"
+                                                        value={selectedEmployee.companyRankName}
+                                                    >
+                                                    </input>
                                                 </td>
-
                                                 <input
                                                     type="hidden"
                                                     id="approval1rank"
@@ -207,7 +226,16 @@ const Report = () => {
                                                     id="approval2rankname"
                                                     name="approval2rankname"
                                                 >
-                                                    2차결재자
+                                                    <input type="text" style={{
+                                                        width: 65,
+                                                        height: 20,
+                                                        fontSize: 12,
+                                                        textAlign: "center",
+                                                        color: "black"
+                                                    }} defaultValue="2차결재자"
+                                                        value={selectedEmployee2.companyRankName}
+                                                    >
+                                                    </input>
                                                 </td>
                                                 <input
                                                     type="hidden"
@@ -232,7 +260,7 @@ const Report = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center"
-                                                    }}  
+                                                    }}
                                                 >
                                                     <input
                                                         type="text"
@@ -416,7 +444,7 @@ const Report = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" value={wdate} onChange={onChange} />
+                                        <input type="date" name="wdate" defaultValue={new Date().toLocaleDateString()} value={wdate} onChange={onChange} />
                                     </span>
                                 </td>
                             </tr>
@@ -505,7 +533,7 @@ const Report = () => {
                                             className="editor_slt"
                                             style={{ width: "100%" }}
                                             name="serviceLife"
-                                            defaultValue="1년"
+                                            defaultValue={'1년'}
                                             value={serviceLife} onChange={onChange}
                                         >
                                             <option onSelect={onChange} value={'1년'} selected="selected">1년</option>
@@ -556,14 +584,14 @@ const Report = () => {
                                             className="editor_slt"
                                             style={{ width: "100%" }}
                                             name="classification"
-                                            defaultValue="1등급"
+                                            defaultValue={'1등급'}
                                             value={classification} onChange={onChange}
                                         >
-                                            <option onSelect={onChange} selected="selected">1등급</option>
-                                            <option onSelect={onChange}>2등급</option>
-                                            <option onSelect={onChange}>3등급</option>
-                                            <option onSelect={onChange}>4등급</option>
-                                            <option onSelect={onChange}>5등급</option>
+                                            <option onSelect={onChange} value={'1등급'} selected="selected">1등급</option>
+                                            <option onSelect={onChange} value={'2등급'}>2등급</option>
+                                            <option onSelect={onChange} value={'3등급'}>3등급</option>
+                                            <option onSelect={onChange} value={'4등급'}>4등급</option>
+                                            <option onSelect={onChange} value={'5등급'}>5등급</option>
                                         </select>
                                     </span>
                                 </td>
@@ -595,7 +623,7 @@ const Report = () => {
                                         style={{
                                             fontFamily: '"맑은 고딕"',
                                             fontSize: "7pt",
-                                            lineHeight: 14,
+                                            lineHeight: 1,
                                             marginTop: 0,
                                             marginBottom: 0
                                         }}

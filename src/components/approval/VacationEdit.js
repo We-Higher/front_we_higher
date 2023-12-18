@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
@@ -10,7 +10,7 @@ const VacationEdit = () => {
     const n = useParams().num;
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
-    const [mdto, setDto] = useState({});
+    const [member, setDto] = useState({});
     const [dto, setDto2] = useState({});
 
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const VacationEdit = () => {
         axios.get(`http://localhost:${myPort}/auth/approval/vacation/editread/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
-                    setDto(res.data.mdto);
+                    setDto(res.data.dto.member);
                     setDto2(res.data.dto);
                 } else {
                     alert('error:' + res.status);
@@ -71,6 +71,10 @@ const VacationEdit = () => {
                 }
             })
     }
+
+    const back = () => {
+        navigate(-1);
+    };
 
     return (
 
@@ -116,6 +120,20 @@ const VacationEdit = () => {
                                 className="dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l"
                             >
                                 휴가원
+                                {dto.rstatus == -1 && (
+                                    <img
+                                        src="/refuse.png"
+                                        style={{ position: 'absolute', width: '130px', height: '130px', marginLeft: '-500px', marginTop: '-50px' }}
+                                        alt="Refuse Image"
+                                    />
+                                )}
+                                {dto.status == 2 && (
+                                    <img
+                                        src="/fapprove.png"
+                                        style={{ position: 'absolute', width: '130px', height: '130px', marginLeft: '-500px', marginTop: '-50px' }}
+                                        alt="Refuse Image"
+                                    />
+                                )}
                             </td>
                         </tr>
                         <tr>
@@ -156,7 +174,7 @@ const VacationEdit = () => {
                                                     color: "rgb(0, 0, 0)",
                                                     fontSize: 12,
                                                     fontWeight: "bold",
-                                                    verticalAlign: "middle"
+                                                    verticalAlign: "middle",
                                                 }}
                                             >
                                                 기안자
@@ -170,7 +188,10 @@ const VacationEdit = () => {
                                                     color: "rgb(0, 0, 0)",
                                                     fontSize: 12,
                                                     fontWeight: "normal",
-                                                    verticalAlign: "middle"
+                                                    verticalAlign: "middle",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
                                                 }}
                                             >
                                                 <span
@@ -190,7 +211,7 @@ const VacationEdit = () => {
                                                     data-value=""
                                                     data-autotype=""
                                                 >
-                                                    {mdto.name}
+                                                    {member.name}
                                                 </span>
                                             </td>
                                         </tr>
@@ -239,7 +260,105 @@ const VacationEdit = () => {
                                                     data-value=""
                                                     data-autotype=""
                                                 >
-                                                    {mdto.deptName}
+                                                    {member.deptName}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                style={{
+                                                    background: "rgb(221, 221, 221)",
+                                                    padding: 5,
+                                                    border: "1px solid black",
+                                                    height: 18,
+                                                    textAlign: "center",
+                                                    color: "rgb(0, 0, 0)",
+                                                    fontSize: 12,
+                                                    fontWeight: "bold",
+                                                    verticalAlign: "middle"
+                                                }}
+                                            >
+                                                기안일
+                                            </td>
+                                            <td
+                                                style={{
+                                                    background: "rgb(255, 255, 255)",
+                                                    padding: 5,
+                                                    border: "1px solid black",
+                                                    textAlign: "left",
+                                                    color: "rgb(0, 0, 0)",
+                                                    fontSize: 12,
+                                                    fontWeight: "normal",
+                                                    verticalAlign: "middle"
+                                                }}
+                                            >
+                                                <span
+                                                    unselectable="on"
+                                                    contentEditable="false"
+                                                    className="comp_wrap"
+                                                    data-cid={12}
+                                                    data-dsl="{{label:draftDept}}"
+                                                    data-wrapper=""
+                                                    style={{
+                                                        fontFamily: '"malgun gothic", dotum, arial, tahoma',
+                                                        fontSize: "9pt",
+                                                        lineHeight: "normal",
+                                                        marginTop: 0,
+                                                        marginBottom: 0
+                                                    }}
+                                                    data-value=""
+                                                    data-autotype=""
+                                                >
+                                                    {dto.wdate}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                style={{
+                                                    background: "rgb(221, 221, 221)",
+                                                    padding: 5,
+                                                    border: "1px solid black",
+                                                    height: 18,
+                                                    textAlign: "center",
+                                                    color: "rgb(0, 0, 0)",
+                                                    fontSize: 12,
+                                                    fontWeight: "bold",
+                                                    verticalAlign: "middle"
+                                                }}
+                                            >
+                                                문서번호
+                                            </td>
+                                            <td
+                                                style={{
+                                                    background: "rgb(255, 255, 255)",
+                                                    padding: 5,
+                                                    border: "1px solid black",
+                                                    textAlign: "left",
+                                                    color: "rgb(0, 0, 0)",
+                                                    fontSize: 12,
+                                                    fontWeight: "normal",
+                                                    verticalAlign: "middle"
+                                                }}
+                                            >
+                                                <span
+                                                    unselectable="on"
+                                                    contentEditable="false"
+                                                    className="comp_wrap"
+                                                    data-cid={12}
+                                                    data-dsl="{{label:draftDept}}"
+                                                    data-wrapper=""
+                                                    style={{
+                                                        fontFamily: '"malgun gothic", dotum, arial, tahoma',
+                                                        fontSize: "9pt",
+                                                        lineHeight: "normal",
+                                                        marginTop: 0,
+                                                        marginBottom: 0
+                                                    }}
+                                                    data-value=""
+                                                    data-autotype=""
+                                                >
+                                                    {dto.vacationNum}
                                                 </span>
                                             </td>
                                         </tr>
@@ -269,13 +388,29 @@ const VacationEdit = () => {
                                             </th>
                                         </tr>
                                         <tr style={{ textAlign: "center", fontSize: "small" }}>
-                                            <td>기안자</td>
-                                            <td
+                                            <td style={{
+                                                width: 70,
+                                                height: 20,
+                                                fontSize: 12,
+                                                textAlign: "center",
+                                                borderWidth: 1,
+                                                borderStyle: 'solid',
+                                                borderColor: 'black'
+                                            }}>기안자</td>
+                                            <td style={{
+                                                width: 70,
+                                                height: 20,
+                                                fontSize: 12,
+                                                textAlign: "center",
+                                                borderWidth: 1,
+                                                borderStyle: 'solid',
+                                                borderColor: 'black'
+                                            }}
                                                 type="text"
                                                 id="approval1rankname"
                                                 name="approval1rankname"
                                             >
-                                                1차결재자
+                                                {dto.approval1rank}
                                             </td>
                                             <input
                                                 type="hidden"
@@ -287,17 +422,28 @@ const VacationEdit = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "black"
+                                                    color: "black",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
                                                 }}
                                                 readOnly=""
                                                 value={dto.approval1rank}
                                             />
-                                            <td
+                                            <td style={{
+                                                width: 70,
+                                                height: 20,
+                                                fontSize: 12,
+                                                textAlign: "center",
+                                                borderWidth: 1,
+                                                borderStyle: 'solid',
+                                                borderColor: 'black'
+                                            }}
                                                 type="text"
                                                 id="approval2rankname"
                                                 name="approval2rankname"
                                             >
-                                                2차결재자
+                                                {dto.approval2rank}
                                             </td>
                                             <input
                                                 type="hidden"
@@ -309,7 +455,10 @@ const VacationEdit = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "black"
+                                                    color: "black",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
                                                 }}
                                                 readOnly=""
                                                 value={dto.approval2rank}
@@ -322,22 +471,14 @@ const VacationEdit = () => {
                                                     width: 70,
                                                     height: 40,
                                                     fontSize: 12,
-                                                    textAlign: "center"
+                                                    textAlign: "center",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
                                                 }}
                                             >
-                                                <input
-                                                    type="text"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "black"
-                                                    }}
-                                                    readOnly="true"
-                                                    value={mdto.name}
-                                                />
+                                                {member.name}
+
                                             </td>
                                             <td
                                                 style={{
@@ -345,37 +486,32 @@ const VacationEdit = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "black"
+                                                    color: "black",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
                                                 }}
                                                 id="ap1"
                                             >
-                                                <input
-                                                    type="text"
-                                                    id="approvalList1"
-                                                    name="approval1"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "black"
-                                                    }}
-                                                    readOnly="true"
-                                                    text="등록"
-                                                    value={dto.approval1}
-                                                />
+                                                {dto.approval1}
                                                 {dto.status == 1 && dto.rstatus == 0 && (
                                                     <img
                                                         src="/approve.png"
-                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
                                                         alt="Approval Image"
                                                     />
                                                 )}
                                                 {dto.status == 1 && dto.rstatus == -1 && (
                                                     <img
                                                         src="/approve.png"
-                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
+                                                        alt="Approval Image"
+                                                    />
+                                                )}
+                                                {dto.status == 2 && dto.rstatus == 0 && (
+                                                    <img
+                                                        src="/approve.png"
+                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
                                                         alt="Approval Image"
                                                     />
                                                 )}
@@ -401,25 +537,21 @@ const VacationEdit = () => {
                                                     height: 40,
                                                     fontSize: 12,
                                                     textAlign: "center",
-                                                    color: "black"
+                                                    color: "black",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
                                                 }}
                                                 id="ap2"
                                             >
-                                                <input
-                                                    type="text"
-                                                    id="approvalList2"
-                                                    name="approval2"
-                                                    defaultValue=""
-                                                    style={{
-                                                        width: 65,
-                                                        height: 40,
-                                                        fontSize: 12,
-                                                        textAlign: "center",
-                                                        color: "black"
-                                                    }}
-                                                    readOnly=""
-                                                    value={dto.approval2}
-                                                />
+                                                {dto.approval2}
+                                                {dto.status == 2 && (
+                                                    <img
+                                                        src="/approve.png"
+                                                        style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
+                                                        alt="Approval Image"
+                                                    />
+                                                )}
                                             </td>
                                             <input
                                                 type="hidden"
@@ -537,7 +669,7 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    {mdto.deptName}
+                                    {member.deptName}
                                 </span>
                             </td>
                         </tr>
@@ -591,7 +723,7 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    {mdto.companyRankName}
+                                    {member.companyRankName}
                                 </span>
                             </td>
                         </tr>
@@ -645,7 +777,7 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    {mdto.name}
+                                    {member.name}
                                 </span>
                             </td>
                         </tr>
@@ -696,13 +828,7 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    <input
-                                        className="ipt_editor ipt_editor_date"
-                                        type="date"
-                                        name="wdate"
-                                        value={dto.wdate}
-                                        readonly="true"
-                                    />
+                                    {dto.wdate}
                                 </span>
                             </td>
                         </tr>
@@ -828,19 +954,10 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    <input
-                                        className="ipt_editor ipt_editor_date"
-                                        type="date"
-                                        name="startDate"
-                                        value={dto.startDate}
-                                    />{" "}
+                                    {dto.startDate}
+                                    {" "}
                                     ~{" "}
-                                    <input
-                                        className="ipt_editor ipt_editor_date"
-                                        type="date"
-                                        name="endDate"
-                                        value={dto.endDate}
-                                    />
+                                    {dto.endDate}
                                 </span>
                             </td>
                             <td
@@ -887,7 +1004,7 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    {mdto.remain}
+                                    {member.remain}
                                 </span>
                             </td>
                         </tr>
@@ -914,7 +1031,7 @@ const VacationEdit = () => {
                                     borderStyle: "none solid solid",
                                     borderColor: "currentColor black black",
                                     padding: 5,
-                                    height: 25,
+                                    height: 200,
                                     textAlign: "left",
                                     color: "rgb(0, 0, 0)",
                                     fontSize: 14,
@@ -941,15 +1058,8 @@ const VacationEdit = () => {
                                     }}
                                     data-value=""
                                 >
-                                    <textarea
-                                        className="txta_editor"
-                                        cols={87}
-                                        rows={10}
-                                        style={{ marginLeft: 3, marginTop: 3, marginBottom: 3 }}
-                                        name="reason"
-                                        defaultValue={""}
-                                        value={dto.reason}
-                                    />
+                                    {dto.reason}
+
                                 </span>
                             </td>
                         </tr>
@@ -1003,6 +1113,11 @@ const VacationEdit = () => {
                     </tr>
                 </tbody>
             </table>
+            <div>
+                <Link onClick={back} className="btn btn-secondary" style={{ fontSize: '13px', marginLeft: '360px', marginTop: '30px' }}>
+                    목록
+                </Link>
+            </div>
         </div>
     )
 }

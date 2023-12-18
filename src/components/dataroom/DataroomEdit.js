@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 export default function DataroomEdit() {
@@ -27,6 +27,30 @@ export default function DataroomEdit() {
         })
     }
 
+    const down = (fname, num) => {
+
+        axios.post(`http://localhost:${myPort}/auth/dataroom/down`,
+            {},
+            {
+                headers: { Authorization: token },
+                responseType: 'blob',
+                params: { fname: fname, num: num }
+            })
+            .then(function (res) {
+                if (res.status === 200) {
+                    const url = window.URL.createObjectURL(new Blob([res.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', fname);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    alert('error:' + res.status);
+                }
+            })
+    }
+
     useEffect(() => {
         axios.get(`http://localhost:${myPort}/auth/dataroom/edit/` + n, { headers: { Authorization: token } })
             .then(function (res) {
@@ -51,7 +75,6 @@ export default function DataroomEdit() {
 
         let fdata = new FormData();
         let file = document.getElementById('f');
-        fdata.append('content', content);
         fdata.append('f', file.files[0]);
         axios.post(`http://localhost:${myPort}/auth/dataroom`, fdata,
             { headers: { Authorization: token }, "Content-Type": "multipart/form-data", params: { num: n, title: title, content: content } })
@@ -62,6 +85,9 @@ export default function DataroomEdit() {
                     alert('error:' + res.status);
                 }
             })
+            .catch(error => {
+                alert('파일을 선택해야합니다.');
+            });
     }
 
     return (
@@ -121,14 +147,12 @@ export default function DataroomEdit() {
                     <div className="col-lg-8">
                         <span className="fw-bolder fs-6 text-dark">
                             <div className="input-group input-group-sm mb-3">
-                                {/* Assuming you are using React Router for navigation */}
-                                {/* Replace your Thymeleaf syntax with the appropriate React Router link */}
-                                <a
+                                <Link
                                     className="form-control"
-                                    href={`/dataroom/down?fname=${fname}&num=${dto.num}`}
+                                    onClick={() => down(fname, dto.num)}
                                 >
                                     {fname}
-                                </a>
+                                </Link>
                             </div>
                         </span>
                     </div>

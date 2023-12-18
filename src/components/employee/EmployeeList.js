@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import '../../css/dataroom.css';
 import EmployeeEdit from './EmployeeEdit';
 
@@ -27,8 +27,7 @@ export default function EmployeeList() {
                     alert('error:' + res.status);
                 }
             });
-    }, [list]);
-
+    }, []);
 
     const search = (type, option) => {
         axios.get(`http://localhost:${myPort}/auth/employee/search`,
@@ -47,7 +46,7 @@ export default function EmployeeList() {
     const [showModal, setShowModal] = useState();
 
     const openModal = (username) => {
-        alert(username);
+        // alert(username);
         setShowModal(true);
         setDto((prevDto) => ({
             ...prevDto,
@@ -78,11 +77,9 @@ export default function EmployeeList() {
                                 <div className="card-header card-header-danger">
                                     <h2 className="card-title">임직원 목록</h2>
                                     <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
-                                        <div className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center"
-                                            data-kt-menu-trigger="click" data-kt-menu-attach="parent"
-                                            data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                            <a href='/employee/join'><i className="bi bi-person-plus-fill">회원가입</i></a>
-                                        </div>
+                                        <Link to='/employee/join'><i className="bi bi-person-plus-fill">회원가입</i></Link>
+                                    </div>
+                                    <div>
                                         <div className="input-group mb-3" style={{ paddingTop: '50px' }}>
                                             <div className="input-group-prepend">
                                                 <select name="type" className="form-select form-select-sm" value={type} onChange={(e) => setType(e.target.value)} >

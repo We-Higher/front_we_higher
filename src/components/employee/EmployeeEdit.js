@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useNavigate, Link, redirect  } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 
 export default function EmployeeEdit({ show, onHide, username }) {
@@ -60,7 +61,9 @@ export default function EmployeeEdit({ show, onHide, username }) {
                 .catch(function () {
                     alert('사용자 데이터를 가져오는 중 오류가 발생했습니다.');
                 });
-        } console.log("DTO in EmployeeEdit:", dto);
+                
+        } 
+        console.log("DTO in EmployeeEdit:", dto);
     }, [username]);
 
     const save = () => {
@@ -96,6 +99,7 @@ export default function EmployeeEdit({ show, onHide, username }) {
             .catch(function () {
                 alert('정보수정 실패');
             });
+            window.location.replace("/employee/list");
     };
 
     const del = () => {
@@ -128,6 +132,7 @@ export default function EmployeeEdit({ show, onHide, username }) {
                             <button onClick={save} className="btn btn-primary align-self-center">수정
                             </button>
                         </div>
+                        <input type="hidden" name="username" value={dto.username} />
                         <input type="hidden" name="name" value={dto.name} />
                         <input type="hidden" name="pwd" value={dto.pwd} />
                         <input type="hidden" name="phone" value={dto.phone} />

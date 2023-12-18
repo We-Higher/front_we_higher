@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
@@ -10,7 +10,7 @@ const ReportEditRead = () => {
     const n = useParams().num;
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
-    const [mdto, setDto] = useState({});
+    const [member, setDto] = useState({});
     const [dto, setDto2] = useState({});
 
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const ReportEditRead = () => {
         axios.get(`http://localhost:${myPort}/auth/approval/report/editread/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
-                    setDto(res.data.mdto);
+                    setDto(res.data.dto.member);
                     setDto2(res.data.dto);
                 } else {
                     alert('error:' + res.status);
@@ -39,6 +39,10 @@ const ReportEditRead = () => {
         return () => {
         };
     }, []);
+
+    const back = () => {
+        navigate(-1);
+    };
 
     return (
 
@@ -121,7 +125,7 @@ const ReportEditRead = () => {
                                     }}
                                     colSpan={4}
                                 >
-                                    <table border="1px solid black" style={{ marginLeft: 280 }}>
+                                    <table border="1px solid black" style={{ marginLeft: 300 }}>
                                         <tbody>
                                             <tr>
                                                 <th
@@ -132,20 +136,44 @@ const ReportEditRead = () => {
                                                 </th>
                                             </tr>
                                             <tr style={{ textAlign: "center", fontSize: "small" }}>
-                                                <td>기안자</td>
-                                                <td
+                                                <td style={{
+                                                    width: 70,
+                                                    height: 20,
+                                                    fontSize: 12,
+                                                    textAlign: "center",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
+                                                }}>기안자</td>
+                                                <td style={{
+                                                    width: 70,
+                                                    height: 20,
+                                                    fontSize: 12,
+                                                    textAlign: "center",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
+                                                }}
                                                     input type="text"
                                                     id="approval1rankname"
                                                     name="approval1rankname"
                                                 >
-                                                    1차결재자
+                                                    {dto.approval1rank}
                                                 </td>
-                                                <td
+                                                <td style={{
+                                                    width: 70,
+                                                    height: 20,
+                                                    fontSize: 12,
+                                                    textAlign: "center",
+                                                    borderWidth: 1,
+                                                    borderStyle: 'solid',
+                                                    borderColor: 'black'
+                                                }}
                                                     type="text"
                                                     id="approval2rankname"
                                                     name="approval2rankname"
                                                 >
-                                                    2차결재자
+                                                    {dto.approval2rank}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -154,22 +182,13 @@ const ReportEditRead = () => {
                                                         width: 70,
                                                         height: 40,
                                                         fontSize: 12,
-                                                        textAlign: "center"
+                                                        textAlign: "center",
+                                                        borderWidth: 1,
+                                                        borderStyle: 'solid',
+                                                        borderColor: 'black'
                                                     }}
                                                 >
-                                                    <input
-                                                        type="text"
-                                                        defaultValue=""
-                                                        style={{
-                                                            width: 65,
-                                                            height: 40,
-                                                            fontSize: 12,
-                                                            textAlign: "center",
-                                                            color: "black"
-                                                        }}
-                                                        value={mdto.name}
-                                                    />
-
+                                                    {member.name}
                                                 </td>
                                                 <td
                                                     style={{
@@ -177,44 +196,32 @@ const ReportEditRead = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "black"
+                                                        color: "black",
+                                                        borderWidth: 1,
+                                                        borderStyle: 'solid',
+                                                        borderColor: 'black'
                                                     }}
                                                     id="ap1"
                                                 >
-                                                    <input
-                                                        type="text"
-                                                        id="approvalList1"
-                                                        name="approval1"
-                                                        defaultValue=""
-                                                        style={{
-                                                            width: 65,
-                                                            height: 40,
-                                                            fontSize: 12,
-                                                            textAlign: "center",
-                                                            color: "black"
-                                                        }}
-                                                        readOnly="true"
-                                                        text="등록"
-                                                        value={dto.approval1}
-                                                    />
+                                                    {dto.approval1}
                                                     {dto.status == 1 && dto.rstatus == 0 && (
                                                         <img
                                                             src="/approve.png"
-                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
                                                             alt="Approval Image"
                                                         />
                                                     )}
                                                     {dto.status == 1 && dto.rstatus == -1 && (
                                                         <img
                                                             src="/approve.png"
-                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
                                                             alt="Approval Image"
                                                         />
                                                     )}
                                                     {dto.status == 2 && dto.rstatus == 0 && (
                                                         <img
                                                             src="/approve.png"
-                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
                                                             alt="Approval Image"
                                                         />
                                                     )}
@@ -225,29 +232,19 @@ const ReportEditRead = () => {
                                                         height: 40,
                                                         fontSize: 12,
                                                         textAlign: "center",
-                                                        color: "black"
+                                                        color: "black",
+                                                        borderWidth: 1,
+                                                        borderStyle: 'solid',
+                                                        borderColor: 'black'
                                                     }}
                                                     id="ap2"
                                                 >
-                                                    <input
-                                                        type="text"
-                                                        id="approvalList2"
-                                                        name="approval2"
-                                                        defaultValue=""
-                                                        style={{
-                                                            width: 65,
-                                                            height: 40,
-                                                            fontSize: 12,
-                                                            textAlign: "center",
-                                                            color: "black"
-                                                        }}
-                                                        readOnly=""
-                                                        value={dto.approval2}
-                                                    />
+                                                    {dto.approval2}
+
                                                     {dto.status == 2 && (
                                                         <img
                                                             src="/approve.png"
-                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-75px', marginTop: '-14px' }}
+                                                            style={{ position: 'absolute', width: '90px', height: '70px', marginLeft: '-63px', marginTop: '-27px' }}
                                                             alt="Approval Image"
                                                         />
                                                     )}
@@ -296,7 +293,7 @@ const ReportEditRead = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        {mdto.deptName}
+                                        {member.deptName}
                                     </span>
                                 </td>
                                 <td
@@ -337,7 +334,7 @@ const ReportEditRead = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" value={dto.wdate} readonly="true" />
+                                        {dto.wdate}
                                     </span>
                                 </td>
                             </tr>
@@ -379,9 +376,9 @@ const ReportEditRead = () => {
                                         }}
                                         data-value=""
                                         data-autotype=""
-                                        value={mdto.name}
+                                        value={member.name}
                                     >
-                                        {mdto.name}
+                                        {member.name}
                                     </span>
                                 </td>
                                 <td
@@ -518,7 +515,7 @@ const ReportEditRead = () => {
                                         style={{
                                             fontFamily: '"맑은 고딕"',
                                             fontSize: "7pt",
-                                            lineHeight: 14,
+                                            lineHeight: 1,
                                             marginTop: 0,
                                             marginBottom: 0
                                         }}
@@ -584,15 +581,7 @@ const ReportEditRead = () => {
                                         }}
                                         data-value=""
                                     >
-                                        <input
-                                            className="ipt_editor"
-                                            type="text"
-                                            style={{ width: 700 }}
-                                            placeholder="제목을 입력해주세요"
-                                            name="title"
-                                            value={dto.title}
-                                            readonly="true"
-                                        />
+                                        {dto.title}
                                     </span>
                                 </td>
                             </tr>
@@ -622,17 +611,8 @@ const ReportEditRead = () => {
                                             marginBottom: 0
                                         }}
                                         data-value=""
-                                    >
-                                        <textarea
-                                            cols={128}
-                                            rows={32}
-                                            placeholder="내용을 작성해주세요"
-                                            name="content"
-                                            defaultValue={""}
-                                            value={dto.content} onChange={onChange}
-                                            readonly="true"
-                                        />
-
+                                    >   <br />
+                                        {dto.content}
                                     </span>
                                     <br />
                                 </td>
@@ -664,6 +644,11 @@ const ReportEditRead = () => {
                     }}
                 />
             </span>
+            <div>
+                <Link onClick={back} className="btn btn-secondary" style={{ fontSize: '13px', marginLeft: '360px', marginTop: '30px' }}>
+                    목록
+                </Link>
+            </div>
         </div>
     )
 }

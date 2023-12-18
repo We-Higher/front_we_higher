@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 export default function DataroomDetail() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -69,9 +69,9 @@ export default function DataroomDetail() {
 
         <div className="container py-4">
             <div className="text-end mt-5">
-                <a href="/dataroom/list" className="btn btn-secondary" style={{ fontSize: '13px' }}>
+                <Link to="/dataroom/list" className="btn btn-secondary" style={{ fontSize: '13px' }}>
                     목록
-                </a>
+                </Link>
             </div>
             <p className="card-text" style={{ fontSize: '20px' }}>
                 <strong>[자료실]</strong>
@@ -98,9 +98,9 @@ export default function DataroomDetail() {
                         <div className="row">
                             <div className="col-md-3">
                                 <span>첨부파일: </span>
-                                <a className="ml-3" style={{ display: 'inline-block', width: 'auto' }} onClick={() => down(fname, num)}>
+                                <Link className="ml-3" style={{ display: 'inline-block', width: 'auto' }} onClick={() => down(fname, num)}>
                                     {fname}
-                                </a>
+                                </Link>
                             </div>
                         </div>
                         <small className="text-muted">게시자: </small>

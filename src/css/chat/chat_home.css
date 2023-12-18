@@ -1,3 +1,7 @@
 .scroll-list {
   max-height: 60vh;
 }
+#toolbar.dropdown-toggle::after,
+.chat.dropdown-toggle::after {
+  display: none !important;
+}

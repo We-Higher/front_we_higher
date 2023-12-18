@@ -68,7 +68,7 @@ export default function ChatInvitation(props) {
             {mList.map((m, i) => (
                 <div className="d-flex flex-stack py-4" key={m.id}>
                   {/*begin::Details*/}
-                  < div className="d-flex align-items-center" >
+                  <div className="d-flex align-items-center" >
                     {/*begin::Avatar*/}
                     <div div className="symbol  symbol-45px symbol-circle " >
                       {m.originFname === null ?

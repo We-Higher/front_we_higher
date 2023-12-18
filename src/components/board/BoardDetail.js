@@ -5,6 +5,7 @@ import { useParams, Link } from "react-router-dom";
 export default function BoardDetail() {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
+    const [mdto, setDto2] = useState({});
     const n = useParams().num;
 
     const [dto, setDto] = useState({
@@ -37,7 +38,110 @@ export default function BoardDetail() {
             });
     }, []);
 
+    useEffect(() => {
+        axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+            .then(
+                function (res) {
+                    if (res.status === 200) {
+                        if (res.data.flag) {
+                            setDto2(res.data.mdto);
+                        } else {
+                            alert('검색안됨');
+                        }
+                    } else {
+                        alert('error:' + res.status);
+                    }
+                }
+            );
+    }, []);
+
     const { num, writer, wdate, udate, title, content, cnt } = dto;
+    const [comments, setComments] = useState([]);
+    const [totalComments, setTotalComments] = useState(0);
+
+    useEffect(() => {
+        fetchData();
+    }, [num]);
+
+    const fetchData = async () => {
+        const com_bno = document.querySelector('#bnum').value;
+        axios.get(`http://localhost:${myPort}/auth/reply/list/${com_bno}`, { headers: { Authorization: token } })
+            .then(
+                function (res) {
+                    if (res.status === 200) {
+                        const data = res.data;
+                        if (data.total > 0) {
+                            setTotalComments(data.total);
+                            setComments(data.list);
+                        } else {
+                            setTotalComments(0);
+                            setComments([]);
+                        }
+                    } else {
+                        alert('error:' + res.status);
+                    }
+                }
+            );
+    };
+
+    const handleDelete = (num) => {
+        axios.post(`http://localhost:${myPort}/auth/reply/del`,
+            {},
+            {
+                headers: { Authorization: token },
+                params: { num: num }
+            }
+        )
+            .then(function (res) {
+                if (res.status === 200) {
+                    fetchData();
+                } else {
+                    alert(res.status);
+                }
+            });
+            fetchData();
+    }
+
+    const handleCommentRegist = async () => {
+
+        const com_bno = document.querySelector('#bnum').value;
+        const com_writer = document.querySelector('#com_writer').value;
+        const com_content = document.querySelector('#com_content').value;
+
+        if (com_content === '') {
+            alert('내용을 입력하세요');
+            return;
+        }
+
+        axios.post(
+            `http://localhost:${myPort}/auth/reply/add`,
+            [
+                {
+                    com_bno: com_bno,
+                    com_writer: com_writer,
+                    com_content: com_content,
+                },
+            ],
+            {
+                headers: {
+                    Authorization: token,
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+            .then(function (res) {
+                if (res.status === 200) {
+                    document.querySelector('#com_writer').value = com_writer;
+                    document.querySelector('#com_content').value = '';
+                    fetchData();
+                } else {
+                    alert('error:' + res.status);
+                }
+            })
+            .catch(function (error) {
+                console.error('Axios Error:', error);
+            });
+    };
 
     return (
         <div className="container py-4">
@@ -86,47 +190,76 @@ export default function BoardDetail() {
                     </p>
                 </div>
             </div>
-            <div className="comment-count">
-                <strong>댓글 &nbsp;</strong>
-                <span id="count">0</span>
-            </div>
-
-            <div className="comment-box" id="commentbox"></div>
-
-            <span className="c-icon">
-                <i className="fa-solid fa-user"></i>
-                <div className="comment-name">
-                    <span className="anonym">
-                        작성자
-                        <input
-                            type="hidden"
-                            className="form-control"
-                            id="com_writer"
-                            placeholder="이름"
-                            name="com_writer"
-                            value={writer}
-                            readOnly
-                            style={{ width: '250px', border: 'none' }}
-                        />
-                    </span>
+            <div>
+                <div className="comment-count">
+                    <strong>댓글 &nbsp;</strong>
+                    <span id="count">{totalComments}</span>
                 </div>
-                {/* <img src="/익명.jpg" width="50px" alt="My Image" /> */}
-            </span>
-            <div className="mb-3 comment-sbox">
-                <textarea
-                    className="form-control comment-input"
-                    id="com_content"
-                    cols="80"
-                    rows="2"
-                    name="com_content"
-                    placeholder="댓글을 입력하세요."
-                ></textarea>
-            </div>
 
-            <div className="regBtn text-end">
-                <button className="btn btn-primary mb-3" style={{ right: '10%' }} id="Comment_regist">
-                    등 록
-                </button>
+                <div className="comment-box" id="commentbox">
+                    {comments.map((comment) => (
+                        <div key={comment.num} className="card mb-3">
+                            <div className="card-body">
+                                {comment.member.originFname === null ? (
+                                    <img src="/default.png" alt="image" style={{ width: '40px', height: '40px', borderRadius: '100px', marginRight: '10px', marginBottom: '10px' }} />
+                                ) : (
+                                    <img src={`http://localhost:${myPort}/image/${comment.member.originFname}`}
+                                        style={{ width: '40px', height: '40px', borderRadius: '100px', marginRight: '10px', marginBottom: '10px' }}
+                                        alt="image" />
+                                )}
+                                <span id="com_writer">
+                                    <strong>{comment.member.name}</strong>
+                                </span>
+                                <br />
+                                <span id="com-content">{comment.content}</span>
+
+                                {comment.member.username === mdto.username && (
+                                    <button
+                                        className="delete"
+                                        style={{
+                                            cursor: 'pointer',
+                                            position: 'absolute',
+                                            border: 'none',
+                                            backgroundColor: 'white',
+                                            top: '10%',
+                                            right: '1%',
+                                        }}
+                                        onClick={() => handleDelete(comment.num)}
+                                    >
+                                        <i className="bi bi-x-square" style={{ color: 'red' }}></i>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="comment-name">
+                    <input
+                        type="hidden"
+                        className="form-control"
+                        id="com_writer"
+                        placeholder="이름"
+                        name="com_writer"
+                        defaultValue={mdto.name}
+                        readOnly
+                        style={{ width: '250px', border: 'none' }}
+                    />
+                </div>
+                <div className="mb-3 comment-sbox">
+                    <textarea
+                        className="form-control comment-input"
+                        id="com_content"
+                        cols="80"
+                        rows="2"
+                        name="com_content"
+                        placeholder="댓글을 입력하세요."
+                    ></textarea>
+                </div>
+                <div className="regBtn text-end">
+                    <button onClick={handleCommentRegist} className="btn btn-primary mb-3" style={{ right: '10%' }} id="Comment_regist">
+                        등 록
+                    </button>
+                </div>
             </div>
         </div>
     );

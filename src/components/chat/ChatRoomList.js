@@ -16,7 +16,7 @@ export default function ChatRoomList(props) {
               </Link>
             </div>
             <span className="badge fs-6 badge-light fw-bold my-2">{room.participants.length} 명</span>
-            <button className="btn btn-danger btn-sm out-room" onClick={(e)=>outRoomHandler(e.target.dataset.roomId)} data-room-id={room.id}>나가기</button>
+            <button className="btn btn-danger btn-sm out-room" onClick={e => outRoomHandler(room.id)} data-room-id={room.id}>나가기</button>
           </div>
         </div>
       ))}

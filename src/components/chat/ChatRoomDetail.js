@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { useStompClient, useSubscription } from 'react-stomp-hooks'
-import { MY_PORT } from '../../common/util'
+import { formatFullDate, MY_PORT } from '../../common/util'
 import ChatDetailParticipants from "./ChatDetailParticipants";
 import { ThreeDots } from "react-bootstrap-icons";
 import { Dropdown, DropdownButton, Modal } from "react-bootstrap";
@@ -63,15 +63,7 @@ export default function ChatRoomDetail() {
             return
         }
         if (stompClient) {
-            let now = new Date()
-            let year = now.getFullYear()
-            let month = ('0' + (now.getMonth() + 1)).slice(-2)
-            let date = ('0' + now.getDate()).slice(-2)
-            let hours = ('0' + now.getHours()).slice(-2)
-            let minutes = ('0' + now.getMinutes()).slice(-2)
-            let seconds = ('0' + now.getSeconds()).slice(-2)
-
-            let timestamp = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
+            let timestamp = formatFullDate(new Date())
 
             let params = new URLSearchParams()
             params.append('type', 'TALK')
@@ -223,7 +215,7 @@ export default function ChatRoomDetail() {
                                                     {/*begin::Details*/}
                                                     <div className="ms-3">
                                                         <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{c.sender.name}</a>
-                                                        <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                        <span className="text-muted fs-7 mb-1">{formatFullDate(new Date(c.timestamp))}</span>
                                                     </div>
                                                     {/*end::Details*/}
                                                 </div>
@@ -246,7 +238,7 @@ export default function ChatRoomDetail() {
                                                 <div className="d-flex align-items-center mb-2">
                                                     {/*begin::Details*/}
                                                     <div className="me-3">
-                                                        <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                        <span className="text-muted fs-7 mb-1">{formatFullDate(new Date(c.timestamp))}</span>
                                                         <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">{c.sender.name}</a>
                                                     </div>
                                                     {/*end::Details*/}

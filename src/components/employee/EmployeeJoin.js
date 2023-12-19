@@ -41,7 +41,8 @@ export default function EmployeeJoin({ show, onHide }) {
         )
             .then(function (res) {
                 if (res.status === 200) {
-                    alert(res.data.name + '님 회원가입 완료');
+                    onHide();
+                    window.myFunction3();
                 } else {
                     alert('error:' + res.status);
                 }
@@ -49,7 +50,7 @@ export default function EmployeeJoin({ show, onHide }) {
             .catch(function (error) {
                 alert('회원가입 실패');
             });
-            window.location.replace("/employee/list");
+
     };
 
     return (

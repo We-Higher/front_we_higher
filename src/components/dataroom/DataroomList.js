@@ -21,14 +21,21 @@ export default function BoardList() {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
-    const [mode,setMode]=useState('list')
+    const [refresh, setRefresh] = useState(2);
+    const loginid = sessionStorage.getItem("loginid");
+    const [mode, setMode] = useState('list')
+
     useEffect(() => {
         if(mode=='list'){
             fetchData(currentPage)
         }else if(mode === 'search'){
             search(type,option,currentPage)
         }
-    }, [currentPage]); // 현재 페이지가 변경될 때 효과 발생 
+    }, [currentPage, refresh]); // 현재 페이지가 변경될 때 효과 발생 
+
+    window.myFunction2 = () => {
+        setRefresh(refresh => refresh * -1);
+      };
 
     const fetchData = (page) => {
         axios.get(`http://localhost:${myPort}/auth/dataroom?page=${page}`, { headers: { Authorization: token } })

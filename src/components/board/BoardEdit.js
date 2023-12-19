@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 
-const BoardEdit = ({show, onHide, num}) => {
+const BoardEdit = ({ show, onHide, num }) => {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const [dto, setDto] = useState({
@@ -29,28 +29,28 @@ const BoardEdit = ({show, onHide, num}) => {
 
     useEffect(() => {
         if (num) {
-        axios.get(`http://localhost:${myPort}/auth/board/edit/` + num, { headers: { Authorization: token } })
-            .then(function (res) {
-                if (res.status === 200) {
-                    let b = res.data.dto;
-                    setDto((prevDto) => ({
-                        ...prevDto,
-                        num: b.num,
-                        wdate: b.wdate,
-                        udate: b.udate,
-                        writer: b.member.name,
-                        title: b.title,
-                        content: b.content,
-                        cnt: b.cnt
-                    }));
-                } else {
-                    alert('error:' + res.status);
-                }
-            })
-            .catch(function () {
-                alert('사용자 데이터를 가져오는 중 오류가 발생했습니다.');
-            });
-        } 
+            axios.get(`http://localhost:${myPort}/auth/board/edit/` + num, { headers: { Authorization: token } })
+                .then(function (res) {
+                    if (res.status === 200) {
+                        let b = res.data.dto;
+                        setDto((prevDto) => ({
+                            ...prevDto,
+                            num: b.num,
+                            wdate: b.wdate,
+                            udate: b.udate,
+                            writer: b.member.name,
+                            title: b.title,
+                            content: b.content,
+                            cnt: b.cnt
+                        }));
+                    } else {
+                        alert('error:' + res.status);
+                    }
+                })
+                .catch(function () {
+                    alert('사용자 데이터를 가져오는 중 오류가 발생했습니다.');
+                });
+        }
     }, [num]);
 
     const edit = () => {
@@ -59,11 +59,12 @@ const BoardEdit = ({show, onHide, num}) => {
             { headers: { Authorization: token }, params: { num: num, title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
+                    onHide();
+                    window.myFunction();
                 } else {
                     alert('error:' + res.status);
                 }
             })
-            window.location.replace("/board/list");
     }
 
     return (

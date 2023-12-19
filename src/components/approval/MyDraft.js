@@ -12,6 +12,7 @@ export default function MyDraft() {
     const [elist, setList1] = useState([]);
     const [rlist, setList2] = useState([]);
     const [vlist, setList3] = useState([]);
+    const [refresh, setRefresh] = useState(1);
 
     useEffect(() => {
         axios.get(`http://localhost:${myPort}/auth/approval/mydraft`, { headers: { Authorization: token } })
@@ -26,7 +27,19 @@ export default function MyDraft() {
                     }
                 }
             );
-    }, [])
+    }, [refresh])
+
+    window.addEventListener('message', (event) => {
+        if (event.data === 'executeMyFunction4') {
+            setRefresh(refresh => refresh + 1);
+        }
+        else if (event.data === 'executeMyFunction5') {
+            setRefresh(refresh => refresh + 1);
+        }
+        else if (event.data === 'executeMyFunction6') {
+            setRefresh(refresh => refresh + 1);
+        }
+    });
 
     /*const del = (num) => {
         axios.post('http://localhost:8081/auth/board/del',
@@ -83,7 +96,7 @@ export default function MyDraft() {
                                                 <td>품의서</td>
                                                 <td>{r.member.name}</td>
                                                 <td>
-                                                <Link to={`/approval/report/editread/${r.reportNum}`}>{r.title}</Link>
+                                                    <Link to={`/approval/report/editread/${r.reportNum}`}>{r.title}</Link>
                                                 </td>
                                                 <td>{r.wdate}</td>
                                                 <td>{r.rstatus === -1 ? '반려' : r.status >= 0 && r.status < 2 && r.rstatus === 0 ? '결재중' : r.status === 2 && r.rstatus === 0 ? '결재완료' : ''}</td>

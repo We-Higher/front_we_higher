@@ -62,7 +62,8 @@ export default function DataroomEdit({ show, onHide, num }) {
             { headers: { Authorization: token }, "Content-Type": "multipart/form-data", params: { num: num, title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/dataroom/list')
+                    onHide();
+                    window.myFunction2();
                 } else {
                     alert('error:' + res.status);
                 }
@@ -70,7 +71,6 @@ export default function DataroomEdit({ show, onHide, num }) {
             .catch(error => {
                 alert('파일을 선택해야합니다.');
             });
-        window.location.replace("/dataroom/list");
     }
 
 

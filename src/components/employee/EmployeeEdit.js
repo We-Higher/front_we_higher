@@ -90,8 +90,8 @@ export default function EmployeeEdit({ show, onHide, username }) {
         )
             .then(function (res) {
                 if (res.status === 200) {
-                    alert(res.data.m.name + '님 정보수정 완료');
                     onHide();
+                    window.myFunction3();
                 } else {
                     alert('error:' + res.status);
                 }
@@ -99,7 +99,7 @@ export default function EmployeeEdit({ show, onHide, username }) {
             .catch(function () {
                 alert('정보수정 실패');
             });
-            window.location.replace("/employee/list");
+            window.myFunction3();
     };
 
     const del = () => {
@@ -112,12 +112,13 @@ export default function EmployeeEdit({ show, onHide, username }) {
         )
             .then(function (res) {
                 if (res.status === 200) {
-                    alert(dto.name + "님을 탈퇴처리 했습니다.")
                     onHide();
+                    window.myFunction3();
                 } else {
                     alert(res.status);
                 }
             });
+     
     }
 
     return (

@@ -85,7 +85,8 @@ const Vacation = () => {
             })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/approval/draft')
+                    window.opener.postMessage('executeMyFunction6', '*');
+                    window.close();
                 } else {
                     alert('error:' + res.status);
                 }

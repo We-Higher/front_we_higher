@@ -10,6 +10,7 @@ export default function CommuteEditList() {
     const loginid = sessionStorage.getItem("loginid");
     const navigate = useNavigate();
     const [list, setList] = useState([]);
+    const [refresh, setRefresh] = useState(1);
     // const [mdto, setDto] = useState({});
     // const { ismaster } = mdto;
 
@@ -28,7 +29,7 @@ export default function CommuteEditList() {
                     }
                 }
             );
-    }, [])
+    }, [refresh])
 
     const edit = (num) => {
         axios.post(`http://localhost:${myPort}/auth/commute/approve`,
@@ -40,7 +41,7 @@ export default function CommuteEditList() {
         )
             .then(function (res) {
                 if (res.status === 200) {   
-                    alert('수정 요청이 승인되었습니다.');
+                     window.comref();
                 } else {
                     alert(res.status);
                 }
@@ -57,12 +58,16 @@ export default function CommuteEditList() {
         )
             .then(function (res) {
                 if (res.status === 200) {
-                    alert('수정 요청이 반려되었습니다.');
+                    window.comref();
                 } else {
                     alert(res.status);
                 }
             });
     }
+
+    window.comref = () => {
+        setRefresh(refresh => refresh * -1);
+      };
 
     return (
         <div className="dataroom">
@@ -99,12 +104,12 @@ export default function CommuteEditList() {
                                                             [퇴근] {e.endTime} → {e.editEndTime}</td>
                                                         <td>{e.reason}</td>
                                                         <td>
-                                                        <a onClick={() => edit(e.num)}>
+                                                        <Link onClick={() => edit(e.num)}>
                                                             <i className="bi bi-check-lg" style={{ color: "blue" }} />
-                                                        </a>
-                                                        <a onClick={() => del(e.num)}>
+                                                        </Link>
+                                                        <Link onClick={() => del(e.num)}>
                                                             <i className="bi bi-x-octagon-fill" style={{ color: "red" }} />
-                                                        </a>
+                                                        </Link>
                                                         </td>
                                                     </tr>
                                                 ))}

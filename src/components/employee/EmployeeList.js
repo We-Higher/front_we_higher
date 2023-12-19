@@ -18,6 +18,7 @@ export default function EmployeeList() {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
+    const [refresh, setRefresh] = useState(1);
     const [mode, setMode] = useState('list')
 
     useEffect(() => {
@@ -28,6 +29,10 @@ export default function EmployeeList() {
             search(type, option, currentPage) 
         } 
     }, [currentPage]);
+
+    window.myFunction3 = () => {
+        setRefresh(refresh => refresh * -1);
+      };
 
     const fetchData = (page) => {
         axios.get(`http://localhost:${myPort}/auth/employee?page=${page}`, { headers: { Authorization: token } })
@@ -138,7 +143,7 @@ export default function EmployeeList() {
                                             <input type="text" name="option" className="form-control form-control-sm" value={option} onChange={(e) => setOption(e.target.value)} />
                                             <div className="input-group-append">
                                                 <button
-                                                    onClick={() => search(type, option,1)}
+                                                    onClick={() => search(type, option, 1)}
                                                     value="검색"
                                                     name="search"
                                                     className="btn btn-success btn-sm"

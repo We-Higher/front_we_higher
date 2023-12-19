@@ -63,7 +63,7 @@ export default function MonthMember({ show, onHide }) {
             );
 
             if (response.status === 200) {
-                alert('이달의 우수사원 선정완료');
+                window.empref();
                 onHide();
             } else {
                 alert('error:' + response.status);

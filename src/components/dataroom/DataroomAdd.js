@@ -43,7 +43,8 @@ export default function BoardAdd({ show, onHide }) {
             { headers: { Authorization: token }, "Content-Type": "multipart/form-data" })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/dataroom/list')
+                    onHide();
+                    window.myFunction2();
                 } else {
                     alert('error:' + res.status);
                 }
@@ -51,7 +52,6 @@ export default function BoardAdd({ show, onHide }) {
             .catch(error => {
                 alert('파일을 선택해야합니다.');
             });
-            window.location.replace("/dataroom/list");
     }
     return (
 

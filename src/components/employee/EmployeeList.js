@@ -18,9 +18,15 @@ export default function EmployeeList() {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
+    const [mode, setMode] = useState('list')
 
     useEffect(() => {
-        fetchData(currentPage);
+        if (mode === 'list') { 
+            fetchData(currentPage); 
+        } else if (mode === 'search') { 
+            console.log(currentPage); 
+            search(type, option, currentPage) 
+        } 
     }, [currentPage]);
 
     const fetchData = (page) => {
@@ -47,13 +53,18 @@ export default function EmployeeList() {
         setCurrentPage(newPage);
     };
 
-    const search = (type, option) => {
-        axios.get(`http://localhost:${myPort}/auth/employee/search`,
+    const search = (type, option, page) => {
+        axios.get(`http://localhost:${myPort}/auth/employee/search?page=${page}`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {
                     if (res.status === 200) {
+                        setMode('search') 
                         setList(res.data.list);
+                        setCurrentPage(page) 
+                        setHasNextPage(res.data.hasNext); 
+                        setHasPreviousPage(res.data.hasPrevious); 
+                        setTotalPages(res.data.totalPages); 
                     } else {
                         alert('error:' + res.status);
                     }
@@ -127,7 +138,7 @@ export default function EmployeeList() {
                                             <input type="text" name="option" className="form-control form-control-sm" value={option} onChange={(e) => setOption(e.target.value)} />
                                             <div className="input-group-append">
                                                 <button
-                                                    onClick={() => search(type, option)}
+                                                    onClick={() => search(type, option,1)}
                                                     value="검색"
                                                     name="search"
                                                     className="btn btn-success btn-sm"
@@ -202,7 +213,7 @@ export default function EmployeeList() {
                 <nav aria-label="...">
                     <ul className="pagination">
                         <li className={`page-item ${hasPreviousPage ? '' : 'disabled'}`}>
-                            <button className="page-link" tabIndex="-1" onClick={() => handlePageChange(currentPage - 1)}>
+                            <button className="page-link" tabIndex="-1" onClick={() => setCurrentPage(currentPage - 1)}>
                                 이전
                             </button>
                         </li>
@@ -211,14 +222,14 @@ export default function EmployeeList() {
                             const isCurrentPage = page === currentPage;
                             return (
                                 <li key={page} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                                    <button className="page-link" onClick={() => setCurrentPage(page)}>
                                         {page}
                                     </button>
                                 </li>
                             );
                         })}
                         <li className={`page-item ${hasNextPage ? '' : 'disabled'}`}>
-                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                            <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
                                 다음
                             </button>
                         </li>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import '../../css/QuoteComponent.css'; // Import the CSS file
+import '../../css/QuoteComponent.css';
+import '../../css/style.bundle.css';
+import MonthMember from "../employee/MonthMember";
 
 export default function Main() {
     const token = sessionStorage.getItem("token");
-
     const quotes = [
         "대부분의 사람은 마음먹은 만큼 행복하다.",
         "행복하게 여행하려면 가볍게 여행해야 한다.",
@@ -36,6 +37,7 @@ export default function Main() {
     const [quoteContentIndex, setQuoteContentIndex] = useState(0);
     const myPort = process.env.REACT_APP_MY_PORT;
     const [list, setList] = useState([]);
+    const [list2, setList2] = useState([]);
     const [mdto, setDto] = useState({});
 
     useEffect(() => {
@@ -46,13 +48,27 @@ export default function Main() {
                         setList(res.data.list);
                         let m = res.data.mdto;
                         setDto({
-                            ismaster: m.isMaster
+                            ismaster: m.isMaster,
                         })
                     } else {
                         alert('error:' + res.status);
                     }
                 }
             );
+
+        axios.get(`http://localhost:${myPort}/monthMemberList`, { headers: { Authorization: token } })
+            .then(function (res) {
+                if (res.status === 200) {
+                    setList2(res.data.list);
+                    let m = res.data.mdto;
+                    setDto({
+                        ismaster: m.isMaster,
+                        monthMember: m.monthMember
+                    });
+                } else {
+                    alert('error:' + res.status);
+                }
+            });
     }, []);
 
     useEffect(() => {
@@ -70,6 +86,17 @@ export default function Main() {
 
         return () => clearInterval(interval);
     }, [quoteContent]);
+
+
+    const [showModal, setShowModal] = useState();
+
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
 
     return (
         <div className="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -140,87 +167,18 @@ export default function Main() {
                                 </h3>
                                 {/* <!--end::Card title--> */}
                                 <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
+                                    <MonthMember
+                                        show={showModal}
+                                        onHide={closeModal}
+                                    />
                                     {(mdto.ismaster === 1) && (
                                         <div
                                             className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center btn-person-plus-fill"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                                            <i className="bi bi-person-plus-fill">선택하기</i>
+                                            <i className="bi bi-person-plus-fill" onClick={() => openModal()}>선택하기</i>
                                         </div>
                                     )}
-                                    <div className="menu menu-sub menu-sub-dropdown menu-column w-400px w-lg-450px e_box"
-                                        data-kt-menu="true">
-                                        <form action="/member/monthMember"
-                                            method="POST">
-                                            <input type="hidden"
-                                                name="${_csrf.parameterName}"
-                                                value="${_csrf.token}" />
-                                            <div className="card mb-5 mb-xl-10">
-                                                <div className="card-header cursor-pointer">
-                                                    <div className="card-title m-0">
-                                                        <h3 className="fw-bolder m-0">임직원 목록</h3>
-                                                    </div>
-                                                    <button type="submit" className="btn btn-primary align-self-center">선택
-                                                    </button>
-                                                </div>
-                                                <div className="card-body p-9">
-                                                    <div className="row mb-7">
-                                                        <div className="col-lg-12 fv-row">
-                                                            <span className="fw-bold fs-6">
-                                                                <div className="input-group input-group-sm mb-3">
-                                                                    <div className="scroll-y me-n5 pe-5 h-550px h-lg-auto"
-                                                                        data-kt-scroll="true"
-                                                                        data-kt-scroll-activate="{default: false, lg: true}"
-                                                                        data-kt-scroll-max-height="auto"
-                                                                        data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_contacts_header"
-                                                                        data-kt-scroll-wrappers="#kt_content, #kt_chat_contacts_body"
-                                                                        data-kt-scroll-offset="5px">
-                                                                        <table className="table table-striped table-row-bordered gy-5 gs-7"
-                                                                        // style="table-layout: auto; width: 100%;"
-                                                                        >
-                                                                            <tr className="fw-bold fs-6 text-gray-800"
-                                                                            // style="text-align: center"
-                                                                            >
-                                                                                <th >이름</th>
-                                                                                <th >사번</th>
-                                                                                <th >부서</th>
-                                                                                <th >직급</th>
-                                                                                <th ><i
-                                                                                    className="bi bi-check-square-fill"></i></th>
-                                                                            </tr>
-                                                                            <tr each="e : ${list}"
-                                                                            // style="text-align: center"
-                                                                            >
-                                                                                <td ><span
-                                                                                    className="name" text="${e.name}"></span></td>
-                                                                                <td ><span
-                                                                                    className="newNo"
-                                                                                    text="${e.newNo}"></span></td>
-                                                                                <td ><span
-                                                                                    className="deptName"
-                                                                                    text="${e.deptName}"></span></td>
-                                                                                <td ><span
-                                                                                    className="companyRankName"
-                                                                                    text="${e.companyRankName}"></span></td>
-                                                                                <td
-                                                                                // style="width: 20%;"
-                                                                                >
-                                                                                    <input type="checkbox"
-                                                                                        name="selectedMembers"
-                                                                                        value="${e.id}"
-                                                                                        checked="${e.monthMember == 1}"
-                                                                                        onclick="limitSelections(this, 8)" /></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
                                 </div>
                             </div>
                             {/* <!--end::Header--> */}
@@ -231,25 +189,30 @@ export default function Main() {
                                     <div className="tab-pane fade active show" id="kt_chart_widget_1_tab_pane_1">
                                         {/* <!--begin::Row--> */}
                                         <div className="row p-0 px-9">
-                                            {/* <!--begin::Col--> */}
-                                            <div className="col-3" each="e, stat : ${monthMemlist}">
-                                                {/* <!--begin::Stat--> */}
-                                                <div className="border border-dashed border-gray-300 text-center min-w-75px rounded pb-4 my-3">
-                                                    <img src="@{'profile/' + ${e.originFname}}" className="card-img-top"
-                                                        if="${e.monthMember == 1 and e.originFname != null}" />
-                                                    <img src="/img/default.png" className="card-img-top"
-                                                        if="${e.monthMember == 1 and e.originFname == null}" />
-                                                    <span className="fs-5 fw-bold text-gray-400 d-block"
-                                                        if="${e.monthMember == 1}">
-                                                        {/* [[${e.deptName}]] */}
-                                                    </span>
-                                                    <span className="fs-2 fw-boldest text-gray-800"
-                                                        if="${e.monthMember == 1}">
-                                                        {/* [[${e.name}]] */}
-                                                    </span>
+                                            {list2.map((m, index) => (
+                                                <div key={index} className="col-3">
+                                                    {/* <!--begin::Stat--> */}
+                                                    <div className="border border-dashed border-gray-300 text-center min-w-75px rounded pb-4 my-3">
+                                                        {m.monthMember === 1 && (
+                                                            <>
+                                                                {(m.originFname === null) ? (
+                                                                    <img src='/default.png' className="card-img-top"/>
+                                                                ) : (
+                                                                    <img src={`http://localhost:${myPort}/image/${m.originFname}`} className="card-img-top custom-card-image" />
+                                                                )}
+
+                                                                <span className="fs-5 fw-bold text-gray-400 d-block">
+                                                                    {m.deptName}
+                                                                </span>
+                                                                <span className="fs-2 fw-boldest text-gray-800">
+                                                                    {m.name}
+                                                                </span>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                    {/* <!--end::Stat--> */}
                                                 </div>
-                                                {/* <!--end::Stat--> */}
-                                            </div>
+                                            ))}
                                             {/* <!--end::Col--> */}
                                         </div>
                                         {/* <!--end::Row--> */}
@@ -258,7 +221,7 @@ export default function Main() {
                                 </div>
                                 {/* <!--end::Tab content--> */}
                             </div>
-                            {/* <!--end::Card body--> */}
+                            {/* <!--end::Card Body--> */}
                         </div>
                         {/* <!--end::Chart Widget 1--> */}
                     </div>
@@ -289,7 +252,6 @@ export default function Main() {
                 </div>
             </div>
             {/* <!--end::Container--> */}
-        </div>
-
+        </div >
     );
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; 
-import { useParams } from "react-router-dom"; 
+import { useNavigate, Link } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 import BoardEdit from './BoardEdit';
 import BoardAdd from './BoardAdd';
@@ -21,11 +21,18 @@ const BoardList = () => {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
-    const loginid = sessionStorage.getItem("loginid"); 
-    const navigate = useNavigate(); 
+    const loginid = sessionStorage.getItem("loginid");
+    const [mode, setMode] = useState('list')
+    const navigate = useNavigate();
     useEffect(() => {
-        fetchData(currentPage);
+        if (mode === 'list') {
+            fetchData(currentPage);
+        } else if (mode === 'search') {
+            console.log(currentPage);
+            search(type, option, currentPage)
+        }
     }, [currentPage]); // 현재 페이지가 변경될 때 효과 발생 
+
 
 
     const fetchData = (page) => {
@@ -68,13 +75,18 @@ const BoardList = () => {
             });
     }
 
-    const search = (type, option) => {
-        axios.get(`http://localhost:${myPort}/auth/board/search`,
+    const search = (type, option, page) => {
+        axios.get(`http://localhost:${myPort}/auth/board/search?page=${page}`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {
                     if (res.status === 200) {
+                        setMode('search')
                         setList(res.data.list);
+                        setCurrentPage(page)
+                        setHasNextPage(res.data.hasNext);
+                        setHasPreviousPage(res.data.hasPrevious);
+                        setTotalPages(res.data.totalPages);
                     } else {
                         alert('error:' + res.status);
                     }
@@ -105,11 +117,11 @@ const BoardList = () => {
     return (
         <div>
             <BoardAdd show={showModal2}
-            onHide={closeModal2}
+                onHide={closeModal2}
             />
             <BoardEdit show={showModal}
-            onHide={closeModal}
-            num={dto.num} 
+                onHide={closeModal}
+                num={dto.num}
             />
             <div className="dataroom">
                 <div className="main-content">
@@ -134,7 +146,7 @@ const BoardList = () => {
                                                 <input type="text" name="option" className="form-control form-control-sm" value={option} onChange={(e) => setOption(e.target.value)} />
                                                 <div className="input-group-append">
                                                     <button
-                                                        onClick={() => search(type, option)}
+                                                        onClick={() => search(type, option, 1)}
                                                         value="검색"
                                                         name="search"
                                                         className="btn btn-success btn-sm"
@@ -215,7 +227,7 @@ const BoardList = () => {
                 <nav aria-label="...">
                     <ul className="pagination">
                         <li className={`page-item ${hasPreviousPage ? '' : 'disabled'}`}>
-                            <button className="page-link" tabIndex="-1" onClick={() => handlePageChange(currentPage - 1)}>
+                            <button className="page-link" tabIndex="-1" onClick={() => setCurrentPage(currentPage - 1)}>
                                 이전
                             </button>
                         </li>
@@ -224,14 +236,14 @@ const BoardList = () => {
                             const isCurrentPage = page === currentPage;
                             return (
                                 <li key={page} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(page)}>
+                                    <button className="page-link" onClick={() => setCurrentPage(page)}>
                                         {page}
                                     </button>
                                 </li>
                             );
                         })}
                         <li className={`page-item ${hasNextPage ? '' : 'disabled'}`}>
-                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                            <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
                                 다음
                             </button>
                         </li>
@@ -240,7 +252,7 @@ const BoardList = () => {
             </div>
         </div>
     );
-} 
+}
 
 
 export default BoardList;

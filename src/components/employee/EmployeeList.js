@@ -28,7 +28,7 @@ export default function EmployeeList() {
             console.log(currentPage); 
             search(type, option, currentPage) 
         } 
-    }, [currentPage]);
+    }, [currentPage, refresh]);
 
     window.myFunction3 = () => {
         setRefresh(refresh => refresh * -1);

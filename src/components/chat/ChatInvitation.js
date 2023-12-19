@@ -68,13 +68,13 @@ export default function ChatInvitation(props) {
             {mList.map((m, i) => (
                 <div className="d-flex flex-stack py-4" key={m.id}>
                   {/*begin::Details*/}
-                  < div className="d-flex align-items-center" >
+                  <div className="d-flex align-items-center" >
                     {/*begin::Avatar*/}
                     <div div className="symbol  symbol-45px symbol-circle " >
                       {m.originFname === null ?
                         <img src="/default.png" alt="no-image" />
                         :
-                        <img src={`/profile/${m.originFname}`} alt="image" />
+                        <img src={`http://localhost:${MY_PORT}/image/${m.originFname}`} alt="image" />
                       }
                       {m.cstatus === 1 ?
                         <div className="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2" />

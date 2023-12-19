@@ -2,18 +2,27 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { useStompClient, useSubscription } from 'react-stomp-hooks'
-import { MY_PORT } from '../../common/util'
+import { formatFullDate, MY_PORT } from '../../common/util'
+import ChatDetailParticipants from "./ChatDetailParticipants";
+import { ThreeDots } from "react-bootstrap-icons";
+import { Dropdown, DropdownButton, Modal } from "react-bootstrap";
+import ChatInviteModal from "./ChatInviteModal";
 
 export default function ChatRoomDetail() {
     const token = sessionStorage.getItem('token')
     const loginid = sessionStorage.getItem('loginid')
 
     const { id } = useParams()
-    const [roomInfo, setRoomInfo] = useState()
+    const [roomInfo, setRoomInfo] = useState(null)
+    const [roomParticipants, setRoomParticipants] = useState([])
     const [chatList, setChatList] = useState([])
     const [chat, setChat] = useState('')
     const [inviteList, setInviteList] = useState([])
     const [user, setUser] = useState(null)
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const stompClient = useStompClient()
 
@@ -33,15 +42,15 @@ export default function ChatRoomDetail() {
     }, [chatList])
 
     const loadRoom = () => {
-        console.log('loadRoom')
         axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, { headers: { Authorization: token } })
             .then(res => {
                 if (res.status === 200) {
+                    console.log(res.data)
                     setUser(res.data.user)
                     setRoomInfo(res.data.chatRoom)
                     setChatList(res.data.clist)
                     setInviteList(res.data.nlist)
-
+                    setRoomParticipants(res.data.chatRoom.participants)
                 } else {
                     console.log(res)
                 }
@@ -54,15 +63,7 @@ export default function ChatRoomDetail() {
             return
         }
         if (stompClient) {
-            let now = new Date()
-            let year = now.getFullYear()
-            let month = ('0' + (now.getMonth() + 1)).slice(-2)
-            let date = ('0' + now.getDate()).slice(-2)
-            let hours = ('0' + now.getHours()).slice(-2)
-            let minutes = ('0' + now.getMinutes()).slice(-2)
-            let seconds = ('0' + now.getSeconds()).slice(-2)
-
-            let timestamp = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
+            let timestamp = formatFullDate(new Date())
 
             let params = new URLSearchParams()
             params.append('type', 'TALK')
@@ -72,7 +73,7 @@ export default function ChatRoomDetail() {
             params.append('timestamp', timestamp)
 
             axios
-                .post('/chat/message/add',
+                .post(`http://localhost:${MY_PORT}/chat/message/add`,
                     params,
                     { headers: { Authorization: token } },
                 )
@@ -98,6 +99,52 @@ export default function ChatRoomDetail() {
         publishMessage()
     }
 
+    const handleInvite = (data) => {
+        let nList = Array.from(data).map(c => ({id : c.value}))
+        let dList = Array.from(data).map(c => c.value)
+
+        axios
+          .post(`http://localhost:${MY_PORT}/chat/room/invite/` + roomInfo.id,
+            nList,
+            {
+                headers: { Authorization: token }
+            }
+          )
+          .then(function (response) {
+              alert("초대에 성공하였습니다.")
+
+              setInviteList(inviteList.filter(m => !dList.includes(`${m.id}`)))
+
+              data.forEach(function (participant) {
+                  participant.checked = false;
+              })
+              setRoomParticipants(response.data.room.participants)
+              handleClose()
+          })
+          .catch(function (response) {
+              console.log(response)
+              alert("초대에 실패하였습니다.");
+          });
+    }
+
+    const enterKeyEventHandler = (event) => {
+        if (event.key === 'Enter') {
+            if (event.shiftKey) {
+                return;
+            } else {
+                event.preventDefault();
+                handleSubmit(event, chat);
+            }
+        }
+    }
+
+    const sendKeyEventHandler = event => {
+        if (event.key === 's' && event.altKey) {
+            event.preventDefault();
+            handleSubmit(event, chat);
+        }
+    }
+
     return <>
         <div className=" container-xxl " id="kt_content_container">
             {/*begin::Layout*/}
@@ -113,10 +160,34 @@ export default function ChatRoomDetail() {
                             {/*begin::Title*/}
                             <div className="card-title">
                                 {/*begin::Users*/}
+                                <ChatDetailParticipants participants={roomParticipants}></ChatDetailParticipants>
                                 {/*end::Users*/}
                             </div>
                             {/*end::Title*/}
                             {/*begin::Card toolbar*/}
+                            <div className="card-toolbar">
+                                {/* <!--begin::Menu--> */}
+                                <div className="me-n3">
+                                    <Dropdown id="toolbar">
+                                        <Dropdown.Toggle className="chat" size="sm">
+                                            <ThreeDots className="fs-2"/>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3">
+                                            <Dropdown.Item className="menu-item px-3">
+                                                    <div className="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">
+                                                        Contacts
+                                                    </div>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item className="menu-item px-3 my-1">
+                                                    <div className="menu-link px-3" data-bs-target="#kt_modal_users_search" onClick={handleShow}>
+                                                        Add Contact
+                                                    </div>
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    <ChatInviteModal show={show} onHide={handleClose} inviteList={inviteList} onInvite={handleInvite}></ChatInviteModal>
+                                </div>
+                            </div>
                             {/*end::Card toolbar*/}
                         </div>
                         {/*end::Card header*/}
@@ -137,14 +208,14 @@ export default function ChatRoomDetail() {
                                                         {c.sender.originFname === null ?
                                                             <img src="/default.png" alt="no-image" />
                                                             :
-                                                            <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                            <img src={`http://localhost:${MY_PORT}/image/${c.sender.originFname}`} alt="image" />
                                                         }
                                                     </div>
                                                     {/*end::Avatar*/}
                                                     {/*begin::Details*/}
                                                     <div className="ms-3">
                                                         <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">{c.sender.name}</a>
-                                                        <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                        <span className="text-muted fs-7 mb-1">{formatFullDate(new Date(c.timestamp))}</span>
                                                     </div>
                                                     {/*end::Details*/}
                                                 </div>
@@ -167,7 +238,7 @@ export default function ChatRoomDetail() {
                                                 <div className="d-flex align-items-center mb-2">
                                                     {/*begin::Details*/}
                                                     <div className="me-3">
-                                                        <span className="text-muted fs-7 mb-1">{c.timestamp}</span>
+                                                        <span className="text-muted fs-7 mb-1">{formatFullDate(new Date(c.timestamp))}</span>
                                                         <a href="#" className="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">{c.sender.name}</a>
                                                     </div>
                                                     {/*end::Details*/}
@@ -176,7 +247,7 @@ export default function ChatRoomDetail() {
                                                         {c.sender.originFname === null ?
                                                             <img src="/default.png" alt="image" />
                                                             :
-                                                            <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                            <img src={`http://localhost:${MY_PORT}/image/${c.sender.originFname}`} alt="image" />
                                                         }
                                                     </div>
                                                     {/*end::Avatar*/}
@@ -200,7 +271,7 @@ export default function ChatRoomDetail() {
                         <div className="card-footer pt-4" id="kt_chat_messenger_footer">
                             <form onSubmit={(event) => handleSubmit(event, chat)}>
                                 {/*begin::Input*/}
-                                <textarea className="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message" id="messageInput" onChange={handleChange} value={chat}></textarea>
+                                <textarea className="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message" id="messageInput" onChange={handleChange} value={chat} onKeyPress={enterKeyEventHandler} onKeyDown={sendKeyEventHandler}></textarea>
                                 {/*end::Input*/}
                                 {/*begin:Toolbar*/}
                                 <div className="d-flex flex-stack">

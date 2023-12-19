@@ -46,27 +46,27 @@ export default function Sidebar() {
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
         window.open('/approval/report', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
-      };
+    };
 
-      const openInNewWindow2 = () => {
+    const openInNewWindow2 = () => {
         const width = 800;
         const height = 550;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
         window.open('/approval/expense', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
-      };
+    };
 
-      const openInNewWindow3 = () => {
+    const openInNewWindow3 = () => {
         const width = 805;
         const height = 780;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
         window.open('/approval/vacation', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
-      };
+    };
 
 
     return (
-        <div id="sidebar" fragment="sidebarFragment">
+        <div id="sidebar" fragment="sidebarFragment" style={{width:'75px'}}>
             <div id="kt_aside" className="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside"
                 data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
                 data-kt-drawer-width="auto" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_toggle">
@@ -75,7 +75,7 @@ export default function Sidebar() {
                 {/*begin::Logo*/}
                 <div className="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto pt-10"
                     id="kt_aside_logo">
-                    <img alt="Logo" src="/logo3.png" className="h-55px" onClick={main} />
+                    <img alt="Logo" src="/logo3.png" className="h-70px" onClick={main} />
                 </div>
                 {/*end::Logo*/}
                 <div className="aside-nav d-flex flex-column flex-lg-row flex-column-fluid w-100 pt-5 pt-lg-0"
@@ -103,7 +103,7 @@ export default function Sidebar() {
                         </div>
 
                         {/* 임직원 관리 */}
-                        <Nav className="ml-auto">
+                        <Nav className="ml-auto justify-content-center">
                             <NavDropdown title={<Employeeicon />} id="nav-dropdown" className="position-static">
                                 {/* Submenu with more items */}
                                 <NavDropdown title="임직원 관리" id="submenu">
@@ -120,38 +120,17 @@ export default function Sidebar() {
                         </Nav>
 
                         {/* 전자결재 */}
-                        <Nav className="ml-auto">
+                        <Nav className="ml-auto justify-content-center">
                             <NavDropdown title={<Approvalicon />} id="nav-dropdown">
                                 <NavDropdown title="결재문서 작성" id="submenu">
                                     <NavDropdown.Item as={Link} onClick={openInNewWindow}>
-                                        <div class="menu-item">
-                                            <a class="menu-link" id="vacation">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">품의서</span>
-                                            </a>
-                                        </div>
+                                        품의서
                                     </NavDropdown.Item>
                                     <NavDropdown.Item as={Link} onClick={openInNewWindow2}>
-                                        <div class="menu-item">
-                                            <a class="menu-link" id="vacation">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">지출결의서</span>
-                                            </a>
-                                        </div>
+                                        지출결의서
                                     </NavDropdown.Item>
                                     <NavDropdown.Item as={Link} onClick={openInNewWindow3}>
-                                        <div class="menu-item">
-                                            <a class="menu-link" id="vacation">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">휴가신청서</span>
-                                            </a>
-                                        </div>
+                                        휴가신청서
                                     </NavDropdown.Item>
                                 </NavDropdown>
 
@@ -174,7 +153,7 @@ export default function Sidebar() {
                         </Nav>
 
                         {/* 근태관리 */}
-                        <Nav className="ml-auto">
+                        <Nav className="ml-auto justify-content-center">
                             <NavDropdown title={<Commuteicon />} id="nav-dropdown">
                                 <NavDropdown title="근태관리" id="submenu">
                                     <NavDropdown.Item as={Link} to="/commute/list">
@@ -184,16 +163,16 @@ export default function Sidebar() {
                                         나의 출퇴근 이력
                                     </NavDropdown.Item>
                                     {mdto.isMaster === 1 && (
-                                    <NavDropdown.Item as={Link} to="/commute/editlist">
-                                        근태 수정요청
-                                    </NavDropdown.Item>
-                                      )}
+                                        <NavDropdown.Item as={Link} to="/commute/editlist">
+                                            근태 수정요청
+                                        </NavDropdown.Item>
+                                    )}
                                 </NavDropdown>
                             </NavDropdown>
                         </Nav>
 
                         {/* 일정 및 예약 */}
-                        <Nav className="ml-auto">
+                        <Nav className="ml-auto justify-content-center">
                             <NavDropdown title={<Scheduleicon />} id="nav-dropdown">
                                 <NavDropdown title="예약 및 일정" id="submenu">
                                     <NavDropdown.Item as={Link} to="/meetingroom/meetingroom">
@@ -206,7 +185,7 @@ export default function Sidebar() {
                             </NavDropdown>
                         </Nav>
 
-                        <Nav className="ml-auto">
+                        <Nav className="ml-auto justify-content-center">
                             <NavDropdown title={<Boardicon />} id="nav-dropdown">
                                 {/* Submenu with more items */}
                                 <NavDropdown title="자료실 및 게시판" id="submenu">

@@ -33,6 +33,7 @@ export default function Main() {
         "-스피노자-",
     ];
 
+    const [refresh, setRefresh] = useState(1);
     const [quoteIndex, setQuoteIndex] = useState(0);
     const [quoteContentIndex, setQuoteContentIndex] = useState(0);
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -69,7 +70,7 @@ export default function Main() {
                     alert('error:' + res.status);
                 }
             });
-    }, []);
+    }, [refresh]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -98,6 +99,10 @@ export default function Main() {
         setShowModal(false);
     };
 
+    window.empref = () => {
+        setRefresh(refresh => refresh * -1);
+      };
+
     return (
         <div className="content d-flex flex-column flex-column-fluid" id="kt_content">
             {/* <!--begin::Container--> */}
@@ -105,7 +110,7 @@ export default function Main() {
                 {/* <!--begin::Row--> */}
                 <div className="row g-5 gx-xxl-8 mb-xxl-3">
                     {/* <!--begin::Col--> */}
-                    <div className="col-xxl-4">
+                    <div className="col-xxl-5">
                         {/* <!--begin::Engage Widget 1--> */}
                         <div className="card card-xxl-stretch">
                             {/* <!--begin::Card body--> */}
@@ -155,7 +160,7 @@ export default function Main() {
                     </div>
                     {/* <!--end::Col--> */}
                     {/* <!--begin::Col--> */}
-                    <div className="col-xxl-8">
+                    <div className="col-xxl-7">
                         {/* <!--begin::Chart Widget 1--> */}
                         <div className="card card-xxl-stretch mb-5 mb-xxl-8">
                             {/* <!--begin::Card header--> */}

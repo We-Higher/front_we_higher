@@ -21,9 +21,10 @@ const BoardList = () => {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
+    const [refresh, setRefresh] = useState(1);
     const loginid = sessionStorage.getItem("loginid");
     const [mode, setMode] = useState('list')
-    const navigate = useNavigate();
+    
     useEffect(() => {
         if (mode === 'list') {
             fetchData(currentPage);
@@ -31,8 +32,11 @@ const BoardList = () => {
             console.log(currentPage);
             search(type, option, currentPage)
         }
-    }, [currentPage]); // 현재 페이지가 변경될 때 효과 발생 
+    }, [currentPage, refresh]); // 현재 페이지가 변경될 때 효과 발생 
 
+    window.myFunction = () => {
+        setRefresh(refresh => refresh * -1);
+      };
 
 
     const fetchData = (page) => {

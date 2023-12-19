@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
+import MyDraft from './MyDraft';
 import '../../css/form.css';
 
 const Report = () => {
@@ -15,7 +16,7 @@ const Report = () => {
         approval1rank: '', approval2rank: '', app1username: '', app2username: '',
     });
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { writer, title, content, wdate, serviceLife, classification, approval1,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
     const onChange = (e) => {
@@ -38,6 +39,8 @@ const Report = () => {
         return () => {
         };
     }, []);
+
+    const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
@@ -72,6 +75,7 @@ const Report = () => {
     };
 
     const save = () => {
+
         axios.post(`http://localhost:${myPort}/auth/approval/report`,
             {},
             {
@@ -84,7 +88,8 @@ const Report = () => {
             })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/approval/draft')
+                    window.opener.postMessage('executeMyFunction4', '*');
+                    window.close();
                 } else {
                     alert('error:' + res.status);
                 }

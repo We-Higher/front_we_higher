@@ -38,12 +38,13 @@ export default function NotifyAdd({show, onHide}) {
             { headers: { Authorization: token }, params: { title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/notify/list')
+                    window.notifyref();
+                    onHide();
                 } else {
                     alert('error:' + res.status);
                 }
             })
-        window.location.replace("/notify/list");
+        
     }
 
     return (

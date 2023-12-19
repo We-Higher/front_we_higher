@@ -37,12 +37,12 @@ export default function BoardAdd({show, onHide}) {
             { headers: { Authorization: token }, params: { title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
+                    onHide();
+                    window.myFunction();
                 } else {
                     alert('error:' + res.status);
                 }
-            })
-            window.location.replace("/board/list");
-            // onHide();
+            })   
     }
 
     return (
@@ -84,7 +84,7 @@ export default function BoardAdd({show, onHide}) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="title" className="form-control" value={title} onChange={onChange} />
+                                        <input type="text" name="title" className="form-control" onChange={onChange} />
                                     </div>
                                 </span>
                             </div>
@@ -94,7 +94,7 @@ export default function BoardAdd({show, onHide}) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <textarea rows="10" cols="30" name="content" className="form-control" value={content} onChange={onChange}></textarea>
+                                        <textarea rows="10" cols="30" name="content" className="form-control" onChange={onChange}></textarea>
                                     </div>
                                 </span>
                             </div>

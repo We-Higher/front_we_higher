@@ -1,18 +1,17 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 
-export default function CommuteEdit() {
+export default function CommuteEdit({show, onHide, num}) {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const loginid = sessionStorage.getItem("loginid");
     const navigate = useNavigate();
     const [list, setList] = useState([]);
-    const n = useParams().num;
     const [dto, setDto] = useState({
-
         num: 0,
         basicDate: null,
         startTime: null,
@@ -24,7 +23,7 @@ export default function CommuteEdit() {
         editBasicDate: null
     });
 
-    const { num, basicDate, startTime, endTime,
+    const { basicDate, startTime, endTime,
         writer, reason, editStartTime, editEndTime, editBasicDate } = dto;
 
     const onChange = (e) => {
@@ -36,11 +35,13 @@ export default function CommuteEdit() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/commute/edit/` + n, { headers: { Authorization: token } })
+        if (num) {
+        axios.get(`http://localhost:${myPort}/auth/commute/edit/` + num, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let b = res.data.dto;
-                    setDto({
+                    setDto((prevDto) => ({
+                        ...prevDto,
                         num: b.num,
                         basicDate: b.basicDate,
                         startTime: b.startTime,
@@ -50,21 +51,21 @@ export default function CommuteEdit() {
                         editStartTime: b.editStartTime,
                         editEndTime: b.editEndTime,
                         editBasicDate: b.editBasicDate
-                    })
+                    }));
                 } else {
                     alert('error:' + res.status);
                 }
             });
-    }, []);
+        }
+    }, [num]);
 
     const save = () => {
         axios.post(`http://localhost:${myPort}/auth/commute/edit`,
             {},
-            { headers: { Authorization: token }, params: { num:num, reason:reason, editStartTime:editStartTime, editEndTime:editEndTime, editBasicDate:editBasicDate} })
+            { headers: { Authorization: token }, params: { num: num, reason: reason, editStartTime: editStartTime, editEndTime: editEndTime, editBasicDate: editBasicDate } })
             .then(function (res) {
                 if (res.status === 200) {
-                    alert("근태수정 신청이 완료됬습니다.");
-                    //navigate('/board/list')
+                    onHide();
                 } else {
                     alert('error:' + res.status);
                 }
@@ -73,121 +74,125 @@ export default function CommuteEdit() {
 
     return (
 
-            <div className="card mb-5 mb-xl-10">
-                <div className="card-header cursor-pointer">
-                    <div className="card-title m-0">
-                        <h3 className="fw-bolder m-0">
-                            {basicDate}일 근태수정 신청
-                        </h3>
+        <Modal show={show} onHide={onHide} size="lg" centered>
+            <Modal.Body>
+                <div className="card mb-5 mb-xl-10">
+                    <div className="card-header cursor-pointer">
+                        <div className="card-title m-0">
+                            <h3 className="fw-bolder m-0">
+                                {basicDate}일 근태수정 신청
+                            </h3>
+                        </div>
+                        <button onClick={save} className="btn btn-primary align-self-center">
+                            신청
+                        </button>
                     </div>
-                    <button onClick={save} className="btn btn-primary align-self-center">
-                        신청
-                    </button>
+                    <div className="card-body p-9">
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">기준일 (Date)</label>
+                            <div className="col-lg-8">
+                                <span className="fw-bolder fs-6 text-dark">
+                                    <div className="input-group input-group-sm mb-3">
+                                        {basicDate}
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">
+                                출근시간 (Attendance)
+                            </label>
+                            <div className="col-lg-8">
+                                <span className="fw-bolder fs-6 text-dark">
+                                    <div className="input-group input-group-sm mb-3">
+                                        {startTime}
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">퇴근시간 (Quit)</label>
+                            <div className="col-lg-8 fv-row">
+                                <span className="fw-bold fs-6">
+                                    <div className="input-group input-group-sm mb-3">
+                                        {endTime}
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="separator my-2" />
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">
+                                수정출근일 (EditDate)
+                            </label>
+                            <div className="col-lg-8">
+                                <span className="fw-bolder fs-6 text-dark">
+                                    <div className="input-group input-group-sm mb-3">
+                                        <input
+                                            type="date"
+                                            name="editBasicDate"
+                                            className="form-control"
+                                            onChange={onChange}
+                                        />
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">
+                                수정출근시간 (EditAttendance)
+                            </label>
+                            <div className="col-lg-8 fv-row">
+                                <span className="fw-bold fs-6">
+                                    <div className="input-group input-group-sm mb-3">
+                                        <input
+                                            type="text"
+                                            name="editStartTime"
+                                            className="form-control"
+                                            placeholder="실제 출근시간을 입력하세요."
+                                            onChange={onChange}
+                                        />
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">
+                                수정퇴근시간 (EditQuit)
+                            </label>
+                            <div className="col-lg-8 fv-row">
+                                <span className="fw-bold fs-6">
+                                    <div className="input-group input-group-sm mb-3">
+                                        <input
+                                            type="text"
+                                            name="editEndTime"
+                                            className="form-control"
+                                            placeholder="실제 퇴근시간을 입력하세요."
+                                            onChange={onChange}
+                                        />
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div className="row mb-7">
+                            <label className="col-lg-4 fw-bold text-muted">사 유 (Reason)</label>
+                            <div className="col-lg-8 fv-row">
+                                <span className="fw-bold fs-6">
+                                    <div className="input-group input-group-sm mb-3">
+                                        <input
+                                            type="text"
+                                            name="reason"
+                                            className="form-control"
+                                            placeholder="사유를 입력하세요."
+                                            onChange={onChange}
+                                        />
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="card-body p-9">
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">기준일 (Date)</label>
-                        <div className="col-lg-8">
-                            <span className="fw-bolder fs-6 text-dark">
-                                <div className="input-group input-group-sm mb-3">
-                                    {basicDate}
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">
-                            출근시간 (Attendance)
-                        </label>
-                        <div className="col-lg-8">
-                            <span className="fw-bolder fs-6 text-dark">
-                                <div className="input-group input-group-sm mb-3">
-                                    {startTime}
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">퇴근시간 (Quit)</label>
-                        <div className="col-lg-8 fv-row">
-                            <span className="fw-bold fs-6">
-                                <div className="input-group input-group-sm mb-3">
-                                    {endTime}
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="separator my-2" />
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">
-                            수정출근일 (EditDate)
-                        </label>
-                        <div className="col-lg-8">
-                            <span className="fw-bolder fs-6 text-dark">
-                                <div className="input-group input-group-sm mb-3">
-                                    <input
-                                        type="date"
-                                        name="editBasicDate"
-                                        className="form-control"
-                                        onChange={onChange} 
-                                    />
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">
-                            수정출근시간 (EditAttendance)
-                        </label>
-                        <div className="col-lg-8 fv-row">
-                            <span className="fw-bold fs-6">
-                                <div className="input-group input-group-sm mb-3">
-                                    <input
-                                        type="text"
-                                        name="editStartTime"
-                                        className="form-control"
-                                        placeholder="실제 출근시간을 입력하세요."
-                                        onChange={onChange} 
-                                    />
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">
-                            수정퇴근시간 (EditQuit)
-                        </label>
-                        <div className="col-lg-8 fv-row">
-                            <span className="fw-bold fs-6">
-                                <div className="input-group input-group-sm mb-3">
-                                    <input
-                                        type="text"
-                                        name="editEndTime"
-                                        className="form-control"
-                                        placeholder="실제 퇴근시간을 입력하세요."
-                                        onChange={onChange} 
-                                    />
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="row mb-7">
-                        <label className="col-lg-4 fw-bold text-muted">사 유 (Reason)</label>
-                        <div className="col-lg-8 fv-row">
-                            <span className="fw-bold fs-6">
-                                <div className="input-group input-group-sm mb-3">
-                                    <input
-                                        type="text"
-                                        name="reason"
-                                        className="form-control"
-                                        placeholder="사유를 입력하세요."
-                                        onChange={onChange} 
-                                    />
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </Modal.Body>
+        </Modal>
     );
 }

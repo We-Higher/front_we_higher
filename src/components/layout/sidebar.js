@@ -64,9 +64,8 @@ export default function Sidebar() {
         window.open('/approval/vacation', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
     };
 
-
     return (
-        <div id="sidebar" fragment="sidebarFragment" style={{width:'75px'}}>
+        <div id="sidebar" fragment="sidebarFragment" style={{ width: '75px' }}>
             <div id="kt_aside" className="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside"
                 data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
                 data-kt-drawer-width="auto" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_toggle">
@@ -123,22 +122,22 @@ export default function Sidebar() {
                         <Nav className="ml-auto justify-content-center">
                             <NavDropdown title={<Approvalicon />} id="nav-dropdown">
                                 <NavDropdown title="결재문서 작성" id="submenu">
-                                    <NavDropdown.Item as={Link} onClick={openInNewWindow}>
+                                    <NavDropdown.Item as={Link} to="/approval/mydraft" onClick={openInNewWindow}>
                                         품의서
                                     </NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} onClick={openInNewWindow2}>
+                                    <NavDropdown.Item as={Link} to="/approval/mydraft" onClick={openInNewWindow2}>
                                         지출결의서
                                     </NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} onClick={openInNewWindow3}>
+                                    <NavDropdown.Item as={Link} to="/approval/mydraft" onClick={openInNewWindow3}>
                                         휴가신청서
                                     </NavDropdown.Item>
                                 </NavDropdown>
-
                                 <NavDropdown title="결재문서 목록" id="submenu" className="menu-item menu-accordion">
-
-                                    <NavDropdown.Item as={Link} to="/approval/draft">
-                                        전체 결재문서
-                                    </NavDropdown.Item>
+                                    {mdto.isMaster === 1 && (
+                                        <NavDropdown.Item as={Link} to="/approval/draft">
+                                            전체 결재문서
+                                        </NavDropdown.Item>
+                                    )}
                                     <NavDropdown.Item as={Link} to="/approval/mydraft">
                                         기안 결재함
                                     </NavDropdown.Item>

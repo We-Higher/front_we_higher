@@ -58,13 +58,14 @@ export default function NotifyEdit({ show, onHide, num }) {
             { headers: { Authorization: token }, params: { num: num, title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
-                    navigate('/notify/list')
+                    window.notifyref();
+                    onHide();
                 } else {
                     alert('error:' + res.status);
                 }
             })
-            window.location.replace("/notify/list");
     }
+    
     return (
 
         <Modal show={show} onHide={onHide} size="lg" centered>

@@ -24,7 +24,9 @@ export default function NotifyList() {
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPreviousPage, setHasPreviousPage] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
-    const [mode,setMode]=useState('list')
+    const [refresh, setRefresh] = useState(1);
+    const [mode, setMode] = useState('list');
+
     useEffect(() => {
         if (mode === 'list') {
             fetchData(currentPage);
@@ -114,6 +116,10 @@ export default function NotifyList() {
     const closeModal2 = () => {
         setShowModal2(false);
     };
+
+    window.notifyref = () => {
+        setRefresh(refresh => refresh * -1);
+      };
 
     return (
 

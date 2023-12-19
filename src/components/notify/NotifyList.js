@@ -34,7 +34,7 @@ export default function NotifyList() {
             console.log(currentPage);
             search(type, option, currentPage)
         }
-    }, [currentPage]); // 현재 페이지가 변경될 때 효과 발생 
+    }, [currentPage, refresh]); // 현재 페이지가 변경될 때 효과 발생 
 
      const fetchData = (page) => {
         axios.get(`http://localhost:${myPort}/auth/notify?page=${page}`, { headers: { Authorization: token } })

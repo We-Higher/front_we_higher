@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap";
-import { useState } from "react";
+import { MY_PORT } from "../../common/util";
 
 export default function ChatInviteModal({ show, onHide, inviteList, onInvite }) {
   const modalList = <>
@@ -12,7 +12,7 @@ export default function ChatInviteModal({ show, onHide, inviteList, onInvite }) 
             {m.originFname === null ?
               <img src="/default.png" alt="image"/>
               :
-              <img src={`/profile/${m.originFname}`} alt="image"/>
+              <img src={`http://localhost:${MY_PORT}/image/${m.originFname}`} alt="image"/>
             }
             {m.cstatus === 1 ?
               <div className="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"/>

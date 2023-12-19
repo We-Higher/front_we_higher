@@ -208,7 +208,7 @@ export default function ChatRoomDetail() {
                                                         {c.sender.originFname === null ?
                                                             <img src="/default.png" alt="no-image" />
                                                             :
-                                                            <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                            <img src={`http://localhost:${MY_PORT}/image/${c.sender.originFname}`} alt="image" />
                                                         }
                                                     </div>
                                                     {/*end::Avatar*/}
@@ -247,7 +247,7 @@ export default function ChatRoomDetail() {
                                                         {c.sender.originFname === null ?
                                                             <img src="/default.png" alt="image" />
                                                             :
-                                                            <img src={`/profile/${c.sender.originFname}`} alt="image" />
+                                                            <img src={`http://localhost:${MY_PORT}/image/${c.sender.originFname}`} alt="image" />
                                                         }
                                                     </div>
                                                     {/*end::Avatar*/}

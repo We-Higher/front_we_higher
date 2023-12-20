@@ -49,7 +49,7 @@ export default function Sidebar() {
     };
 
     const openInNewWindow2 = () => {
-        const width = 800;
+        const width = 805;
         const height = 550;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;

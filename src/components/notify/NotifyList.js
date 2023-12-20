@@ -36,9 +36,9 @@ export default function NotifyList() {
         }
     }, [currentPage, refresh]); // 현재 페이지가 변경될 때 효과 발생 
 
-     const fetchData = (page) => {
+    const fetchData = (page) => {
         axios.get(`http://localhost:${myPort}/auth/notify?page=${page}`, { headers: { Authorization: token } })
-           .then((res) => {
+            .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
                     setDto({
@@ -119,7 +119,7 @@ export default function NotifyList() {
 
     window.notifyref = () => {
         setRefresh(refresh => refresh * -1);
-      };
+    };
 
     return (
 
@@ -157,7 +157,7 @@ export default function NotifyList() {
                                                     value={option} onChange={(e) => setOption(e.target.value)} />
                                                 <div className="input-group-append">
                                                     <button
-                                                        onClick={() => search(type, option,1)}
+                                                        onClick={() => search(type, option, 1)}
                                                         value="검색"
                                                         name="search"
                                                         className="btn btn-success btn-sm"
@@ -233,7 +233,7 @@ export default function NotifyList() {
                     </div>
                 </div>
             </div>
-       <div className="card-footer d-flex justify-content-center py-4">
+            <div className="card-footer d-flex justify-content-center py-4">
                 <nav aria-label="...">
                     <ul className="pagination">
                         <li className={`page-item ${hasPreviousPage ? '' : 'disabled'}`}>

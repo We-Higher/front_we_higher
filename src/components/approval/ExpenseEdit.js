@@ -57,7 +57,7 @@ const ExpenseEdit = () => {
     }
 
     const refuse = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/approval/report/refuse`,
+        axios.post(`http://localhost:${myPort}/auth/approval/expense/refuse`,
             {},
             {
                 headers: { Authorization: token },
@@ -77,6 +77,7 @@ const ExpenseEdit = () => {
       };
 
     return (
+        <div className="center-container2">
         <div>
             <div style={{ fontFamily: '돋움', fontSize: '9pt', lineHeight: 'normal', marginTop: '0px', marginBottom: '0px' }}>
                 <span style={{ fontFamily: '돋움', fontSize: '9pt', lineHeight: 'normal', marginTop: '0px', marginBottom: '0px' }}>
@@ -459,6 +460,7 @@ const ExpenseEdit = () => {
                     목록
                 </Link>
                 </div>
+        </div>
         </div>
     )
 }

@@ -5,3 +5,21 @@
     padding: 20px; /* 내부 여백 */
     margin: 20px; /* 바깥 여백 */
   }
+
+.center-container {
+    
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px; /* 오른쪽으로 20px의 패딩 추가, 필요에 따라 조절하세요 */
+  padding-right: 850px; /* 오른쪽으로 20px의 패딩 추가, 필요에 따라 조절하세요 */
+  }
+
+  .center-container2 {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px; /* 오른쪽으로 20px의 패딩 추가, 필요에 따라 조절하세요 */
+    padding-right: 850px; /* 오른쪽으로 20px의 패딩 추가, 필요에 따라 조절하세요 */
+    }

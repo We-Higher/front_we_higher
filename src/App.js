@@ -1,9 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import Navbar from './components/layout/navbar';
-import Sidebar from './components/layout/sidebar';
-import Footer from './components/layout/footer';
-import React from 'react';
-import Router from './Router';
+import React, { useEffect, useState } from 'react';
 import Login from './components/member/Login';
 import EmployeeEdit from './components/employee/EmployeeEdit';
 import Report from "./components/approval/Report";
@@ -12,42 +8,50 @@ import Vacation from "./components/approval/Vacation";
 import './css/layout.css';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
-import { StompSessionProvider } from "react-stomp-hooks";
+import { useSubscription } from "react-stomp-hooks";
 import { MY_PORT } from './common/util';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
+import axios from "axios";
+import MainLayout from "./components/layout/MainLayout";
+import ChatAlarm from "./components/alarm/ChatAlarm";
 
 export default function App() {
-  const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
+    const [chatAlarmList, setChatAlarmList] = useState([])
+    const [user, setUser] = useState({id: '', username: ''})
+
+    useEffect(() => {
+        if (token !== null) {
+            axios.get(`http://localhost:${MY_PORT}/member`, { headers: { Authorization: token } })
+                .then(res => {
+                    setUser(res.data.member)
+                })
+        }
+    }, []);
+
+    useSubscription(`/sub/alarm/${user.id}`, (message) => {
+        const recv = JSON.parse(message.body)
+        console.log('message', recv)
+        if (window.location.pathname === `/chat/room/${recv.room.id}`) {
+            return
+        }
+        setChatAlarmList([...chatAlarmList, recv])
+    })
+
+    const handleClose = (i, id) => {
+        // chatAlarmList
+        console.log('before', chatAlarmList)
+        setChatAlarmList(chatAlarmList.filter(chatAlarm => chatAlarm.id !== id))
+        console.log('after', chatAlarmList)
+
+    }
+
   return (
-    <StompSessionProvider
-      url={`http://localhost:${MY_PORT}/ws-stomp`}>
       <BrowserRouter>
         <Routes>
           {token ? (
-            <Route
-              path="/*"
-              element={
-                <div className="d-flex flex-column flex-root">
-                  <div className="page d-flex flex-row flex-column-fluid">
-                    <div className="sidebar">
-                      <Sidebar />
-                    </div>
-                    <div className="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-                      <div className="navbar">
-                        <Navbar />
-                      </div>
-                      <div className="content">
-                        <Router />
-                      </div>
-                      <div className="footer">
-                        <Footer />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-            />
+            <Route path="/*" element={<MainLayout />} />
           ) : (
             <Route path="/" element={<Login />} />
           )}
@@ -56,7 +60,7 @@ export default function App() {
           <Route path="/approval/expense" element={<Expense />} />
           <Route path="/approval/vacation" element={<Vacation />} />
         </Routes>
+      <ChatAlarm chatAlarmList={chatAlarmList} handleClose={handleClose}></ChatAlarm>
       </BrowserRouter>
-    </StompSessionProvider>
   );
 }

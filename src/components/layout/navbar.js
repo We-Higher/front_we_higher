@@ -12,6 +12,7 @@ export default function Navbar() {
   const myPort = process.env.REACT_APP_MY_PORT;
   const token = sessionStorage.getItem("token");
   const loginid = sessionStorage.getItem("loginid");
+  const isMaster = sessionStorage.getItem("isMaster");
   const navigate = useNavigate();
 
   const redirect = (url) => {
@@ -131,20 +132,23 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="d-flex align-items-center ms-1 ms-lg-3">
-          {/* 메일 */}
-          <div className="btn btn-icon btn-active-light-primary position-relative w-30px h-30px w-md-40px h-md-40px" data-bs-toggle="tooltip" title="메일" data-bs-html="true" data-bs-placement="bottom" onClick={mail}>
-            <span className="svg-icon svg-icon-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-envelope" viewBox="0 0 16 16" color="#ADB5BD">
-                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
-              </svg>
-            </span>
+        {(isMaster === '1') && (
+          <div className="d-flex align-items-center ms-1 ms-lg-3">
+            {/* 메일 */}
+            <div className="btn btn-icon btn-active-light-primary position-relative w-30px h-30px w-md-40px h-md-40px" data-bs-toggle="tooltip" title="메일" data-bs-html="true" data-bs-placement="bottom" onClick={mail}>
+              <span className="svg-icon svg-icon-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-envelope" viewBox="0 0 16 16" color="#ADB5BD">
+                  <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
+                </svg>
+              </span>
+            </div>
           </div>
-        </div>
+        )}
+
 
         <div className="d-flex align-items-center ms-1 ms-lg-3">
           {/* 사용자 정보 */}
-          <NavDropdown title={<Profileicon />} id="nav-dropdown">       
+          <NavDropdown title={<Profileicon />} id="nav-dropdown">
             <NavDropdown.Item as={Link} to="/member/mypage">
               내 정보
             </NavDropdown.Item>

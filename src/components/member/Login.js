@@ -38,6 +38,7 @@ export default function Login() {
                     if (res.data.flag) {
                         sessionStorage.setItem('token', res.data.token);
                         sessionStorage.setItem('loginid', username);
+                        sessionStorage.setItem('isMaster', res.data.dto.isMaster);
                         window.location.reload(); // 페이지 새로고침
                     } else {
                         alert('로그인 실패');

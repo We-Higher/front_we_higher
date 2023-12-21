@@ -78,6 +78,7 @@ const ReportEdit = () => {
 
     return (
 
+        <div className="center-container">
         <div>
             <span
                 style={{
@@ -696,6 +697,7 @@ const ReportEdit = () => {
                     목록
                 </Link>
             </div>
+        </div>
         </div>
     )
 }

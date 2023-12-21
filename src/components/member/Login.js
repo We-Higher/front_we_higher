@@ -25,6 +25,12 @@ export default function Login() {
         })
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            login();
+        }
+    };
+
     const login = () => {
         axios.post('http://localhost:' + myPort + '/login', {}, { params: { username: username, password: password } })
             .then(function (res) {
@@ -75,11 +81,11 @@ export default function Login() {
                                                 </div>
                                                 <div className="form-group">
                                                     <label className="form-control-label text-muted">username</label>
-                                                    <input type="text" name="username" className="form-control" onChange={onChange} value={username} />
+                                                    <input type="text" name="username" className="form-control" onChange={onChange} onKeyDown={onKeyDown} value={username} />
                                                 </div>
                                                 <div className="form-group">
                                                     <label className="form-control-label text-muted">password</label>
-                                                    <input type="password" name="password" className="form-control" onChange={onChange} value={password} />
+                                                    <input type="password" name="password" className="form-control" onChange={onChange} onKeyDown={onKeyDown} value={password} />
                                                 </div>
                                                 <div className="row justify-content-center my-3 px-3">
                                                     <button onClick={login} className="btn btn-primary" style={{ marginTop: '20px' }}>로그인</button>

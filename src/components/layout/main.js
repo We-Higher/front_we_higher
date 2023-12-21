@@ -101,7 +101,7 @@ export default function Main() {
 
     window.empref = () => {
         setRefresh(refresh => refresh * -1);
-      };
+    };
 
     return (
         <div className="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -171,20 +171,22 @@ export default function Main() {
                                     <span className="text-gray-400 mt-2 fw-bold fs-6">Employee of the Month</span>
                                 </h3>
                                 {/* <!--end::Card title--> */}
-                                <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
-                                    <MonthMember
-                                        show={showModal}
-                                        onHide={closeModal}
-                                    />
-                                    {(mdto.ismaster === 1) && (
+                                {(mdto.ismaster === 1) && (
+                                    <div className="card-header cursor-pointer d-flex justify-content-between align-items-center">
+                                        <MonthMember
+                                            show={showModal}
+                                            onHide={closeModal}
+                                        />
+
                                         <div
                                             className="btn btn-icon btn-active-light-primary w-60px h-60px w-md-60px h-md-60px align-self-center btn-person-plus-fill"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
                                             <i className="bi bi-person-plus-fill" onClick={() => openModal()}>선택하기</i>
                                         </div>
-                                    )}
-                                </div>
+
+                                    </div>
+                                )}
                             </div>
                             {/* <!--end::Header--> */}
                             <div className="card-body p-0">
@@ -201,7 +203,7 @@ export default function Main() {
                                                         {m.monthMember === 1 && (
                                                             <>
                                                                 {(m.originFname === null) ? (
-                                                                    <img src='/default.png' className="card-img-top"/>
+                                                                    <img src='/default.png' className="card-img-top" />
                                                                 ) : (
                                                                     <img src={`http://localhost:${myPort}/image/${m.originFname}`} className="card-img-top custom-card-image" />
                                                                 )}

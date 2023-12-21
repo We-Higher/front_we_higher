@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/style.bundle.css';
 import '../../css/plugins.bundle.css';
 import '../../css/layout.css';
@@ -13,6 +13,8 @@ export default function Navbar() {
   const token = sessionStorage.getItem("token");
   const loginid = sessionStorage.getItem("loginid");
   const isMaster = sessionStorage.getItem("isMaster");
+  const [cstatus, setCstatus] = useState({});
+  const [refresh, setRefresh] = useState(1);
   const navigate = useNavigate();
 
   const redirect = (url) => {
@@ -26,6 +28,19 @@ export default function Navbar() {
     // window.location.reload();
   }
 
+  useEffect(() => {
+    axios.get(`http://localhost:${myPort}/auth/commute`, { headers: { Authorization: token } })
+      .then(
+        function (res) {
+          if (res.status === 200) {
+            setCstatus(res.data.mdto.cstatus);
+          } else {
+            alert('error:' + res.status);
+          }
+        }
+      );
+  }, [refresh]);
+
   const attendence = () => {
 
     axios.post(`http://localhost:${myPort}/auth/commute/attendance`,
@@ -35,17 +50,24 @@ export default function Navbar() {
         if (res.status === 200) {
           if (res.data.flag) {
             alert('출근이 정상적으로 처리되었습니다.');
+            window.myFunction();
             navigate('/main')
           }
           else {
             alert('이미 출근처리가 완료되었습니다.');
+            window.myFunction();
             navigate('/main')
+
           }
         } else {
           alert('error:' + res.status);
         }
       })
   }
+
+  window.myFunction = () => {
+    setRefresh(refresh => refresh * -1);
+  };
 
   const quit = () => {
 
@@ -56,10 +78,12 @@ export default function Navbar() {
         if (res.status === 200) {
           if (res.data.flag) {
             alert('퇴근이 정상적으로 처리되었습니다.');
+            window.myFunction();
             navigate('/main')
           }
           else {
             alert('이미 퇴근처리가 완료되었습니다.');
+            window.myFunction();
             navigate('/main')
           }
         } else {
@@ -86,33 +110,38 @@ export default function Navbar() {
       <div className="d-flex align-items-stretch flex-shrink-0">
         <div className="d-flex align-items-stretch ms-1 ms-lg-3">
           {/* 출근 */}
-          <div id="kt_header_search" className="d-flex align-items-stretch">
-            <div className="d-flex align-items-center" data-kt-search-element="toggle" id="kt_header_search_toggle">
+          {(cstatus === 0 || cstatus === null) && (
+            <div id="kt_header_search" className="d-flex align-items-stretch">
+              <div className="d-flex align-items-center" data-kt-search-element="toggle" id="kt_header_search_toggle">
+                <div className="btn btn-icon btn-active-light-primary">
+                  <Button variant="none" onClick={attendence}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      fill="currentColor" class="bi bi-door-closed"
+                      viewBox="0 0 16 16" color="#ADB5BD">
+                      <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z" />
+                      <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
+                    </svg>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="d-flex align-items-stretch">
+          {/* 퇴근 토글 */}
+          {(cstatus === 1) && (
+            <div className="d-flex align-items-center">
               <div className="btn btn-icon btn-active-light-primary">
-                <Button variant="none" onClick={attendence}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    fill="currentColor" class="bi bi-door-closed"
-                    viewBox="0 0 16 16" color="#ADB5BD">
-                    <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z" />
-                    <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
+                <Button variant="none" onClick={quit}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-door-open" viewBox="0 0 16 16" color="#ADB5BD">
+                    <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />
+                    <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z" />
                   </svg>
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="d-flex align-items-stretch">
-          {/* 퇴근 토글 */}
-          <div className="d-flex align-items-center">
-            <div className="btn btn-icon btn-active-light-primary">
-              <Button variant="none" onClick={quit}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-door-open" viewBox="0 0 16 16" color="#ADB5BD">
-                  <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z" />
-                  <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z" />
-                </svg>
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="d-flex align-items-center ms-1 ms-lg-3">

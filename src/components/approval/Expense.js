@@ -7,11 +7,13 @@ import ApprovalList2 from './ApprovalList2';
 export default function Expense() {
     const token = sessionStorage.getItem("token");
     const myPort = process.env.REACT_APP_MY_PORT;
+    const [money, setMoney] = useState('');
     const [mdto, setDto] = useState({});
     const [dto, setDto2] = useState({
         writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
         category: '', detail: '', sum: '', note: '', approval1: '', approval2: '', approval1rank: '', approval2rank: '', app1username: '', app2username: ''
     });
+    
     const navigate = useNavigate();
     const { writer, title, content, wdate, category, detail, sum, note, approval1,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
@@ -35,13 +37,18 @@ export default function Expense() {
             });
     }, [dto.sum]);
 
+    const onChangeSum = (e) => {
+        const newSum = e.target.value;
+        setMoney(newSum);
+      };
+
     const save = () => {
         axios.post(`http://localhost:${myPort}/auth/approval/expense`,
             {},
             {
                 headers: { Authorization: token }, params: {
                     writer: writer, title: title, content: content,
-                    wdate: wdate, category: category, detail: detail, sum: sum, note: note, approval1: selectedEmployee.name,
+                    wdate: wdate, category: category, detail: detail, sum: money, note: note, approval1: selectedEmployee.name,
                     approval2: selectedEmployee2.name, approval1rank: selectedEmployee.companyRankName,
                     approval2rank: selectedEmployee2.companyRankName, app1username: selectedEmployee.username, app2username: selectedEmployee2.username
                 }
@@ -379,7 +386,7 @@ export default function Expense() {
                         </td>
                         <td colSpan={9} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '242px' }} className="dext_table_border_l">
                             <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
-                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={6} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><input className="ipt_editor" type="hidden" name="sum" value={dto.sum} onChange={onChange} /></span>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={6} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><input className="ipt_editor" type="hidden" name="sum" value={money} />{money}</span>
                             </p>
                         </td>
                     </tr>
@@ -389,7 +396,7 @@ export default function Expense() {
                         </td>
                         <td colSpan={12} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'top', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '683px', height: '51px', backgroundRepeat: 'no-repeat' }} className="dext_table_border_l">
                             <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
-                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={8} data-dsl="{{textarea}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><textarea className="txta_editor" cols={105} rows={10} style={{ marginTop: '3px', marginBottom: '3px' }} name="content" defaultValue={""} onChange={onChange} /></span>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={8} data-dsl="{{textarea}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><textarea className="txta_editor" cols={83} rows={10} style={{ marginTop: '3px', marginBottom: '3px' }} name="content" defaultValue={""} onChange={onChange} /></span>
                             </p>
                         </td>
                     </tr>
@@ -440,13 +447,13 @@ export default function Expense() {
                             </span>
                         </td>
                         <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px', width: '40%', paddingRight: '1px' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={12} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" type="text" name="detail" onChange={onChange} /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={12} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" type="text" value={detail} name="detail" onChange={onChange} /></span>
                         </td>
                         <td className="detailColumn centerCol price dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ paddingLeft: '1px', height: '29px', width: '20%' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={11} data-dsl="{{currency_0}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor ipt_editor_currency" type="number" name="sum" onChange={onChange} /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={11} data-dsl="{{currency_0}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor ipt_editor_currency" type="number" name="sum" onChange={onChangeSum} /></span>
                         </td>
                         <td className="detailColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px', width: '20%' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={13} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" type="text" name="note" onChange={onChange} /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={13} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" type="text" value={note} name="note" onChange={onChange} /></span>
                         </td>
                     </tr>
 
@@ -455,7 +462,7 @@ export default function Expense() {
 
             <span style={{ fontFamily: '"맑은 고딕"', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
                 <strong>* 영수증 별도 제출</strong></span>
-            <input type="button" onClick={save} defaultValue="작성" style={{ marginLeft: '643px', marginTop: '5px' }} />
+            <input type="button" onClick={save} defaultValue="작성" style={{ marginLeft: '650px', marginTop: '5px' }} />
         </div>
 
     )

@@ -1,4 +1,3 @@
-import { Component } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import Login from "./components/member/Login";
@@ -59,8 +58,7 @@ import Schedule from "./components/schedule/Calendar";
 
 let isAuthorized = sessionStorage.getItem("isAuthorized");
 
-class Router extends Component {
-    render() {
+const Router = () => {
         return (
             <Routes>
                 <Route path="/" element={<Navigate to="/member/login" />} />
@@ -124,7 +122,6 @@ class Router extends Component {
                 <Route path="/schedule/calendar" element={<Schedule  />} />
             </Routes>
         );
-    }
 }
 
 export default Router;

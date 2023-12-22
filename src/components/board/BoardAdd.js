@@ -33,6 +33,18 @@ export default function BoardAdd({show, onHide}) {
     }
 
     const save = () => {
+
+        const title = document.querySelector('#title').value;
+        const content = document.querySelector('#content').value;
+
+        if (title === '') {
+            alert('제목을 입력하세요');
+            return;
+        } else if (content === '') {
+            alert('내용을 입력하세요');
+            return;
+        } 
+        
         axios.post(`${API_BASE_URL}/auth/board`,
             {},
             { headers: { Authorization: token }, params: { title: title, content: content } })
@@ -85,7 +97,7 @@ export default function BoardAdd({show, onHide}) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="title" className="form-control" onChange={onChange} />
+                                        <input type="text" id="title" name="title" className="form-control" onChange={onChange} />
                                     </div>
                                 </span>
                             </div>
@@ -95,7 +107,7 @@ export default function BoardAdd({show, onHide}) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <textarea rows="10" cols="30" name="content" className="form-control" onChange={onChange}></textarea>
+                                        <textarea rows="10" cols="30" id="content" name="content" className="form-control" onChange={onChange}></textarea>
                                     </div>
                                 </span>
                             </div>

@@ -91,7 +91,7 @@ export default function CommuteEditList() {
                                                     <th>기준일</th>
                                                     <th>수정내용</th>
                                                     <th>요청사유</th>
-                                                    <th>승인 및 취소</th>
+                                                    <th>승인 / 취소</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -108,6 +108,7 @@ export default function CommuteEditList() {
                                                         <Link onClick={() => edit(e.num)}>
                                                             <i className="bi bi-check-lg" style={{ color: "blue" }} />
                                                         </Link>
+                                                        &emsp; &emsp;
                                                         <Link onClick={() => del(e.num)}>
                                                             <i className="bi bi-x-octagon-fill" style={{ color: "red" }} />
                                                         </Link>

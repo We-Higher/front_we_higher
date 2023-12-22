@@ -74,6 +74,33 @@ const Vacation = () => {
     };
 
     const save = () => {
+
+        const app1username = document.querySelector('#app1username').value;
+        const app2username = document.querySelector('#app2username').value;
+        const wdate = document.querySelector('#wdate').value;
+        const startDate = document.querySelector('#startDate').value;
+        const endDate = document.querySelector('#endDate').value;
+        const reason = document.querySelector('#reason').value;
+
+        if (app1username === '') {
+            alert('1차 결재자를 입력하세요');
+            return;
+        } else if (app2username === '') {
+            alert('2차 결재자를 입력하세요');
+            return;
+        } else if (wdate === '') {
+            alert('작성일을 입력하세요');
+            return;
+        } else if (startDate === '') {
+            alert('휴가 시작일을 입력하세요');
+            return;
+        } else if (endDate === '') {
+            alert('휴가 종료일을 입력하세요');
+            return;
+        } else if (reason === '') {
+            alert('사유를 입력하세요');
+            return;
+        } 
         axios.post(`${API_BASE_URL}/auth/approval/vacation`,
             {},
             {
@@ -746,6 +773,7 @@ const Vacation = () => {
                                         className="ipt_editor ipt_editor_date"
                                         type="date"
                                         name="wdate"
+                                        id="wdate"
                                         value={wdate} onChange={onChange}
                                     />
                                 </span>
@@ -807,7 +835,7 @@ const Vacation = () => {
                                         data-wrapper=""
                                         style={{
                                             fontFamily: '"malgun gothic", dotum, arial, tahoma',
-                                            fontSize: "9pt"
+                                            fontSize: "10pt"
                                         }}
                                         data-value=""
                                         data-autotype=""
@@ -877,6 +905,7 @@ const Vacation = () => {
                                         className="ipt_editor ipt_editor_date"
                                         type="date"
                                         name="startDate"
+                                        id="startDate"
                                         value={startDate} onChange={onChange}
                                     />{" "}
                                     ~{" "}
@@ -884,6 +913,7 @@ const Vacation = () => {
                                         className="ipt_editor ipt_editor_date"
                                         type="date"
                                         name="endDate"
+                                        id="endDate"
                                         value={endDate} onChange={onChange}
                                     />
                                 </span>
@@ -992,6 +1022,7 @@ const Vacation = () => {
                                         rows={10}
                                         style={{ marginLeft: 3, marginTop: 3, marginBottom: 3 }}
                                         name="reason"
+                                        id="reason"
                                         defaultValue={""}
                                         value={reason} onChange={onChange}
                                     />

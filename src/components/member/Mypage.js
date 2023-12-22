@@ -77,7 +77,7 @@ export default function Mypage() {
                                                                 </svg>
                                                             </span>
                                                         </a>
-                                                        <a href="#" className="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">{mdto.companyRankName}</a>
+                                                        <a href="#" className="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3" >{mdto.companyRankName}</a>
                                                     </div>
                                                     <div className="d-flex flex-wrap fw-bold fs-6 mb-2 pe-2">
                                                         <a href="#" className="d-flex align-items-center text-gray-600 text-hover-primary me-5 mb-2" style={{ fontSize: '130%' }}>

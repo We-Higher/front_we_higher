@@ -14,7 +14,7 @@ export default function Expense() {
         writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
         category: '', detail: '', sum: '', note: '', approval1: '', approval2: '', approval1rank: '', approval2rank: '', app1username: '', app2username: ''
     });
-    
+
     const navigate = useNavigate();
     const { writer, title, content, wdate, category, detail, sum, note, approval1,
         approval2, approval1rank, approval2rank, app1username, app2username } = dto;
@@ -41,9 +41,45 @@ export default function Expense() {
     const onChangeSum = (e) => {
         const newSum = e.target.value;
         setMoney(newSum);
-      };
+    };
 
     const save = () => {
+
+        const app1username = document.querySelector('#app1username').value;
+        const app2username = document.querySelector('#app2username').value;
+        const wdate = document.querySelector('#wdate').value;
+        const title = document.querySelector('#title').value;
+        const content = document.querySelector('#content').value;
+        const rdate = document.querySelector('#rdate').value;
+        const detail = document.querySelector('#detail').value;
+        const sum = document.querySelector('#sum').value;
+
+        if (app1username === '') {
+            alert('1차 결재자를 입력하세요');
+            return;
+        } else if (app2username === '') {
+            alert('2차 결재자를 입력하세요');
+            return;
+        } else if (title === '') {
+            alert('제목을 입력하세요');
+            return;
+        } else if (wdate === '') {
+            alert('작성일을 입력하세요');
+            return;
+        } else if (content === '') {
+            alert('사유를 입력하세요');
+            return;
+        } else if (rdate === '') {
+            alert('지출일자를 입력하세요');
+            return;
+        } else if (detail === '') {
+            alert('사용 내역을 입력하세요');
+            return;
+        } else if (sum === '') {
+            alert('금액을 입력하세요');
+            return;
+        }
+
         axios.post(`${API_BASE_URL}/auth/approval/expense`,
             {},
             {
@@ -328,7 +364,7 @@ export default function Expense() {
                                                     </td>
                                                     <input
                                                         type="hidden"
-                                                        //id="app2username"
+                                                        id="app2username"
                                                         name="app2username"
                                                         style={{
                                                             width: 65,
@@ -369,7 +405,7 @@ export default function Expense() {
                         <td colSpan={12} width={760} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', borderImage: 'initial', fontSize: '10pt', textAlign: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: 'windowtext black windowtext windowtext', width: '720px' }}>
                             <p style={{ textAlign: 'left', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
                                 <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={4} data-dsl="{{text}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype>
-                                    <input className="ipt_editor" type="text" style={{ width: '688px', marginLeft: '2px' }} name="title" onChange={onChange} /></span>
+                                    <input className="ipt_editor" id="title" type="text" style={{ width: '688px', marginLeft: '2px' }} name="title" onChange={onChange} /></span>
                             </p>
                         </td>
                     </tr>
@@ -379,7 +415,7 @@ export default function Expense() {
                         </td>
                         <td colSpan={2} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '303px' }} className="dext_table_border_l">
                             <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
-                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={5} data-dsl="{{calendar}}" data-wrapper style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_date" type="date" name="wdate" onChange={onChange} /></span>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={5} data-dsl="{{calendar}}" data-wrapper style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_date" type="date" id="wdate" name="wdate" onChange={onChange} /></span>
                             </p>
                         </td>
                         <td style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', textAlign: 'center', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderLeft: '1px solid windowtext', borderImage: 'initial', height: '30px', borderTop: 'none', backgroundColor: 'rgb(226, 226, 226)', width: '79px' }} className="dext_table_border_t">
@@ -397,7 +433,7 @@ export default function Expense() {
                         </td>
                         <td colSpan={12} style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'top', fontSize: '10pt', textAlign: 'center', borderTop: '1px solid windowtext', borderRight: '1px solid windowtext', borderBottom: '1px solid windowtext', borderImage: 'initial', borderLeft: 'none', width: '683px', height: '51px', backgroundRepeat: 'no-repeat' }} className="dext_table_border_l">
                             <p style={{ fontFamily: '"맑은 고딕", monospace', fontSize: '10pt', lineHeight: '20px', marginTop: '0px', marginBottom: '0px' }}>
-                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={8} data-dsl="{{textarea}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><textarea className="txta_editor" cols={83} rows={10} style={{ marginTop: '3px', marginBottom: '3px' }} name="content" defaultValue={""} onChange={onChange} /></span>
+                                <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={8} data-dsl="{{textarea}}" data-wrapper style={{ width: '100%', fontFamily: '"맑은 고딕", monospace', fontSize: '10pt' }} data-value data-autotype><textarea className="txta_editor" cols={83} rows={10} style={{ marginTop: '3px', marginBottom: '3px' }} id="content" name="content" defaultValue={""} onChange={onChange} /></span>
                             </p>
                         </td>
                     </tr>
@@ -430,11 +466,11 @@ export default function Expense() {
                     </tr>
                     <tr className="copyRow1" style={{ paddingTop: '1px', paddingRight: '1px', paddingLeft: '1px', fontFamily: '"맑은 고딕", monospace', verticalAlign: 'middle', textAlign: 'center', border: '1px solid windowtext', borderImage: 'initial', height: '30px', borderTop: 'none' }}>
                         <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ width: '20%' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={9} data-dsl="{{calendar}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_date" type="date" name="rdate" /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={9} data-dsl="{{calendar}}" data-wrapper style={{ fontFamily: '"malgun gothic", dotum, arial, tahoma', fontSize: '9pt' }} data-value data-autotype><input className="ipt_editor ipt_editor_date" type="date" id='rdate' name="rdate" /></span>
                         </td>
                         <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ width: '20%' }}>
                             <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={10} data-dsl="{{cSel__물품구입비_잡비_회식비_식비_교통비_기타}}" data-wrapper data-value data-autotype>
-                                <select className="editor_slt" name="category" value={category} onChange={onChange}>
+                                <select className="editor_slt" id="category" name="category" value={category} onChange={onChange}>
                                     <option onSelect={onChange} value={'물품구입비'} selected="selected">물품구입비</option>
                                     <option onSelect={onChange} value={'잡비'}  >잡비</option>
                                     <option onSelect={onChange} value={'회식비'} >회식비</option>
@@ -448,13 +484,13 @@ export default function Expense() {
                             </span>
                         </td>
                         <td className="detailColumn centerCol dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px', width: '40%', paddingRight: '1px' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={12} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" type="text" value={detail} name="detail" onChange={onChange} /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={12} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" id='detail' type="text" value={detail} name="detail" onChange={onChange} /></span>
                         </td>
                         <td className="detailColumn centerCol price dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ paddingLeft: '1px', height: '29px', width: '20%' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={11} data-dsl="{{currency_0}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor ipt_editor_currency" type="number" name="sum" onChange={onChangeSum} /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={11} data-dsl="{{currency_0}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor ipt_editor_currency" id='sum' type="number" name="sum" onChange={onChangeSum} /></span>
                         </td>
                         <td className="detailColumn dext_table_border_t dext_table_border_r dext_table_border_b dext_table_border_l" style={{ height: '29px', width: '20%' }}>
-                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={13} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" type="text" value={note} name="note" onChange={onChange} /></span>
+                            <span unselectable="on" contentEditable="false" className="comp_wrap" data-cid={13} data-dsl="{{text}}" data-wrapper style={{ width: '20%' }} data-value data-autotype><input className="ipt_editor" id='note' type="text" value={note} name="note" onChange={onChange} /></span>
                         </td>
                     </tr>
 

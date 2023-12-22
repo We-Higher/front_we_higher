@@ -70,7 +70,7 @@ export default function DataroomEdit({ show, onHide, num }) {
                 }
             })
             .catch(error => {
-                alert('파일을 선택해야합니다.');
+                alert('수정할 파일을 선택하세요');
             });
     }
 

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 import { API_BASE_URL } from "../../common/util";
 
-export default function CommuteEdit({show, onHide, num}) {
+export default function CommuteEdit({ show, onHide, num }) {
     const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
     const loginid = sessionStorage.getItem("loginid");
@@ -37,30 +37,50 @@ export default function CommuteEdit({show, onHide, num}) {
 
     useEffect(() => {
         if (num) {
-        axios.get(`${API_BASE_URL}/auth/commute/edit/` + num, { headers: { Authorization: token } })
-            .then(function (res) {
-                if (res.status === 200) {
-                    let b = res.data.dto;
-                    setDto((prevDto) => ({
-                        ...prevDto,
-                        num: b.num,
-                        basicDate: b.basicDate,
-                        startTime: b.startTime,
-                        endTime: b.endTime,
-                        writer: b.member.name,
-                        reason: b.reason,
-                        editStartTime: b.editStartTime,
-                        editEndTime: b.editEndTime,
-                        editBasicDate: b.editBasicDate
-                    }));
-                } else {
-                    alert('error:' + res.status);
-                }
-            });
+            axios.get(`${API_BASE_URL}/auth/commute/edit/` + num, { headers: { Authorization: token } })
+                .then(function (res) {
+                    if (res.status === 200) {
+                        let b = res.data.dto;
+                        setDto((prevDto) => ({
+                            ...prevDto,
+                            num: b.num,
+                            basicDate: b.basicDate,
+                            startTime: b.startTime,
+                            endTime: b.endTime,
+                            writer: b.member.name,
+                            reason: b.reason,
+                            editStartTime: b.editStartTime,
+                            editEndTime: b.editEndTime,
+                            editBasicDate: b.editBasicDate
+                        }));
+                    } else {
+                        alert('error:' + res.status);
+                    }
+                });
         }
     }, [num]);
 
     const save = () => {
+
+        const editBasicDate = document.querySelector('#editBasicDate').value;
+        const editStartTime = document.querySelector('#editStartTime').value;
+        const editEndTime = document.querySelector('#editEndTime').value;
+        const reason = document.querySelector('#reason').value;
+
+        if (editBasicDate === '') {
+            alert('실제 출근일을 입력하세요');
+            return;
+        } else if (editStartTime === '') {
+            alert('출근한 시간을 입력하세요');
+            return;
+        } else if (editEndTime === '') {
+            alert('퇴근한 시간을 입력하세요');
+            return;
+        } else if (reason === '') {
+            alert('사유을 입력하세요');
+            return;
+        }
+
         axios.post(`${API_BASE_URL}/auth/commute/edit`,
             {},
             { headers: { Authorization: token }, params: { num: num, reason: reason, editStartTime: editStartTime, editEndTime: editEndTime, editBasicDate: editBasicDate } })
@@ -132,6 +152,7 @@ export default function CommuteEdit({show, onHide, num}) {
                                         <input
                                             type="date"
                                             name="editBasicDate"
+                                            id='editBasicDate'
                                             className="form-control"
                                             onChange={onChange}
                                         />
@@ -149,6 +170,7 @@ export default function CommuteEdit({show, onHide, num}) {
                                         <input
                                             type="text"
                                             name="editStartTime"
+                                            id='editStartTime'
                                             className="form-control"
                                             placeholder="실제 출근시간을 입력하세요."
                                             onChange={onChange}
@@ -167,6 +189,7 @@ export default function CommuteEdit({show, onHide, num}) {
                                         <input
                                             type="text"
                                             name="editEndTime"
+                                            id='editEndTime'
                                             className="form-control"
                                             placeholder="실제 퇴근시간을 입력하세요."
                                             onChange={onChange}
@@ -182,6 +205,7 @@ export default function CommuteEdit({show, onHide, num}) {
                                     <div className="input-group input-group-sm mb-3">
                                         <input
                                             type="text"
+                                            id='reason'
                                             name="reason"
                                             className="form-control"
                                             placeholder="사유를 입력하세요."

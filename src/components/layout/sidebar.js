@@ -46,7 +46,7 @@ export default function Sidebar() {
         const height = 760;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
-        window.open('/approval/report', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+        window.open('/approval/report', 'approvalWindow1', `width=${width}, height=${height}, left=${left}, top=${top}`);
     };
 
     const openInNewWindow2 = () => {
@@ -54,7 +54,7 @@ export default function Sidebar() {
         const height = 550;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
-        window.open('/approval/expense', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+        window.open('/approval/expense', 'approvalWindow2', `width=${width}, height=${height}, left=${left}, top=${top}`);
     };
 
     const openInNewWindow3 = () => {
@@ -62,7 +62,7 @@ export default function Sidebar() {
         const height = 780;
         const left = (window.innerWidth - width) / 2;
         const top = (window.innerHeight - height) / 2;
-        window.open('/approval/vacation', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+        window.open('/approval/vacation', 'approvalWindow3', `width=${width}, height=${height}, left=${left}, top=${top}`);
     };
 
     return (

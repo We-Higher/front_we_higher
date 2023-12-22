@@ -18,7 +18,7 @@ export default function MyCommute() {
     const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get(`${API_BASE_URL}}/auth/commute/mycommute`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/commute/mycommute`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {

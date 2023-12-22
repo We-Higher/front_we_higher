@@ -19,7 +19,43 @@ export default function EmployeeJoin({ show, onHide }) {
         })
     }
 
-    const save = () => {
+    const save = async () => {
+
+        const username = document.querySelector('#username').value;
+        const pwd = document.querySelector('#pwd').value;
+        const name = document.querySelector('#name').value;
+        const email = document.querySelector('#email').value;
+        const phone = document.querySelector('#phone').value;
+        const address = document.querySelector('#address').value;
+        const newNo = document.querySelector('#newNo').value;
+        const comCall = document.querySelector('#comCall').value;
+
+        if (username === '') {
+            alert('아이디를 입력하세요');
+            return;
+        } else if (pwd === '') {
+            alert('패스워드를 입력하세요');
+            return;
+        } else if (name === '') {
+            alert('이름을 입력하세요');
+            return;
+        } else if (newNo === '') {
+            alert('사번을 입력하세요');
+            return;
+        } else if (email === '') {
+            alert('이메일을 입력하세요');
+            return;
+        } else if (address === '') {
+            alert('주소를 입력하세요');
+            return;
+        } else if (comCall === '') {
+            alert('내선전화를 입력하세요');
+            return;
+        } else if (phone === '') {
+            alert('핸드폰번호를 입력하세요');
+            return;
+        } 
+
         axios.post(`${API_BASE_URL}/join`,
             {
                 username: username,
@@ -45,6 +81,7 @@ export default function EmployeeJoin({ show, onHide }) {
                     onHide();
                     window.myFunction3();
                 } else {
+                    alert('test');
                     alert('error:' + res.status);
                 }
             })
@@ -72,7 +109,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="username" className="form-control" placeholder="아이디를 입력해주세요." onChange={onChange} value={username} />
+                                        <input type="text" id='username' name="username" className="form-control" placeholder="아이디를 입력해주세요." onChange={onChange} value={username} />
                                     </div>
                                 </span>
                             </div>
@@ -82,7 +119,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="password" name="pwd" className="form-control" placeholder="패스워드를 입력해주세요." onChange={onChange} value={pwd} />
+                                        <input type="password" id='pwd' name="pwd" className="form-control" placeholder="패스워드를 입력해주세요." onChange={onChange} value={pwd} />
                                     </div>
                                 </span>
                             </div>
@@ -92,7 +129,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="name" className="form-control" placeholder="이름을 입력해주세요." onChange={onChange} value={name} />
+                                        <input type="text" id='name' name="name" className="form-control" placeholder="이름을 입력해주세요." onChange={onChange} value={name} />
                                     </div>
                                 </span>
                             </div>
@@ -102,7 +139,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="companyName" defaultValue="We-Higher" className="form-control" readOnly onChange={onChange} />
+                                        <input type="text" id='companyName' name="companyName" defaultValue="We-Higher" className="form-control" readOnly onChange={onChange} />
                                     </div>
                                 </span>
                             </div>
@@ -112,7 +149,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8 fv-row">
                                 <span className="fw-bold fs-6">
                                     <div className="input-group input-group-sm mb-3">
-                                        <select className="form-select form-select-sm form-select-solid" name="deptCode" onChange={onChange} value={deptCode}>
+                                        <select className="form-select form-select-sm form-select-solid" id='deptCode' name="deptCode" onChange={onChange} value={deptCode}>
                                             <option selected="selected" value={0} onSelect={onChange}>총무팀</option>
                                             <option value={1} onSelect={onChange}>인사팀</option>
                                             <option value={2} onSelect={onChange}>법무팀</option>
@@ -130,7 +167,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8 fv-row">
                                 <span className="fw-bold fs-6">
                                     <div className="input-group input-group-sm mb-3">
-                                        <select className="form-select form-select-sm form-select-solid" name="companyRank" onChange={onChange} value={companyRank}>
+                                        <select className="form-select form-select-sm form-select-solid" id='companyRank' name="companyRank" onChange={onChange} value={companyRank}>
                                             <option selected="selected" value={1} onSelect={onChange}>사원</option>
                                             <option value={2} onSelect={onChange}>대리</option>
                                             <option value={3} onSelect={onChange}>과장</option>
@@ -150,7 +187,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="newNo" className="form-control" placeholder="사번을 입력해주세요." onChange={onChange} value={newNo} />
+                                        <input type="text" id='newNo' name="newNo" className="form-control" placeholder="사번을 입력해주세요." onChange={onChange} value={newNo} />
                                     </div>
                                 </span>
                             </div>
@@ -160,7 +197,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="email" name="email" className="form-control" placeholder="이메일을 입력해주세요." onChange={onChange} value={email} />
+                                        <input type="email" id='email' name="email" className="form-control" placeholder="이메일을 입력해주세요." onChange={onChange} value={email} />
                                     </div>
                                 </span>
                             </div>
@@ -170,7 +207,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="address" className="form-control" placeholder="주소를 입력해주세요." onChange={onChange} value={address} />
+                                        <input type="text" id='address' name="address" className="form-control" placeholder="주소를 입력해주세요." onChange={onChange} value={address} />
                                     </div>
                                 </span>
                             </div>
@@ -180,7 +217,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8 fv-row">
                                 <span className="fw-bold fs-6">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="comCall" className="form-control" placeholder="내선전화번호를 입력해주세요." onChange={onChange} value={comCall} />
+                                        <input type="text" id='comCall' name="comCall" className="form-control" placeholder="내선전화번호를 입력해주세요." onChange={onChange} value={comCall} />
                                     </div>
                                 </span>
                             </div>
@@ -190,7 +227,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8 fv-row">
                                 <span className="fw-bold fs-6">
                                     <div className="input-group input-group-sm mb-3">
-                                        <input type="text" name="phone" className="form-control" placeholder="핸드폰 번호를 입력해주세요." onChange={onChange} value={phone} />
+                                        <input type="text" id='phone' name="phone" className="form-control" placeholder="핸드폰 번호를 입력해주세요." onChange={onChange} value={phone} />
                                     </div>
                                 </span>
                             </div>
@@ -200,7 +237,7 @@ export default function EmployeeJoin({ show, onHide }) {
                             <div className="col-lg-8 fv-row">
                                 <span className="fw-bold fs-6">
                                     <div className="input-group input-group-sm mb-3">
-                                        <select name="isMaster" className="form-select form-select-sm form-select-solid" onChange={onChange} value={isMaster}>
+                                        <select id='isMaster' name="isMaster" className="form-select form-select-sm form-select-solid" onChange={onChange} value={isMaster}>
                                             <option selected="selected" value={0} onSelect={onChange}>일반회원</option>
                                             <option value={1} onSelect={onChange}>관리자</option>
                                         </select>

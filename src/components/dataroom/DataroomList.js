@@ -25,6 +25,7 @@ export default function BoardList() {
     const [refresh, setRefresh] = useState(2);
     const loginid = sessionStorage.getItem("loginid");
     const [mode, setMode] = useState('list')
+    const [paging, setPaging] = useState({})
 
     useEffect(() => {
         if(mode=='list'){
@@ -49,6 +50,7 @@ export default function BoardList() {
                     setHasNextPage(res.data.hasNext);
                     setHasPreviousPage(res.data.hasPrevious);
                     setTotalPages(res.data.totalPages);
+                    setPaging(res.data.paging);
                 } else {
                     alert('에러: ' + res.status);
                 }
@@ -70,6 +72,7 @@ export default function BoardList() {
                         setHasNextPage(res.data.hasNext);
                         setHasPreviousPage(res.data.hasPrevious);
                         setTotalPages(res.data.totalPages);
+                        setPaging(res.data.paging);
                     } else {
                         alert('error:' + res.status);
                     }
@@ -185,9 +188,9 @@ export default function BoardList() {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {list.map((d) => (
+                                                    {list.map((d, i) => (
                                                         <tr>
-                                                            <td>{d.num}</td>
+                                                            <td>{paging.totalElements - (paging.number * paging.size) - i }</td>
                                                             <td>
                                                                 <Link to={`/dataroom/detail/${d.num}`} className="link">{d.title}</Link>
                                                             </td>

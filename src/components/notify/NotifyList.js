@@ -27,6 +27,7 @@ export default function NotifyList() {
     const [totalPages, setTotalPages] = useState(1);
     const [refresh, setRefresh] = useState(1);
     const [mode, setMode] = useState('list');
+    const [paging, setPaging] = useState({})
 
     useEffect(() => {
         if (mode === 'list') {
@@ -48,6 +49,7 @@ export default function NotifyList() {
                     setHasNextPage(res.data.hasNext);
                     setHasPreviousPage(res.data.hasPrevious);
                     setTotalPages(res.data.totalPages);
+                    setPaging(res.data.paging);
                 } else {
                     alert('에러: ' + res.status);
                 }
@@ -91,6 +93,7 @@ export default function NotifyList() {
                         setHasNextPage(res.data.hasNext);
                         setHasPreviousPage(res.data.hasPrevious);
                         setTotalPages(res.data.totalPages);
+                        setPaging(res.data.paging);
                     } else {
                         alert('error:' + res.status);
                     }
@@ -189,9 +192,9 @@ export default function NotifyList() {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {list.map((b) => (
+                                                    {list.map((b, i) => (
                                                         <tr>
-                                                            <td>{b.num}</td>
+                                                            <td>{paging.totalElements - (paging.number * paging.size) - i }</td>
                                                             <td>{b.member.name}</td>
                                                             <td>
                                                                 <Link to={`/notify/detail/${b.num}`} className="link">

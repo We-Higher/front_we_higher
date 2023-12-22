@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function CommuteList() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -23,7 +24,7 @@ export default function CommuteList() {
 
 
     const fetchData = (page) => {
-        axios.get(`http://localhost:${myPort}/auth/commute?page=${page}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/commute?page=${page}`, { headers: { Authorization: token } })
             .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
@@ -46,7 +47,7 @@ export default function CommuteList() {
         setCurrentPage(newPage);
     };
     /*const del = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/board/del`,
+        axios.post(`${API_BASE_URL}/auth/board/del`,
             {},
             {
                 headers: { Authorization: token },

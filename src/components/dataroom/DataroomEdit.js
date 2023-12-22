@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function DataroomEdit({ show, onHide, num }) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -29,7 +30,7 @@ export default function DataroomEdit({ show, onHide, num }) {
 
     useEffect(() => {
         if (num) {
-            axios.get(`http://localhost:${myPort}/auth/dataroom/edit/` + num, { headers: { Authorization: token } })
+            axios.get(`${API_BASE_URL}/auth/dataroom/edit/` + num, { headers: { Authorization: token } })
                 .then(function (res) {
                     if (res.status === 200) {
                         let d = res.data.dto;
@@ -58,7 +59,7 @@ export default function DataroomEdit({ show, onHide, num }) {
         let fdata = new FormData();
         let file = document.getElementById('f');
         fdata.append('f', file.files[0]);
-        axios.post(`http://localhost:${myPort}/auth/dataroom`, fdata,
+        axios.post(`${API_BASE_URL}/auth/dataroom`, fdata,
             { headers: { Authorization: token }, "Content-Type": "multipart/form-data", params: { num: num, title: title, content: content } })
             .then(function (res) {
                 if (res.status === 200) {
@@ -76,7 +77,7 @@ export default function DataroomEdit({ show, onHide, num }) {
 
     const down = (fname, num) => {
 
-        axios.post(`http://localhost:${myPort}/auth/dataroom/down`,
+        axios.post(`${API_BASE_URL}/auth/dataroom/down`,
             {},
             {
                 headers: { Authorization: token },

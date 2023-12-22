@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 import BoardEdit from './BoardEdit';
 import BoardAdd from './BoardAdd';
+import { API_BASE_URL } from "../../common/util";
 
 const BoardList = () => {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -40,7 +41,7 @@ const BoardList = () => {
 
 
     const fetchData = (page) => {
-        axios.get(`http://localhost:${myPort}/auth/board?page=${page}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/board?page=${page}`, { headers: { Authorization: token } })
             .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
@@ -63,7 +64,7 @@ const BoardList = () => {
         setCurrentPage(newPage);
     };
     const del = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/board/del`,
+        axios.post(`${API_BASE_URL}/auth/board/del`,
             {},
             {
                 headers: { Authorization: token },
@@ -80,7 +81,7 @@ const BoardList = () => {
     }
 
     const search = (type, option, page) => {
-        axios.get(`http://localhost:${myPort}/auth/board/search?page=${page}`,
+        axios.get(`${API_BASE_URL}/auth/board/search?page=${page}`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useSubscription } from "react-stomp-hooks";
-import { MY_PORT } from "../../common/util";
+import { MY_PORT, API_BASE_URL } from "../../common/util";
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";
 import Router from "../../Router";

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { API_BASE_URL } from "../../common/util";
 
 export default function DataroomDetail() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -19,7 +20,7 @@ export default function DataroomDetail() {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/dataroom/` + n, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/dataroom/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -43,7 +44,7 @@ export default function DataroomDetail() {
 
     const down = (fname, num) => {
 
-            axios.post(`http://localhost:${myPort}/auth/dataroom/down`,
+            axios.post(`${API_BASE_URL}/auth/dataroom/down`,
             {},
             {
                 headers: { Authorization: token },

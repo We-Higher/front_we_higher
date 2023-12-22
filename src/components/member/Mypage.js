@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import '../../css/style.bundle.css';
 import '../../css/plugins.bundle.css';
 import MypageEdit from './MypageEdit';
+import { API_BASE_URL } from "../../common/util";
 
 export default function Mypage() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -21,7 +22,7 @@ export default function Mypage() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/mypage`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -53,7 +54,7 @@ export default function Mypage() {
                                             {loginid === null || mdto.originFname === null ? (
                                                 <img src="/default.png" alt="image" style={{ maxWidth: '100%', height: 'auto' }} />
                                             ) : (
-                                                <img src={`http://localhost:${myPort}/image/${mdto.originFname}`}
+                                                <img src={`${API_BASE_URL}/image/${mdto.originFname}`}
                                                     style={{ maxWidth: '100%', height: 'auto' }}
                                                     alt="image" />
                                             )}

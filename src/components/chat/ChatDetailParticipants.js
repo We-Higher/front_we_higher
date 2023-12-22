@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
 import { useState } from "react";
 import ParticipantsModal from "./ParticipantsModal";
-import { MY_PORT } from "../../common/util";
+import { MY_PORT, API_BASE_URL } from "../../common/util";
 
 export default function ChatDetailParticipants(props) {
   const participants = props.participants || []
@@ -17,7 +17,7 @@ export default function ChatDetailParticipants(props) {
           {participant.originFname === null ?
             <img src="/default.png" alt="image"/>
             :
-            <img src={`http://localhost:${MY_PORT}/image/${participant.originFname}`} alt="image"/>
+            <img src={`${API_BASE_URL}/image/${participant.originFname}`} alt="image"/>
           }
         </div>
       ))}

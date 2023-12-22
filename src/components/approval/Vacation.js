@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
+import { API_BASE_URL } from "../../common/util";
 
 const Vacation = () => {
     const token = sessionStorage.getItem("token");
@@ -28,7 +29,7 @@ const Vacation = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/vacation`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/approval/vacation`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -73,7 +74,7 @@ const Vacation = () => {
     };
 
     const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/approval/vacation`,
+        axios.post(`${API_BASE_URL}/auth/approval/vacation`,
             {},
             {
                 headers: { Authorization: token }, params: {

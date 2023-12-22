@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
 import NotifyEdit from './NotifyEdit';
 import NotifyAdd from './NotifyAdd';
+import { API_BASE_URL } from "../../common/util";
 
 export default function NotifyList() {
 
@@ -37,7 +38,7 @@ export default function NotifyList() {
     }, [currentPage, refresh]); // 현재 페이지가 변경될 때 효과 발생 
 
     const fetchData = (page) => {
-        axios.get(`http://localhost:${myPort}/auth/notify?page=${page}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/notify?page=${page}`, { headers: { Authorization: token } })
             .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
@@ -62,7 +63,7 @@ export default function NotifyList() {
 
 
     const del = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/notify/del`,
+        axios.post(`${API_BASE_URL}/auth/notify/del`,
             {},
             {
                 headers: { Authorization: token },
@@ -79,7 +80,7 @@ export default function NotifyList() {
     }
 
     const search = (type, option, page) => {
-        axios.get(`http://localhost:${myPort}/auth/notify/search?page=${page}`,
+        axios.get(`${API_BASE_URL}/auth/notify/search?page=${page}`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {

@@ -4,6 +4,7 @@ import '../../css/dataroom.css';
 import DataroomEdit from './DataroomEdit';
 import DataroomAdd from './DataroomAdd';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from "../../common/util";
 
 
 export default function BoardList() {
@@ -38,7 +39,7 @@ export default function BoardList() {
       };
 
     const fetchData = (page) => {
-        axios.get(`http://localhost:${myPort}/auth/dataroom?page=${page}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/dataroom?page=${page}`, { headers: { Authorization: token } })
             .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
@@ -58,7 +59,7 @@ export default function BoardList() {
     };
 
     const search = (type, option, page) => {
-        axios.get(`http://localhost:${myPort}/auth/dataroom/search?page=${page}`,
+        axios.get(`${API_BASE_URL}/auth/dataroom/search?page=${page}`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {
@@ -81,7 +82,7 @@ export default function BoardList() {
     };
 
     const del = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/dataroom/del`,
+        axios.post(`${API_BASE_URL}/auth/dataroom/del`,
             {},
             {
                 headers: { Authorization: token },

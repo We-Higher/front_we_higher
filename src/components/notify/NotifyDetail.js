@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { API_BASE_URL } from "../../common/util";
 
 export default function NotifyDetail() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -18,7 +19,7 @@ export default function NotifyDetail() {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/notify/` + n, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/notify/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;

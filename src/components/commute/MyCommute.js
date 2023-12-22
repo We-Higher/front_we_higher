@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import CommuteEdit from './CommuteEdit';
 import '../../css/dataroom.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function MyCommute() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -17,7 +18,7 @@ export default function MyCommute() {
     const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/commute/mycommute`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}}/auth/commute/mycommute`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {

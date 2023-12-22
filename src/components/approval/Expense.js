@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
+import { API_BASE_URL } from "../../common/util";
 
 export default function Expense() {
     const token = sessionStorage.getItem("token");
@@ -27,7 +28,7 @@ export default function Expense() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/expense`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/approval/expense`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -43,7 +44,7 @@ export default function Expense() {
       };
 
     const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/approval/expense`,
+        axios.post(`${API_BASE_URL}/auth/approval/expense`,
             {},
             {
                 headers: { Authorization: token }, params: {

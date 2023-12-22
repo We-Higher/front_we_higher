@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
 import Profileicon from '../icons/Profileicon';
+import { API_BASE_URL } from "../../common/util";
 
 export default function Navbar() {
   const myPort = process.env.REACT_APP_MY_PORT;
@@ -29,7 +30,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:${myPort}/auth/commute`, { headers: { Authorization: token } })
+    axios.get(`${API_BASE_URL}/auth/commute`, { headers: { Authorization: token } })
       .then(
         function (res) {
           if (res.status === 200) {
@@ -43,7 +44,7 @@ export default function Navbar() {
 
   const attendence = () => {
 
-    axios.post(`http://localhost:${myPort}/auth/commute/attendance`,
+    axios.post(`${API_BASE_URL}/auth/commute/attendance`,
       {},
       { headers: { Authorization: token } })
       .then(function (res) {
@@ -71,7 +72,7 @@ export default function Navbar() {
 
   const quit = () => {
 
-    axios.post(`http://localhost:${myPort}/auth/commute/quit`,
+    axios.post(`${API_BASE_URL}/auth/commute/quit`,
       {},
       { headers: { Authorization: token } })
       .then(function (res) {

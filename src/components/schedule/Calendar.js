@@ -5,6 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import axios from 'axios';
+import { API_BASE_URL } from "../../common/util";
 
 function Schedule() {
     const myPort = process.env.REACT_APP_MY_PORT
@@ -13,7 +14,7 @@ function Schedule() {
 
     const loadEvents = async () => {
         try {
-            const response = await axios.get(`http://localhost:${myPort}/auth/schedule`, {
+            const response = await axios.get(`${API_BASE_URL}/auth/schedule`, {
                 headers: { Authorization: token },
             });
             setEvents(response.data); // 일정 상태를 업데이트
@@ -40,7 +41,7 @@ function Schedule() {
             }];
 
             try {
-                const response = await axios.post(`http://localhost:${myPort}/auth/schedule`, eventData, { headers: { Authorization: token } });
+                const response = await axios.post(`${API_BASE_URL}/auth/schedule`, eventData, { headers: { Authorization: token } });
 
                 if (response.status === 200) {
 
@@ -61,7 +62,7 @@ function Schedule() {
                 calId = info.event._def.publicId
             }
             try {
-                const response = await axios.delete(`http://localhost:${myPort}/auth/schedule/${calId}`, { headers: { Authorization: token } });
+                const response = await axios.delete(`${API_BASE_URL}/auth/schedule/${calId}`, { headers: { Authorization: token } });
 
                 if (response.data.flag) {
                     info.event.remove();
@@ -92,7 +93,7 @@ function Schedule() {
             try {
                 const response = await axios({
                     method: 'put',
-                    url: `http://localhost:${myPort}/auth/schedule/${calId}`,
+                    url: `${API_BASE_URL}/auth/schedule/${calId}`,
                     headers: { Authorization: token, 'Content-Type': 'application/json' },
                     data: JSON.stringify(events)
                 });
@@ -128,7 +129,7 @@ function Schedule() {
             try {
                 const response = await axios({
                     method: 'put',
-                    url: `http://localhost:${myPort}/auth/schedule/${calId}`,
+                    url: `${API_BASE_URL}/auth/schedule/${calId}`,
                     headers: { Authorization: token, 'Content-Type': 'application/json' },
                     data: JSON.stringify(events)
                 });

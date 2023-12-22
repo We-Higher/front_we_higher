@@ -5,6 +5,7 @@ import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
 import MyDraft from './MyDraft';
 import '../../css/form.css';
+import { API_BASE_URL } from "../../common/util";
 
 const Report = () => {
     const token = sessionStorage.getItem("token");
@@ -28,7 +29,7 @@ const Report = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/approval/report`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.mdto);
@@ -76,7 +77,7 @@ const Report = () => {
 
     const save = () => {
 
-        axios.post(`http://localhost:${myPort}/auth/approval/report`,
+        axios.post(`${API_BASE_URL}/auth/approval/report`,
             {},
             {
                 headers: { Authorization: token }, params: {

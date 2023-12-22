@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../../css/QuoteComponent.css';
 import '../../css/style.bundle.css';
 import MonthMember from "../employee/MonthMember";
+import { API_BASE_URL } from "../../common/util";
 
 export default function Main() {
     const token = sessionStorage.getItem("token");
@@ -42,7 +43,7 @@ export default function Main() {
     const [mdto, setDto] = useState({});
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/notify/list`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/notify/list`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -57,7 +58,7 @@ export default function Main() {
                 }
             );
 
-        axios.get(`http://localhost:${myPort}/monthMemberList`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/monthMemberList`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setList2(res.data.list);
@@ -205,7 +206,7 @@ export default function Main() {
                                                                 {(m.originFname === null) ? (
                                                                     <img src='/default.png' className="card-img-top" />
                                                                 ) : (
-                                                                    <img src={`http://localhost:${myPort}/image/${m.originFname}`} className="card-img-top custom-card-image" />
+                                                                    <img src={`${API_BASE_URL}/image/${m.originFname}`} className="card-img-top custom-card-image" />
                                                                 )}
 
                                                                 <span className="fs-5 fw-bold text-gray-400 d-block">

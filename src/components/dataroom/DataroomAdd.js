@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function BoardAdd({ show, onHide }) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -12,7 +13,7 @@ export default function BoardAdd({ show, onHide }) {
     const { writer, content, f } = dto;
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/dataroom/add`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/dataroom/add`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto2(res.data.mdto);
@@ -39,7 +40,7 @@ export default function BoardAdd({ show, onHide }) {
         fdata.append('content', content);
         fdata.append('f', file.files[0]);
 
-        axios.post(`http://localhost:${myPort}/auth/dataroom`, fdata,
+        axios.post(`${API_BASE_URL}/auth/dataroom`, fdata,
             { headers: { Authorization: token }, "Content-Type": "multipart/form-data" })
             .then(function (res) {
                 if (res.status === 200) {

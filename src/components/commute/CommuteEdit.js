@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function CommuteEdit({show, onHide, num}) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -36,7 +37,7 @@ export default function CommuteEdit({show, onHide, num}) {
 
     useEffect(() => {
         if (num) {
-        axios.get(`http://localhost:${myPort}/auth/commute/edit/` + num, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/commute/edit/` + num, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let b = res.data.dto;
@@ -60,7 +61,7 @@ export default function CommuteEdit({show, onHide, num}) {
     }, [num]);
 
     const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/commute/edit`,
+        axios.post(`${API_BASE_URL}/auth/commute/edit`,
             {},
             { headers: { Authorization: token }, params: { num: num, reason: reason, editStartTime: editStartTime, editEndTime: editEndTime, editBasicDate: editBasicDate } })
             .then(function (res) {

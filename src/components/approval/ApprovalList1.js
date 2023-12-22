@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 const ApprovalList1 = ({ show, onHide, onSelectEmployee }) => {
     const myPort = process.env.REACT_APP_MY_PORT
@@ -13,7 +14,7 @@ const ApprovalList1 = ({ show, onHide, onSelectEmployee }) => {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:${myPort}/auth/employee/list`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/employee/list`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -43,7 +44,7 @@ const ApprovalList1 = ({ show, onHide, onSelectEmployee }) => {
     };
 
     const search = (type, option) => {
-        axios.get(`http://localhost:${myPort}/auth/employee/search`,
+        axios.get(`${API_BASE_URL}/auth/employee/search`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {

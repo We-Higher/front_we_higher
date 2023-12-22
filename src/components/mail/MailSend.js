@@ -41,13 +41,16 @@ export default function MailSend() {
     }, [])
 
     const send = () => {
+        const joinedRecipients = recipientList.join(','); 
+
         let fdata = new FormData();
         fdata.append('from', from);
-        fdata.append('address', address);
+        fdata.append('address', joinedRecipients);
         fdata.append('ccAddress', ccAddress);
         fdata.append('title', title);
         fdata.append('content', content);
         fdata.append('file', document.getElementById('file').files[0]);
+
 
         axios.post(`${API_BASE_URL}/mail/send`, fdata,
             {

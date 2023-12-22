@@ -206,7 +206,7 @@ export default function Main() {
                                                                 {(m.originFname === null) ? (
                                                                     <img src='/default.png' className="card-img-top" />
                                                                 ) : (
-                                                                    <img src={`${API_BASE_URL}/image/${m.originFname}`} className="card-img-top custom-card-image" />
+                                                                    <img src={`${API_BASE_URL}/image/${m.originFname}`} className="card-img-top" />
                                                                 )}
 
                                                                 <span className="fs-5 fw-bold text-gray-400 d-block">

@@ -203,10 +203,10 @@ export default function Main() {
                                                     <div className="border border-dashed border-gray-300 text-center min-w-75px rounded pb-4 my-3">
                                                         {m.monthMember === 1 && (
                                                             <>
-                                                                {(m.originFname === null) ? (
-                                                                    <img src='/default.png' className="card-img-top" />
+                                                                {(m.originFname === null) ? (  
+                                                                    <img src={`${API_BASE_URL}/image/default.png`}  className="card-img-top" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
                                                                 ) : (
-                                                                    <img src={`${API_BASE_URL}/image/${m.originFname}`} className="card-img-top custom-card-image" />
+                                                                    <img src={`${API_BASE_URL}/image/${m.originFname}`}  className="card-img-top custom-card-image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                                 )}
 
                                                                 <span className="fs-5 fw-bold text-gray-400 d-block">

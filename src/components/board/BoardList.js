@@ -25,8 +25,7 @@ const BoardList = () => {
     const [refresh, setRefresh] = useState(1);
     const loginid = sessionStorage.getItem("loginid");
     const [mode, setMode] = useState('list')
-    const [paging, setPaging] = useState({})
-
+    
     useEffect(() => {
         if (mode === 'list') {
             fetchData(currentPage);
@@ -52,7 +51,6 @@ const BoardList = () => {
                     setHasNextPage(res.data.hasNext);
                     setHasPreviousPage(res.data.hasPrevious);
                     setTotalPages(res.data.totalPages);
-                    setPaging(res.data.paging);
                 } else {
                     alert('에러: ' + res.status);
                 }
@@ -94,7 +92,6 @@ const BoardList = () => {
                         setHasNextPage(res.data.hasNext);
                         setHasPreviousPage(res.data.hasPrevious);
                         setTotalPages(res.data.totalPages);
-                        setPaging(res.data.paging);
                     } else {
                         alert('error:' + res.status);
                     }
@@ -184,9 +181,9 @@ const BoardList = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {list.map((b, i) => (
+                                                    {list.map((b) => (
                                                         <tr>
-                                                            <td>{paging.totalElements - (paging.number * paging.size) - i }</td>
+                                                            <td>{b.num}</td>
                                                             <td>{b.member.name}</td>
                                                             <td>{b.member.companyRankName}</td>
                                                             <td>

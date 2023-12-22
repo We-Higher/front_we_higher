@@ -1,14 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { API_BASE_URL } from "../../common/util";
 
 export default function MypageEdit({show, onHide}) {
-    const myPort = process.env.REACT_APP_MY_PORT;
     const token = sessionStorage.getItem("token");
-    const loginid = sessionStorage.getItem("loginid");
-    const navigate = useNavigate();
 
     const [mdto, setDto] = useState({
         username: '',
@@ -27,7 +23,7 @@ export default function MypageEdit({show, onHide}) {
         originFname: ''
     });
 
-    const { username, pwd, name, email, phone, address, companyName, deptCode, companyRank, newNo, comCall, isMaster, status, originFname } = mdto;
+    const { username, name, email, phone, address, companyName, deptCode, companyRank, newNo, comCall, isMaster, status, originFname } = mdto;
 
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -59,6 +55,13 @@ export default function MypageEdit({show, onHide}) {
     };
 
     const edit = () => {
+        
+        const pwd = document.querySelector('#pwd').value;
+
+        if (pwd === '') {
+            alert('패스워드를 입력하세요');
+            return;
+        } 
 
         let fdata = new FormData();
         let fileInput = document.getElementById('f');
@@ -139,6 +142,7 @@ export default function MypageEdit({show, onHide}) {
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
                                         <input
+                                            id='pwd'
                                             type="password"
                                             name="pwd"
                                             placeholder="비밀번호를 입력해주세요.."

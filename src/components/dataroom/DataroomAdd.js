@@ -35,6 +35,17 @@ export default function BoardAdd({ show, onHide }) {
 
     const save = () => {
 
+        const content = document.querySelector('#content').value;
+        const f = document.querySelector('#f').value;
+
+        if (content === '') {
+            alert('내용을 입력하세요');
+            return;
+        } else if(f === '') {
+            alert('파일을 선택하세요');
+            return;
+        }
+
         let fdata = new FormData();
         let file = document.getElementById('f');
         fdata.append('content', content);
@@ -94,7 +105,7 @@ export default function BoardAdd({ show, onHide }) {
                             <div className="col-lg-8">
                                 <span className="fw-bolder fs-6 text-dark">
                                     <div className="input-group input-group-sm mb-3">
-                                        <textarea rows="10" cols="30" name="content" className="form-control" value={content} onChange={onChange}></textarea>
+                                        <textarea rows="10" cols="30" id="content" name="content" className="form-control" value={content} onChange={onChange}></textarea>
                                     </div>
                                 </span>
                             </div>

@@ -41,6 +41,22 @@ export default function MailSend() {
     }, [])
 
     const send = () => {
+
+        const address = document.querySelector('.address').value;
+        const title = document.querySelector('#title').value;
+        const content = document.querySelector('#content').value;
+
+        if (address === '') {
+            alert('받는 사람을 입력하세요');
+            return;
+        } else if (title === '') {
+            alert('제목을 입력하세요');
+            return;
+        } else if (content === '') {
+            alert('내용을 입력하세요');
+            return;
+        }
+
         const joinedRecipients = recipientList.join(','); 
 
         let fdata = new FormData();
@@ -93,7 +109,7 @@ export default function MailSend() {
                 <label htmlFor="address" className="form-label">받는 사람</label>
                 {recipientList.map((address, index) => (
                     <div key={index}>
-                        <input type="email" className="form-control" value={address} onChange={(e) => {
+                        <input type="email" className="form-control address" value={address} onChange={(e) => {
                             const updatedRecipientList = [...recipientList];
                             updatedRecipientList[index] = e.target.value;
                             setRecipientList(updatedRecipientList);

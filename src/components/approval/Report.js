@@ -3,13 +3,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApprovalList1 from './ApprovalList1';
 import ApprovalList2 from './ApprovalList2';
-import MyDraft from './MyDraft';
 import '../../css/form.css';
 import { API_BASE_URL } from "../../common/util";
 
 const Report = () => {
     const token = sessionStorage.getItem("token");
-    const myPort = process.env.REACT_APP_MY_PORT;
     const [mdto, setDto] = useState({});
     const [dto, setDto2] = useState({
         writer: sessionStorage.getItem('loginid'), title: '', content: '', wdate: '',
@@ -18,8 +16,8 @@ const Report = () => {
     });
 
     // const navigate = useNavigate();
-    const { writer, title, content, wdate, serviceLife, classification, approval1,
-        approval2, approval1rank, approval2rank, app1username, app2username } = dto;
+    const { writer, title, content, wdate, serviceLife, classification
+         } = dto;
     const onChange = (e) => {
         const { name, value } = e.target;
         setDto2({
@@ -40,8 +38,6 @@ const Report = () => {
         return () => {
         };
     }, []);
-
-    const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);
     const [showModal2, setShowModal2] = useState(false);
@@ -77,6 +73,29 @@ const Report = () => {
 
     const save = () => {
 
+        const app1username = document.querySelector('#app1username').value;
+        const app2username = document.querySelector('#app2username').value;
+        const wdate = document.querySelector('#wdate').value;
+        const title = document.querySelector('#title').value;
+        const content = document.querySelector('#content').value;
+
+        if (app1username === '') {
+            alert('1차 결재자를 입력하세요');
+            return;
+        } else if (app2username === '') {
+            alert('2차 결재자를 입력하세요');
+            return;
+        } else if (wdate === '') {
+            alert('기안일을 입력하세요');
+            return;
+        } else if (title === '') {
+            alert('제목을 입력하세요');
+            return;
+        } else if (content === '') {
+            alert('내용을 입력하세요');
+            return;
+        } 
+        
         axios.post(`${API_BASE_URL}/auth/approval/report`,
             {},
             {
@@ -354,7 +373,7 @@ const Report = () => {
                                                 </td>
                                                 <input
                                                     type="hidden"
-                                                    //id="app2username"
+                                                    id="app2username"
                                                     name="app2username"
                                                     style={{
                                                         width: 65,
@@ -450,7 +469,7 @@ const Report = () => {
                                         data-value=""
                                         data-autotype=""
                                     >
-                                        <input type="date" name="wdate" defaultValue={new Date().toLocaleDateString()} value={wdate} onChange={onChange} />
+                                        <input type="date" id="wdate" name="wdate" defaultValue={new Date().toLocaleDateString()} value={wdate} onChange={onChange} />
                                     </span>
                                 </td>
                             </tr>
@@ -700,6 +719,7 @@ const Report = () => {
                                             type="text"
                                             style={{ width: 700 }}
                                             placeholder="제목을 입력해주세요"
+                                            id="title"
                                             name="title"
                                             value={title} onChange={onChange}
                                         />
@@ -737,6 +757,7 @@ const Report = () => {
                                             cols={128}
                                             rows={32}
                                             placeholder="내용을 작성해주세요"
+                                            id="content"
                                             name="content"
                                             defaultValue={""}
                                             value={content} onChange={onChange}

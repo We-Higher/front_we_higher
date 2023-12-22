@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import '../../css/dataroom.css';
 import EmployeeEdit from './EmployeeEdit';
 import EmployeeJoin from './EmployeeJoin';
+import { API_BASE_URL } from "../../common/util";
 
 export default function EmployeeList() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -35,7 +36,7 @@ export default function EmployeeList() {
       };
 
     const fetchData = (page) => {
-        axios.get(`http://localhost:${myPort}/auth/employee?page=${page}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/employee?page=${page}`, { headers: { Authorization: token } })
             .then((res) => {
                 if (res.status === 200) {
                     setList(res.data.list);
@@ -59,7 +60,7 @@ export default function EmployeeList() {
     };
 
     const search = (type, option, page) => {
-        axios.get(`http://localhost:${myPort}/auth/employee/search?page=${page}`,
+        axios.get(`${API_BASE_URL}/auth/employee/search?page=${page}`,
             { headers: { Authorization: token }, params: { type: type, option: option } })
             .then(
                 function (res) {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function NotifyEdit({ show, onHide, num }) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -29,7 +30,7 @@ export default function NotifyEdit({ show, onHide, num }) {
 
     useEffect(() => {
         if (num) {
-            axios.get(`http://localhost:${myPort}/auth/notify/edit/` + num, { headers: { Authorization: token } })
+            axios.get(`${API_BASE_URL}/auth/notify/edit/` + num, { headers: { Authorization: token } })
                 .then(function (res) {
                     if (res.status === 200) {
                         let b = res.data.dto;
@@ -53,7 +54,7 @@ export default function NotifyEdit({ show, onHide, num }) {
     }, [num]);
 
     const edit = () => {
-        axios.put(`http://localhost:${myPort}/auth/notify/edit`,
+        axios.put(`${API_BASE_URL}/auth/notify/edit`,
             {},
             { headers: { Authorization: token }, params: { num: num, title: title, content: content } })
             .then(function (res) {

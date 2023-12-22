@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function CommuteEditList() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -15,7 +16,7 @@ export default function CommuteEditList() {
     // const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/commute/editlist`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/commute/editlist`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -32,7 +33,7 @@ export default function CommuteEditList() {
     }, [refresh])
 
     const edit = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/commute/approve`,
+        axios.post(`${API_BASE_URL}/auth/commute/approve`,
             {},
             {
                 headers: { Authorization: token },
@@ -49,7 +50,7 @@ export default function CommuteEditList() {
     }
 
     const del = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/commute/cancel`,
+        axios.post(`${API_BASE_URL}/auth/commute/cancel`,
             {},
             {
                 headers: { Authorization: token },

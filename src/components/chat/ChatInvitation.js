@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import $ from 'jquery';
-import { MY_PORT } from "../../common/util";
+import { MY_PORT, API_BASE_URL } from "../../common/util";
 
 export default function ChatInvitation(props) {
   const [mList, setMList] = useState([])
@@ -10,7 +10,7 @@ export default function ChatInvitation(props) {
   const token = sessionStorage.getItem("token")
 
   useEffect(() => {
-    axios.get(`http://localhost:${MY_PORT}/chat/invitation`, { headers: { Authorization: token } })
+    axios.get(`${API_BASE_URL}/chat/invitation`, { headers: { Authorization: token } })
       .then(res => {
         if (res.status === 200) {
           setMList(res.data.mlist)
@@ -74,7 +74,7 @@ export default function ChatInvitation(props) {
                       {m.originFname === null ?
                         <img src="/default.png" alt="no-image" />
                         :
-                        <img src={`http://localhost:${MY_PORT}/image/${m.originFname}`} alt="image" />
+                        <img src={`${API_BASE_URL}/image/${m.originFname}`} alt="image" />
                       }
                       {m.cstatus === 1 ?
                         <div className="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2" />

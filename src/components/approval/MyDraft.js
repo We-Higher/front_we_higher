@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import '../../css/dataroom.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function MyDraft() {
     const token = sessionStorage.getItem("token");
@@ -15,7 +16,7 @@ export default function MyDraft() {
     const [refresh, setRefresh] = useState(1);
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/mydraft`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/approval/mydraft`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {

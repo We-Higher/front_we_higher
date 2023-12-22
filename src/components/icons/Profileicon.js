@@ -2,6 +2,7 @@ import React from 'react';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE_URL } from "../../common/util";
 
 export default function Profileicon() {
     const loginid = sessionStorage.getItem("loginid");
@@ -10,7 +11,7 @@ export default function Profileicon() {
     const [mdto, setDto] = useState({});
 
     useEffect(() => {
-      axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+      axios.get(`${API_BASE_URL}/auth/mypage`, { headers: { Authorization: token } })
           .then(
               function (res) {
                   if (res.status === 200) {
@@ -30,7 +31,7 @@ export default function Profileicon() {
     {loginid === null || mdto.originFname === null ? (
       <img src="/default.png" alt="image" />
     ) : (
-      <img src={`http://localhost:${myPort}/image/${mdto.originFname}`} alt="image" />
+      <img src={`${API_BASE_URL}/image/${mdto.originFname}`} alt="image" />
     )}
   </div>
   );

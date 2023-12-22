@@ -6,6 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import axios from 'axios';
 import '../../css/meetingroom.css';
+import { API_BASE_URL } from "../../common/util";
 
 const RoomTab = ({ id, active, onTabClick }) => (
   <li id={`mtab${id}`} className={`mtab ${active ? 'active' : ''}`}>
@@ -37,11 +38,11 @@ function Meetingroom() {
     try {
       let response;
       if (roomId === '0') {
-        response = await axios.get(`http://localhost:${myPort}/auth/meetingroom`, {
+        response = await axios.get(`${API_BASE_URL}/auth/meetingroom`, {
           headers: { Authorization: token },
         });
       } else {
-        response = await axios.get(`http://localhost:${myPort}/auth/meetingroom/${roomId}`, {
+        response = await axios.get(`${API_BASE_URL}/auth/meetingroom/${roomId}`, {
           headers: { Authorization: token },
         });
       }
@@ -108,7 +109,7 @@ function Meetingroom() {
           alert('이미 이벤트가 있는 시간에는 중복을 할 수 없습니다.');
         } else {
           try {
-            const response = await axios.post(`http://localhost:${myPort}/auth/meetingroom/${roomId}`, [event], {
+            const response = await axios.post(`${API_BASE_URL}/auth/meetingroom/${roomId}`, [event], {
               headers: { Authorization: token },
             });
 
@@ -147,7 +148,7 @@ function Meetingroom() {
 
         try {
           const calId = info.event.id;
-          const response = await axios.put(`http://localhost:${myPort}/auth/meetingroom/${calId}/${roomId}`, events, {
+          const response = await axios.put(`${API_BASE_URL}/auth/meetingroom/${calId}/${roomId}`, events, {
             headers: {
               Authorization: token,
               'Content-Type': 'application/json',
@@ -184,7 +185,7 @@ function Meetingroom() {
 
         try {
           const calId = info.event.id;
-          const response = await axios.put(`http://localhost:${myPort}/auth/meetingroom/${calId}/${roomId}`, events, {
+          const response = await axios.put(`${API_BASE_URL}/auth/meetingroom/${calId}/${roomId}`, events, {
             headers: {
               Authorization: token,
               'Content-Type': 'application/json',
@@ -214,7 +215,7 @@ function Meetingroom() {
       if (window.confirm(`${info.event.title} 일정을 삭제하시겠습니까 ?`)) {
         try {
           const calId = info.event.id;
-          const response = await axios.delete(`http://localhost:${myPort}/auth/meetingroom/${calId}`, {
+          const response = await axios.delete(`${API_BASE_URL}/auth/meetingroom/${calId}`, {
             headers: {
               Authorization: token,
             },

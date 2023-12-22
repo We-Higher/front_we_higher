@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { API_BASE_URL } from "../../common/util";
 
 export default function BoardDetail() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -19,7 +20,7 @@ export default function BoardDetail() {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/board/` + n, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/board/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     let d = res.data.dto;
@@ -39,7 +40,7 @@ export default function BoardDetail() {
     }, []);
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/mypage`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -65,7 +66,7 @@ export default function BoardDetail() {
 
     const fetchData = async () => {
         const com_bno = document.querySelector('#bnum').value;
-        axios.get(`http://localhost:${myPort}/auth/reply/list/${com_bno}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/reply/list/${com_bno}`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -85,7 +86,7 @@ export default function BoardDetail() {
     };
 
     const handleDelete = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/reply/del`,
+        axios.post(`${API_BASE_URL}/auth/reply/del`,
             {},
             {
                 headers: { Authorization: token },
@@ -114,7 +115,7 @@ export default function BoardDetail() {
         }
 
         axios.post(
-            `http://localhost:${myPort}/auth/reply/add`,
+            `${API_BASE_URL}/auth/reply/add`,
             [
                 {
                     com_bno: com_bno,
@@ -203,7 +204,7 @@ export default function BoardDetail() {
                                 {comment.member.originFname === null ? (
                                     <img src="/default.png" alt="image" style={{ width: '40px', height: '40px', borderRadius: '100px', marginRight: '10px', marginBottom: '10px' }} />
                                 ) : (
-                                    <img src={`http://localhost:${myPort}/image/${comment.member.originFname}`}
+                                    <img src={`${API_BASE_URL}/image/${comment.member.originFname}`}
                                         style={{ width: '40px', height: '40px', borderRadius: '100px', marginRight: '10px', marginBottom: '10px' }}
                                         alt="image" />
                                 )}

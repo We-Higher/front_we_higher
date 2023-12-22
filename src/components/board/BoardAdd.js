@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function BoardAdd({show, onHide}) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -11,7 +12,7 @@ export default function BoardAdd({show, onHide}) {
     const { writer, title, content } = dto;
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/board/add`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/board/add`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto2(res.data.mdto);
@@ -32,7 +33,7 @@ export default function BoardAdd({show, onHide}) {
     }
 
     const save = () => {
-        axios.post(`http://localhost:${myPort}/auth/board`,
+        axios.post(`${API_BASE_URL}/auth/board`,
             {},
             { headers: { Authorization: token }, params: { title: title, content: content } })
             .then(function (res) {

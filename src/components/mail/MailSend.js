@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../common/util";
 
 export default function MailSend() {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -29,7 +30,7 @@ export default function MailSend() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/mail/send`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/mail/send`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setMailsender(res.data.mailsender);
@@ -48,7 +49,7 @@ export default function MailSend() {
         fdata.append('content', content);
         fdata.append('file', document.getElementById('file').files[0]);
 
-        axios.post(`http://localhost:${myPort}/mail/send`, fdata,
+        axios.post(`${API_BASE_URL}/mail/send`, fdata,
             {
                 headers: { Authorization: token, 'Content-Type': 'multipart/form-data' }
             })

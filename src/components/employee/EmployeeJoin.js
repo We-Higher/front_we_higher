@@ -3,6 +3,7 @@ import { useState } from 'react';
 import '../../css/dataroom.css';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function EmployeeJoin({ show, onHide }) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -19,7 +20,7 @@ export default function EmployeeJoin({ show, onHide }) {
     }
 
     const save = () => {
-        axios.post(`http://localhost:${myPort}/join`,
+        axios.post(`${API_BASE_URL}/join`,
             {
                 username: username,
                 pwd: pwd,

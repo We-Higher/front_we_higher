@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { useStompClient, useSubscription } from 'react-stomp-hooks'
-import { formatFullDate, MY_PORT } from '../../common/util'
+import { API_BASE_URL, formatFullDate, MY_PORT } from '../../common/util'
 import ChatDetailParticipants from "./ChatDetailParticipants";
 import { ThreeDots } from "react-bootstrap-icons";
 import { Dropdown, DropdownButton, Modal } from "react-bootstrap";
@@ -42,7 +42,7 @@ export default function ChatRoomDetail() {
     }, [chatList])
 
     const loadRoom = () => {
-        axios.get(`http://localhost:${MY_PORT}/chat/room/${id}`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/chat/room/${id}`, { headers: { Authorization: token } })
             .then(res => {
                 if (res.status === 200) {
                     console.log(res.data)
@@ -73,7 +73,7 @@ export default function ChatRoomDetail() {
             params.append('timestamp', timestamp)
 
             axios
-                .post(`http://localhost:${MY_PORT}/chat/message/add`,
+                .post(`${API_BASE_URL}/chat/message/add`,
                     params,
                     { headers: { Authorization: token } },
                 )
@@ -104,7 +104,7 @@ export default function ChatRoomDetail() {
         let dList = Array.from(data).map(c => c.value)
 
         axios
-          .post(`http://localhost:${MY_PORT}/chat/room/invite/` + roomInfo.id,
+          .post(`${API_BASE_URL}/chat/room/invite/` + roomInfo.id,
             nList,
             {
                 headers: { Authorization: token }
@@ -208,7 +208,7 @@ export default function ChatRoomDetail() {
                                                         {c.sender.originFname === null ?
                                                             <img src="/default.png" alt="no-image" />
                                                             :
-                                                            <img src={`http://localhost:${MY_PORT}/image/${c.sender.originFname}`} alt="image" />
+                                                            <img src={`${API_BASE_URL}/image/${c.sender.originFname}`} alt="image" />
                                                         }
                                                     </div>
                                                     {/*end::Avatar*/}
@@ -247,7 +247,7 @@ export default function ChatRoomDetail() {
                                                         {c.sender.originFname === null ?
                                                             <img src="/default.png" alt="image" />
                                                             :
-                                                            <img src={`http://localhost:${MY_PORT}/image/${c.sender.originFname}`} alt="image" />
+                                                            <img src={`${API_BASE_URL}/image/${c.sender.originFname}`} alt="image" />
                                                         }
                                                     </div>
                                                     {/*end::Avatar*/}

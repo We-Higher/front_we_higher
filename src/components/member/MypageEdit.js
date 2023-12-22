@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function MypageEdit({show, onHide}) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -37,7 +38,7 @@ export default function MypageEdit({show, onHide}) {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/mypage`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {
@@ -68,7 +69,7 @@ export default function MypageEdit({show, onHide}) {
         } else {
             console.log('No file selected.');
         }
-        axios.put(`http://localhost:${myPort}/auth/pwdedit`, fdata,
+        axios.put(`${API_BASE_URL}/auth/pwdedit`, fdata,
             {
                 headers: { Authorization: token }, "Content-Type": "multipart/form-data", params: {
                     username: username, pwd: pwd, name: name, email: email,

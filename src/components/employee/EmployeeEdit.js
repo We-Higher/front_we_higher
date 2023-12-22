@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, redirect  } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
+import { API_BASE_URL } from "../../common/util";
 
 export default function EmployeeEdit({ show, onHide, username }) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -34,7 +35,7 @@ export default function EmployeeEdit({ show, onHide, username }) {
 
     useEffect(() => {
         if (username) {
-            axios.get(`http://localhost:${myPort}/edit/${username}`, { headers: { Authorization: token }, params: { username: username } })
+            axios.get(`${API_BASE_URL}/edit/${username}`, { headers: { Authorization: token }, params: { username: username } })
                 .then(function (res) {
                     if (res.status === 200) {
                         let m = res.data.m;
@@ -68,7 +69,7 @@ export default function EmployeeEdit({ show, onHide, username }) {
 
     const save = () => {
         axios.put(
-            `http://localhost:${myPort}/edit`,
+            `${API_BASE_URL}/edit`,
             {
                 username: username,
                 pwd: pwd,
@@ -103,7 +104,7 @@ export default function EmployeeEdit({ show, onHide, username }) {
     };
 
     const del = () => {
-        axios.post('http://localhost:' + myPort + '/del',
+        axios.post(`${API_BASE_URL}/del`,
             {},
             {
                 headers: { Authorization: token },

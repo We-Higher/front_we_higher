@@ -4,7 +4,7 @@ import ChatInvitation from './ChatInvitation'
 import ChatRoomList from './ChatRoomList'
 import $ from 'jquery'
 import '../../css/chat/chat_home.css'
-import { MY_PORT } from "../../common/util";
+import { MY_PORT, API_BASE_URL } from "../../common/util";
 
 export default function ChatHome() {
   const token = sessionStorage.getItem('token')
@@ -13,7 +13,7 @@ export default function ChatHome() {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:${MY_PORT}/chat/room`,
+        `${API_BASE_URL}/chat/room`,
         { headers: { Authorization: token } })
       .then(function (res) {
         if (res.status === 200) {
@@ -26,7 +26,7 @@ export default function ChatHome() {
 
   const addRoomHandler = (data) => {
     axios
-      .post(`http://localhost:${MY_PORT}/chat/room`,
+      .post(`${API_BASE_URL}/chat/room`,
         data,
         {
           headers: {
@@ -52,7 +52,7 @@ export default function ChatHome() {
 
   const outRoomHandler = (id) => {
     axios
-      .post(`http://localhost:${MY_PORT}/chat/room/out/` + id,
+      .post(`${API_BASE_URL}/chat/room/out/` + id,
         '',
         {
           headers: {

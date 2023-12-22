@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import '../../css/login_form.css';
 import '../../css/style.bundle.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function Login() {
     const myPort = process.env.REACT_APP_MY_PORT
@@ -32,7 +33,7 @@ export default function Login() {
     };
 
     const login = () => {
-        axios.post('http://localhost:' + myPort + '/login', {}, { params: { username: username, password: password } })
+        axios.post(`${API_BASE_URL}/login`, {}, { params: { username: username, password: password } })
             .then(function (res) {
                 if (res.status === 200) {
                     if (res.data.flag) {

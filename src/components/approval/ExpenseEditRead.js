@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import '../../css/form.css';
+import { API_BASE_URL } from "../../common/util";
 
 const ExpenseEditRead = () => {
 
@@ -23,7 +24,7 @@ const ExpenseEditRead = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/expense/editread/` + n, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/approval/expense/editread/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.dto.member);

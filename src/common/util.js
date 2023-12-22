@@ -1,4 +1,5 @@
 const MY_PORT = process.env.REACT_APP_MY_PORT
+const API_HOST = process.env.REACT_APP_API_HOST
 
 let backendHost;
 
@@ -6,8 +7,9 @@ const hostname = window && window.location && window.location.hostname;
 
 if (hostname === 'localhost') {
   backendHost = `http://localhost:${MY_PORT}`
+  // backendHost = API_HOST
 } else {
-  backendHost = `http://localhost:${MY_PORT}`
+  backendHost = API_HOST
 }
 
 export function formatFullDate(date) {

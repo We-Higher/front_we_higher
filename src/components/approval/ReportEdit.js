@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../../common/util";
 
 const ReportEdit = () => {
 
@@ -14,7 +15,7 @@ const ReportEdit = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/approval/report/editread/` + n, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/approval/report/editread/` + n, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     setDto(res.data.dto.member);
@@ -31,7 +32,7 @@ const ReportEdit = () => {
     }, []);
 
     const approve = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/approval/report/approve`,
+        axios.post(`${API_BASE_URL}/auth/approval/report/approve`,
             {},
             {
                 headers: { Authorization: token },
@@ -47,7 +48,7 @@ const ReportEdit = () => {
     }
 
     const refuse = (num) => {
-        axios.post(`http://localhost:${myPort}/auth/approval/report/refuse`,
+        axios.post(`${API_BASE_URL}/auth/approval/report/refuse`,
             {},
             {
                 headers: { Authorization: token },

@@ -1,6 +1,7 @@
 import { Modal } from "react-bootstrap";
 import { useEffect, useState } from 'react';
 import axios from "axios";
+import { API_BASE_URL } from "../../common/util";
 
 export default function MonthMember({ show, onHide }) {
     const myPort = process.env.REACT_APP_MY_PORT;
@@ -10,7 +11,7 @@ export default function MonthMember({ show, onHide }) {
     const { ismaster } = mdto;
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/employee/list`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/employee/list`, { headers: { Authorization: token } })
             .then(function (res) {
                 if (res.status === 200) {
                     const updatedList = res.data.list.map(e => ({
@@ -55,7 +56,7 @@ export default function MonthMember({ show, onHide }) {
 
         try {
             const response = await axios.put(
-                `http://localhost:${myPort}/monthMember`,
+                `${API_BASE_URL}/monthMember`,
                 { selectedMembers },
                 {
                     headers: { Authorization: token }

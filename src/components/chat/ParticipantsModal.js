@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap";
-import { MY_PORT } from "../../common/util";
+import { MY_PORT, API_BASE_URL } from "../../common/util";
 
 export default function ParticipantsModal({ show, onHide, participants }) {
   const modalList = <>
@@ -12,7 +12,7 @@ export default function ParticipantsModal({ show, onHide, participants }) {
             {participant.originFname === null ?
               <img src="/default.png" alt="image"/>
               :
-              <img src={`http://localhost:${MY_PORT}/image/${participant.originFname}`} alt="image"/>
+              <img src={`${API_BASE_URL}/image/${participant.originFname}`} alt="image"/>
             }
             {participant.cstatus === 1 ?
               <div className="symbol-badge bg-success start-100 top-100 border-4 h-15px w-15px ms-n2 mt-n2"/>

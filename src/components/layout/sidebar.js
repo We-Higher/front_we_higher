@@ -12,6 +12,7 @@ import Scheduleicon from '../icons/Scheduleicon';
 import '../../css/layout.css';
 import '../../css/style.bundle.css';
 import '../../css/plugins.bundle.css';
+import { API_BASE_URL } from "../../common/util";
 
 export default function Sidebar() {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function Sidebar() {
     const [mdto, setDto] = useState({});
 
     useEffect(() => {
-        axios.get(`http://localhost:${myPort}/auth/mypage`, { headers: { Authorization: token } })
+        axios.get(`${API_BASE_URL}/auth/mypage`, { headers: { Authorization: token } })
             .then(
                 function (res) {
                     if (res.status === 200) {

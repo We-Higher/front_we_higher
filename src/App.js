@@ -9,7 +9,7 @@ import './css/layout.css';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
 import { useSubscription } from "react-stomp-hooks";
-import { MY_PORT } from './common/util';
+import { MY_PORT, API_BASE_URL } from './common/util';
 import './css/style.bundle.css';
 import './css/plugins.bundle.css';
 import axios from "axios";
@@ -23,7 +23,7 @@ export default function App() {
 
     useEffect(() => {
         if (token !== null) {
-            axios.get(`http://localhost:${MY_PORT}/member`, { headers: { Authorization: token } })
+            axios.get(`${API_BASE_URL}/member`, { headers: { Authorization: token } })
                 .then(res => {
                     setUser(res.data.member)
                 })

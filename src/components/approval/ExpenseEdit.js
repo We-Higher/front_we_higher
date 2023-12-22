@@ -49,6 +49,10 @@ const ExpenseEdit = () => {
             })
             .then(function (res) {
                 if (res.status === 200) {
+                    if(res.data.flag==false){
+
+                        alert("결재할 수 없습니다.");
+                    }
                     navigate('/approval/process')
                 } else {
                     alert('error:' + res.status);
@@ -65,6 +69,10 @@ const ExpenseEdit = () => {
             })
             .then(function (res) {
                 if (res.status === 200) {
+                    if(res.data.flag==false){
+
+                        alert("반려할 수 없습니다.");
+                    }
                     navigate('/approval/process')
                 } else {
                     alert('error:' + res.status);
